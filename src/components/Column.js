@@ -1,8 +1,16 @@
 import React from "react";
 import {Droppable} from "react-beautiful-dnd";
-import {Container} from "@mui/material";
 import styled from 'styled-components'
 import Trait from './Trait';
+
+const Container = styled.div`
+margin: 8px;
+  border: 1px solid lightgray;
+  border-radius: 2px;
+  
+  display: flex;
+  flex-direction: column;
+`;
 
 const TraitList = styled.div`
   padding: 8px;
