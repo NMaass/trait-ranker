@@ -17,7 +17,7 @@ const initialTraits = {
         'column2':{
             id: 'traits',
             title:'traits',
-            traitIds:['peace', 'love', 'patience', 'joy', 'perseverance'],
+            traitIds:['peace', 'love', 'patience', 'joy', 'perseverance','bravery',],
         },
         'column3':{
             id: 'likes',

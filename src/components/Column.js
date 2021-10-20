@@ -32,7 +32,8 @@ const Column = ({ column, traits, key}) => {
                     <TraitList
                         ref={provided.innerRef}
                         isDraggingOver={snapshot.isDraggingOver}
-                        {...provided.droppableProps}>
+                        {...provided.droppableProps}
+                    >
                         {traits.map((trait, index) => <Trait key={trait.id} trait={trait} index={index}/>)}
                         {provided.placeholder}
                     </TraitList>
