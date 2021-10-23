@@ -2,7 +2,8 @@ import React, {useState} from "react";
 import initialTraits from './initialTraits';
 import {DragDropContext} from "react-beautiful-dnd";
 import styled from 'styled-components';
-import Column from './Column.js'
+import Column from './Column.js';
+import Landing from "./Landing";
 
 const Container = styled.div`
   display: flex;
@@ -12,6 +13,7 @@ const Container = styled.div`
 
 const App = () => {
     const [data, setData] = useState(initialTraits);
+    const [name, setName] = useState('');
 
     const onDragEnd = ({destination, source, draggableId}) => {
         if(!destination){
@@ -78,6 +80,8 @@ const App = () => {
 
 
     return(
+        <div>
+            <Landing/>
     <DragDropContext onDragEnd={onDragEnd}>
         <Container>
             {data.columnOrder.map(columnId => {
@@ -88,7 +92,9 @@ const App = () => {
                 return <Column key={column.id} column={column} traits={traits}/>;
             })}
         </Container>
-    </DragDropContext>)
+    </DragDropContext>
+        </div>
+    )
 };
 
 export default App;
