@@ -29,6 +29,7 @@ const App = () => {
 
         //if moving within the same column
         if(start === finish){
+
             const newTraitIds = Array.from(start.traitIds);
             newTraitIds.splice(source.index, 1);
             newTraitIds.splice(destination.index,0,draggableId);
@@ -73,7 +74,6 @@ const App = () => {
             },
         }
         setData(newData);
-        return;
     }
 
 
@@ -82,10 +82,10 @@ const App = () => {
         <Container>
             {data.columnOrder.map(columnId => {
                 const column = data.columns[columnId];
-                const contents = column.traitIds.map(traitId =>{
+                const traits = column.traitIds.map(traitId =>{
                     return data.traits[traitId]
                 });
-                return <Column key={column.id} column={column} traits={contents}/>;
+                return <Column key={column.id} column={column} traits={traits}/>;
             })}
         </Container>
     </DragDropContext>)

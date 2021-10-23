@@ -7,9 +7,9 @@ const Container = styled.div`
   padding: 8px;
   margin-bottom: 8px;
   background-color: ${props => (props.isDragging ? 'lightgreen': 'white')};
-  width: 40px;
+  width: 200px;
   height: 40px;
-  border-radius: 50%;
+  border-radius: 5%;
   
   display: flex;
   justify-content: center;
@@ -30,8 +30,9 @@ const Trait = ({ trait, index}) => {
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
                     ref={provided.innerRef}
-                    isDragging={snapshot.isDragging}>
-                    {trait.content[0]}
+                    isDragging={snapshot.isDragging}
+                >
+                    {trait.content}
                 </Container>
             )}
 
