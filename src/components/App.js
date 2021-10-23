@@ -14,6 +14,7 @@ const Container = styled.div`
 const App = () => {
     const [data, setData] = useState(initialTraits);
     const [name, setName] = useState('');
+    const [formText, setFromText] = useState('')
 
     const onDragEnd = ({destination, source, draggableId}) => {
         if(!destination){
@@ -78,10 +79,14 @@ const App = () => {
         setData(newData);
     }
 
+    const onLandingSubmit = (event) => {
+        event.preventDefault();
+        setName(event.target.value);
+    }
 
     return(
         <div>
-            <Landing/>
+            <Landing onFormSubmit={onLandingSubmit} formText={formText} setFormText={setFromText}/>
     <DragDropContext onDragEnd={onDragEnd}>
         <Container>
             {data.columnOrder.map(columnId => {

@@ -1,9 +1,16 @@
 import React from "react";
 import styled from "styled-components";
 
-const Landing = () => {
+const Landing = ({onFormSubmit, formText, setFormText}) => {
+
     return(
-        <div>landing</div>
+        <div>
+            <form onSubmit={onFormSubmit}>
+                <div>
+                    <input type="text" value={formText} onChange={event => setFormText(event.target.value)}/>
+                </div>
+            </form>
+        </div>
         )
 }
 
