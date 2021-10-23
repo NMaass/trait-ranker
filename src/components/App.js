@@ -4,6 +4,7 @@ import {DragDropContext} from "react-beautiful-dnd";
 import styled from 'styled-components';
 import Column from './Column.js';
 import Landing from "./Landing";
+import {BrowserRouter, Route, useHistory} from "react-router-dom";
 
 const Container = styled.div`
   display: flex;
@@ -12,6 +13,7 @@ const Container = styled.div`
 
 
 const App = () => {
+    const history = useHistory();
     const [data, setData] = useState(initialTraits);
     const [name, setName] = useState('');
     const [formText, setFromText] = useState('')
@@ -82,24 +84,38 @@ const App = () => {
     const onLandingSubmit = (event) => {
         event.preventDefault();
         setName(event.target.value);
+        history.push('/Selection');
     }
 
     return(
         <div>
-            <Landing onFormSubmit={onLandingSubmit} formText={formText} setFormText={setFromText}/>
-    <DragDropContext onDragEnd={onDragEnd}>
-        <Container>
-            {data.columnOrder.map(columnId => {
-                const column = data.columns[columnId];
-                const traits = column.traitIds.map(traitId =>{
-                    return data.traits[traitId]
-                });
-                return <Column key={column.id} column={column} traits={traits}/>;
-            })}
-        </Container>
-    </DragDropContext>
+            <Route exact path='/'>
+                <Landing onFormSubmit={onLandingSubmit} formText={formText} setFormText={setFromText}/>
+            </Route>
+           <Route path='/Selection'>
+                <DragDropContext onDragEnd={onDragEnd}>
+                    <Container>
+                        {data.columnOrder.map(columnId => {
+                            const column = data.columns[columnId];
+                            const traits = column.traitIds.map(traitId =>{
+                                return data.traits[traitId]
+                            });
+                            return <Column key={column.id} column={column} traits={traits}/>;
+                        })}
+                    </Container>
+                </DragDropContext>
+           </Route>
         </div>
     )
 };
 
-export default App;
+const AppWrapper = () => {
+    return(
+        <BrowserRouter>
+            <App/>
+        </BrowserRouter>
+    )
+}
+
+
+export default AppWrapper;
