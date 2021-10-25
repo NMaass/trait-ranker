@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import Column from './Column.js';
 import Landing from "./Landing";
 import Results from "./Results";
+import RankStack from "./RankStack";
 import {BrowserRouter, Route, useHistory} from "react-router-dom";
 
 const Container = styled.div`
@@ -93,6 +94,9 @@ const App = () => {
         <div>
             <Route exact path='/'>
                 <Landing onFormSubmit={onLandingSubmit} formText={formText} setFormText={setFromText}/>
+            </Route>
+            <Route path='/Rank'>
+                <RankStack/>
             </Route>
            <Route path='/Selection'>
                 <DragDropContext onDragEnd={onDragEnd}>
