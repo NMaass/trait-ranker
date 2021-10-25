@@ -4,6 +4,7 @@ import {DragDropContext} from "react-beautiful-dnd";
 import styled from 'styled-components';
 import Column from './Column.js';
 import Landing from "./Landing";
+import Results from "./Results";
 import {BrowserRouter, Route, useHistory} from "react-router-dom";
 
 const Container = styled.div`
@@ -16,7 +17,8 @@ const App = () => {
     const history = useHistory();
     const [data, setData] = useState(initialTraits);
     const [name, setName] = useState('');
-    const [formText, setFromText] = useState('')
+    const [formText, setFromText] = useState('');
+    const [topTraits, setTopTraits] = useState(['this','is','my','init','array'])
 
     const onDragEnd = ({destination, source, draggableId}) => {
         if(!destination){
@@ -86,7 +88,7 @@ const App = () => {
         setName(event.target.value);
         history.push('/Selection');
     }
-
+    const tempName = "Nick"
     return(
         <div>
             <Route exact path='/'>
@@ -105,6 +107,9 @@ const App = () => {
                     </Container>
                 </DragDropContext>
            </Route>
+            <Route path='/Results'>
+                <Results name={tempName} topTraits={topTraits}/>
+            </Route>
         </div>
     )
 };
