@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from "styled-components";
 import {Draggable} from "react-beautiful-dnd";
+import TraitCard from "./TraitCard";
 
 const Container = styled.div`
   border: 3px solid lightgray;
@@ -32,7 +33,7 @@ const Trait = ({ trait, index}) => {
                     ref={provided.innerRef}
                     isDragging={snapshot.isDragging}
                 >
-                    {trait.content}
+                    <TraitCard trait={trait.content}/>
                 </Container>
             )}
 

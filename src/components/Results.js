@@ -1,11 +1,11 @@
 import React from "react";
-
+import TraitCard from "./TraitCard";
 const Results = ({name, topTraits}) => {
 
     const listTraitsWithLineBreak = (traits) => {
         let htmlTraits = [];
         for (let traitsKey in traits) {
-            htmlTraits.push(<h5 key={traitsKey}>{traits[traitsKey]}</h5>)
+            htmlTraits.push(<TraitCard key={traitsKey} trait={traits[traitsKey]}></TraitCard>)
 
             if(traits.indexOf(traitsKey) === (traits.length / 2)){
                 htmlTraits.push(<br/>)
