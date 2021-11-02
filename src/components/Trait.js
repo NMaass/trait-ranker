@@ -11,7 +11,6 @@ const Container = styled.div`
   width: 200px;
   height: 40px;
   border-radius: 5%;
-  
   display: flex;
   justify-content: center;
   align-content: center;
@@ -21,7 +20,6 @@ const Container = styled.div`
     border-color: red;
   }
 `;
-
 
 const Trait = ({ trait, index}) => {
     return(

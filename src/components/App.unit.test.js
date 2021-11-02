@@ -66,7 +66,7 @@ describe('App', () => {
             });
 
             const  { getAllByTestId: getAllByTestIdWithinColumn} = within(
-                getByTestId('traits'),
+                getByTestId('trait'),
             );
             const testTextOrderByTestId = createTestTextOrderByTestIdHelper(
                 getAllByTestIdWithinColumn,

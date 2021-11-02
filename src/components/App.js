@@ -92,13 +92,13 @@ const App = () => {
     const tempName = "Nick"
     return(
         <div>
-            <Route exact path='/'>
+            <Route exact path='/fix'>
                 <Landing onFormSubmit={onLandingSubmit} formText={formText} setFormText={setFromText}/>
             </Route>
             <Route path='/Rank'>
                 <RankStack/>
             </Route>
-           <Route path='/Selection'>
+           <Route exact path='/'>
                 <DragDropContext onDragEnd={onDragEnd}>
                     <Container>
                         {data.columnOrder.map(columnId => {

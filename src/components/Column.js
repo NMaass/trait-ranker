@@ -2,6 +2,7 @@ import React from "react";
 import {Droppable} from "react-beautiful-dnd";
 import styled from 'styled-components'
 import Trait from './Trait';
+import TraitCard from "./TraitCard";
 
 const Container = styled.div`
 margin: 8px;
@@ -34,7 +35,13 @@ const Column = ({ column, traits, key}) => {
                         isDraggingOver={snapshot.isDraggingOver}
                         {...provided.droppableProps}
                     >
-                        {traits.map((trait, index) => <Trait key={trait.id} trait={trait} index={index}/>)}
+                        {traits.map((trait, index) => {
+                            return(
+                                (index === 0) ? <Trait key={trait.id} trait={trait} index={index}/> : <TraitCard key={trait.id} trait={trait.content}/>
+
+                                )
+                            }
+                        )}
                         {provided.placeholder}
                     </TraitList>
                 )}
