@@ -3,12 +3,14 @@ import {Droppable} from "react-beautiful-dnd";
 import styled from 'styled-components'
 import Trait from './Trait';
 import TraitCard from "./TraitCard";
+import '../style/CardStacking.scss'
 
 const Container = styled.div`
 margin: 8px;
   border: 1px solid lightgray;
   border-radius: 2px;
-  
+  min-width: 250px;
+  margin-left: 190px;
   display: flex;
   flex-direction: column;
 `;
@@ -31,13 +33,14 @@ const Column = ({ column, traits, key}) => {
             <Droppable droppableId={column.id} direction='horizontal'>
                 {(provided, snapshot) => (
                     <TraitList
+                        classname='cards'
                         ref={provided.innerRef}
                         isDraggingOver={snapshot.isDraggingOver}
                         {...provided.droppableProps}
                     >
                         {traits.map((trait, index) => {
                             return(
-                                (index === 0) ? <Trait key={trait.id} trait={trait} index={index}/> : <TraitCard key={trait.id} trait={trait.content}/>
+                                (index === (traits.length - 1)) ? <Trait key={trait.id} trait={trait} index={index} dragging={true}/> : <Trait key={trait.id} trait={trait} index={index} dragging={false}/>
 
                                 )
                             }
