@@ -1,17 +1,12 @@
 import React, {useState} from "react";
 import initialTraits from './initialTraits';
-import {DragDropContext} from "react-beautiful-dnd";
-import styled from 'styled-components';
-import Column from './Column.js';
 import Landing from "./Landing";
 import Results from "./Results";
 import RankStack from "./RankStack";
 import {BrowserRouter, Route, useHistory} from "react-router-dom";
-import SkipButton from "./SkipButton";
+import SelectionPage from "./SelectionPage";
 
-const Container = styled.div`
-  display: flex;
-`;
+
 
 
 
@@ -101,18 +96,7 @@ const App = () => {
                 <RankStack/>
             </Route>
            <Route exact path='/'>
-               <SkipButton column={data.columns.column2}/>
-                <DragDropContext onDragEnd={onDragEnd}>
-                    <Container>
-                        {data.columnOrder.map(columnId => {
-                            const column = data.columns[columnId];
-                            const traits = column.traitIds.map(traitId =>{
-                                return data.traits[traitId]
-                            });
-                            return <Column key={column.id} column={column} traits={traits}/>;
-                        })}
-                    </Container>
-                </DragDropContext>
+                <SelectionPage columnData={data} onDragEnd={onDragEnd} />
            </Route>
             <Route path='/Results'>
                 <Results name={name} topTraits={topTraits}/>
