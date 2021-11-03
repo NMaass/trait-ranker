@@ -33,17 +33,17 @@ const Column = ({ column, traits, key}) => {
             <Droppable droppableId={column.id} direction='horizontal'>
                 {(provided, snapshot) => (
                     <TraitList
-                        classname='cards'
+                        classname='cards fa-stack'
                         ref={provided.innerRef}
                         isDraggingOver={snapshot.isDraggingOver}
                         {...provided.droppableProps}
                     >
                         {traits.map((trait, index) => {
                             return(
-                                (index === (traits.length - 1)) ? <Trait key={trait.id} trait={trait} index={index} dragging={true}/> : <Trait key={trait.id} trait={trait} index={index} dragging={false}/>
 
-                                )
-                            }
+                                    <Trait key={trait.id} trait={trait} index={index}  classname={index}/>
+
+                                    )}
                         )}
                         {provided.placeholder}
                     </TraitList>
