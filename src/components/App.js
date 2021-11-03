@@ -7,6 +7,7 @@ import Landing from "./Landing";
 import Results from "./Results";
 import RankStack from "./RankStack";
 import {BrowserRouter, Route, useHistory} from "react-router-dom";
+import SkipButton from "./SkipButton";
 
 const Container = styled.div`
   display: flex;
@@ -17,7 +18,7 @@ const Container = styled.div`
 const App = () => {
     const history = useHistory();
     const [data, setData] = useState(initialTraits);
-    const [name, setName] = useState('');
+    const [name, setName] = useState('Nick');
     const [formText, setFromText] = useState('');
     const [topTraits, setTopTraits] = useState(['this','is','my','init','array'])
 
@@ -89,16 +90,18 @@ const App = () => {
         setName(event.target.value);
         history.push('/Selection');
     }
-    const tempName = "Nick"
+
+
     return(
         <div>
-            <Route exact path='/fix'>
+            <Route exact path='/fixme'>
                 <Landing onFormSubmit={onLandingSubmit} formText={formText} setFormText={setFromText}/>
             </Route>
             <Route path='/Rank'>
                 <RankStack/>
             </Route>
            <Route exact path='/'>
+               <SkipButton column={data.columns.column2}/>
                 <DragDropContext onDragEnd={onDragEnd}>
                     <Container>
                         {data.columnOrder.map(columnId => {
@@ -112,7 +115,7 @@ const App = () => {
                 </DragDropContext>
            </Route>
             <Route path='/Results'>
-                <Results name={tempName} topTraits={topTraits}/>
+                <Results name={name} topTraits={topTraits}/>
             </Route>
         </div>
     )

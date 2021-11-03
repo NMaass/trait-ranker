@@ -11,9 +11,8 @@ const Container = styled.div`
 
 
 
-const Trait = ({ trait, index, dragging}) => {
+const Trait = ({ trait, index}) => {
     return(
-        dragging ? (
         <Draggable draggableId={trait.id} index={index}>
             {(provided, snapshot) => (
                 <Container
@@ -27,7 +26,6 @@ const Trait = ({ trait, index, dragging}) => {
             )}
 
         </Draggable>
-        ) : <TraitCard trait={trait.content}/>
     )
 }
 export default Trait
