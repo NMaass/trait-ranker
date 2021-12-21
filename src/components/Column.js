@@ -2,7 +2,6 @@ import React from "react";
 import {Droppable} from "react-beautiful-dnd";
 import styled from 'styled-components'
 import Trait from './Trait';
-import TraitCard from "./TraitCard";
 import '../style/CardStacking.scss'
 
 const Container = styled.div`

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import SkipButton from "./SkipButton";
 import Column from "./Column";
 import styled from "styled-components";
@@ -9,10 +9,11 @@ const Container = styled.div`
 `;
 
 
-const SelectionPage = ({columnData, onDragEnd}) =>{
+
+const SelectionPage = ({columnData, onDragEnd, setTopTraits, setData, data}) =>{
+
     return(
         <div>
-            <SkipButton column={columnData.columns.column2}/>
             <DragDropContext onDragEnd={onDragEnd}>
                 <Container>
                     {columnData.columnOrder.map(columnId => {
@@ -20,8 +21,13 @@ const SelectionPage = ({columnData, onDragEnd}) =>{
                         const traits = column.traitIds.map(traitId => {
                             return columnData.traits[traitId]
                         });
-                        return <Column key={column.id} column={column} traits={traits} />
-                    })}
+                        return (
+                            <Container>
+                                    <Column key={column.id} column={column} traits={traits} />
+                                    <SkipButton column={column} id={columnId} setData={setData} data={data} />
+                            </Container>
+                        )}
+                        )}
                 </Container>
             </DragDropContext>
         </div>

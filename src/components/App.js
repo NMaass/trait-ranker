@@ -96,7 +96,7 @@ const App = () => {
                 <RankStack/>
             </Route>
            <Route exact path='/'>
-                <SelectionPage columnData={data} onDragEnd={onDragEnd} />
+                <SelectionPage columnData={data} onDragEnd={onDragEnd} setData={setData} data={data}/>
            </Route>
             <Route path='/Results'>
                 <Results name={name} topTraits={topTraits}/>
