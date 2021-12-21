@@ -23,8 +23,7 @@ const SelectionPage = ({columnData, onDragEnd, setTopTraits, setData, data}) =>{
                         });
                         return (
                             <Container>
-                                    <Column key={column.id} column={column} traits={traits} />
-                                    <SkipButton column={column} id={columnId} setData={setData} data={data} />
+                                <Column key={column.id} column={column} traits={traits} setData={setData} data={data} />
                             </Container>
                         )}
                         )}
