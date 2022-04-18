@@ -3,6 +3,7 @@ import initialTraits from './initialTraits';
 import Landing from "./Landing";
 import Results from "./Results";
 import RankStack from "./RankStack";
+import NavBar from "./NavBar";
 import {BrowserRouter, Route, useHistory} from "react-router-dom";
 import SelectionPage from "./SelectionPage";
 
@@ -89,6 +90,7 @@ const App = () => {
 
     return(
         <div>
+            <NavBar/>
             <Route exact path='/fixme'>
                 <Landing onFormSubmit={onLandingSubmit} formText={formText} setFormText={setFromText}/>
             </Route>
