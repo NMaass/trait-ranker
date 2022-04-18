@@ -3,7 +3,7 @@ import initialTraits from './initialTraits';
 import Landing from "./Landing";
 import Results from "./Results";
 import RankStack from "./RankStack";
-import NavBar from "./NavBar";
+import NavBar from "./NavBar/NavBar";
 import {BrowserRouter, Route, useHistory} from "react-router-dom";
 import SelectionPage from "./SelectionPage";
 
@@ -15,9 +15,13 @@ const App = () => {
     const history = useHistory();
     const [data, setData] = useState(initialTraits);
     const [name, setName] = useState('Nick');
+
     const [formText, setFromText] = useState('');
     const [topTraits, setTopTraits] = useState(['this','is','my','init','array'])
 
+    const historyPushTracksPrevious = ({route}) => {
+        history.push(route)
+    }
     const onDragEnd = ({destination, source, draggableId}) => {
         if(!destination){
             return;
@@ -90,14 +94,14 @@ const App = () => {
 
     return(
         <div>
-            <NavBar/>
-            <Route exact path='/fixme'>
+            <NavBar history={history}/>
+            <Route exact path='/'>
                 <Landing onFormSubmit={onLandingSubmit} formText={formText} setFormText={setFromText}/>
             </Route>
             <Route path='/Rank'>
                 <RankStack/>
             </Route>
-           <Route exact path='/'>
+           <Route exact path='/Selection'>
                 <SelectionPage columnData={data} onDragEnd={onDragEnd} setData={setData} data={data}/>
            </Route>
             <Route path='/Results'>
