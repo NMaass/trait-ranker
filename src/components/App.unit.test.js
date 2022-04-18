@@ -8,7 +8,7 @@ import {
     DND_DIRECTION_LEFT,
     DND_DIRECTION_RIGHT, makeDnd
 } from "react-beautiful-dnd-test-utils/src";
-import initialTraits from "./initialTraits";
+import initialTraits from "./Selection/initialTraits";
 
 const createTestTextOrderByTestIdHelper = getAllByTestId => {
     const testTextOrderByTestId = (testId, expectedTexts) => {

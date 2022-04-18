@@ -1,5 +1,5 @@
-import React, {useState} from "react";
-import SkipButton from "./SkipButton";
+import React from "react";
+import DoneButton from "./DoneButton"
 import Column from "./Column";
 import styled from "styled-components";
 import {DragDropContext} from "react-beautiful-dnd";
@@ -10,7 +10,7 @@ const Container = styled.div`
 
 
 
-const SelectionPage = ({columnData, onDragEnd, setTopTraits, setData, data}) =>{
+const SelectionPage = ({columnData, onDragEnd, setTopTraits, setColumnData, history}) =>{
 
     return(
         <div>
@@ -22,13 +22,14 @@ const SelectionPage = ({columnData, onDragEnd, setTopTraits, setData, data}) =>{
                             return columnData.traits[traitId]
                         });
                         return (
-                            <Container>
-                                <Column key={column.id} column={column} traits={traits} setData={setData} data={data} />
+                            <Container key={column.id}>
+                                <Column column={column} traits={traits} setData={setColumnData} data={columnData} />
                             </Container>
                         )}
                         )}
                 </Container>
             </DragDropContext>
+            <DoneButton setTopTraits={setTopTraits} columnData={columnData} setColumnData={setColumnData} history={history}/>
         </div>
     )
 };

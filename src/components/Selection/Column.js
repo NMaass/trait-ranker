@@ -1,9 +1,9 @@
 import React from "react";
 import {Droppable} from "react-beautiful-dnd";
 import styled from 'styled-components'
-import Trait from './Trait';
+import Trait from '../Trait';
 import SkipButton from "./SkipButton";
-import '../style/CardStacking.scss'
+import '../../style/CardStacking.scss'
 
 const Container = styled.div`
 margin: 8px;
@@ -38,7 +38,7 @@ const Column = ({ column, traits, key, setData, data}) => {
                 <Title>{column.title}</Title>
                 <SkipButton column={column} id={key} setData={setData} data={data} />
             </HeaderContainer>
-            <Droppable droppableId={column.id} direction='horizontal'>
+            <Droppable key={column.id} droppableId={column.id} direction='horizontal'>
                 {(provided, snapshot) => (
                     <TraitList
                         classname='cards fa-stack'

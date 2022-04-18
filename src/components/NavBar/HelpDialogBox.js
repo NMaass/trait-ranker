@@ -24,7 +24,7 @@ const HelpDialogBox = () => {
         <Dialog
             onClose={handleClose}
             open = {open}
-            fullWidth={"xl"}
+            maxWidth={"xl"}
         >
             <DialogTitle>Help</DialogTitle>
             <DialogContentText paragraph={true}>

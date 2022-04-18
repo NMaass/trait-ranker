@@ -1,11 +1,11 @@
 import React, {useState} from "react";
-import initialTraits from './initialTraits';
+import initialTraits from './Selection/initialTraits';
 import Landing from "./Landing";
 import Results from "./Results";
 import RankStack from "./RankStack";
 import NavBar from "./NavBar/NavBar";
 import {BrowserRouter, Route, useHistory} from "react-router-dom";
-import SelectionPage from "./SelectionPage";
+import SelectionPage from "./Selection/SelectionPage";
 
 
 
@@ -13,15 +13,12 @@ import SelectionPage from "./SelectionPage";
 
 const App = () => {
     const history = useHistory();
-    const [data, setData] = useState(initialTraits);
+    const [columnData, setColumnData] = useState(initialTraits);
     const [name, setName] = useState('Nick');
 
     const [formText, setFromText] = useState('');
-    const [topTraits, setTopTraits] = useState(['this','is','my','init','array'])
+    const [topTraits, setTopTraits] = useState([])
 
-    const historyPushTracksPrevious = ({route}) => {
-        history.push(route)
-    }
     const onDragEnd = ({destination, source, draggableId}) => {
         if(!destination){
             return;
@@ -33,8 +30,8 @@ const App = () => {
         ){
             return;
         }
-        const start = data.columns[source.droppableId];
-        const finish = data.columns[destination.droppableId];
+        const start = columnData.columns[source.droppableId];
+        const finish = columnData.columns[destination.droppableId];
 
         //if moving within the same column
         if(start === finish){
@@ -50,13 +47,13 @@ const App = () => {
 
             //override existing column
             const newData = {
-                ...data,
+                ...columnData,
                 columns:{
-                    ...data.columns,
+                    ...columnData.columns,
                     [newColumn.id]:newColumn,
                 }
             }
-            setData(newData);
+            setColumnData(newData);
             return;
         }
         //cross column moving
@@ -75,14 +72,14 @@ const App = () => {
         }
 
         const newData = {
-            ...data,
+            ...columnData,
             columns:{
-                ...data.columns,
+                ...columnData.columns,
                 [newStart.id]: newStart,
                 [newFinish.id]: newFinish,
             },
         }
-        setData(newData);
+        setColumnData(newData);
     }
 
     const onLandingSubmit = (event) => {
@@ -102,7 +99,7 @@ const App = () => {
                 <RankStack/>
             </Route>
            <Route exact path='/Selection'>
-                <SelectionPage columnData={data} onDragEnd={onDragEnd} setData={setData} data={data}/>
+                <SelectionPage columnData={columnData} setTopTraits={setTopTraits} onDragEnd={onDragEnd} setColumnData={setColumnData} history={history}/>
            </Route>
             <Route path='/Results'>
                 <Results name={name} topTraits={topTraits}/>
