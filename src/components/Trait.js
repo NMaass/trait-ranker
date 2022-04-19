@@ -13,7 +13,7 @@ const Container = styled.div`
 
 const Trait = ({ trait, index}) => {
     return(
-        <Draggable draggableId={trait.id} index={index}>
+        <Draggable draggableId={trait} index={index}>
             {(provided, snapshot) => (
                 <Container
                     {...provided.draggableProps}
@@ -21,7 +21,7 @@ const Trait = ({ trait, index}) => {
                     ref={provided.innerRef}
                     isDragging={snapshot.isDragging}
                 >
-                    <TraitCard trait={trait.content}/>
+                    <TraitCard trait={trait}/>
                 </Container>
             )}
 

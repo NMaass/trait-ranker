@@ -20,12 +20,9 @@ const SelectionPage = ({columnData, onDragEnd, setTopTraits, setColumnData, hist
 
                         columnData.columnOrder.map(columnId => {
                         const column = columnData.columns[columnId];
-                        const traits = column.traitIds.map(traitId => {
-                            return columnData.traits[traitId]
-                        });
                         return (
                             <Container key={column.id}>
-                                <Column column={column} traits={traits} setData={setColumnData} data={columnData} />
+                                <Column column={column} traits={column.traitIds} setData={setColumnData} data={columnData} />
                             </Container>
                         )}
                         )}

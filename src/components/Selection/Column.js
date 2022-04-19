@@ -49,7 +49,7 @@ const Column = ({ column, traits, key, setData, data}) => {
                         {traits.map((trait, index) => {
                             return(
 
-                                    <Trait key={trait.id} trait={trait} index={index}  classname={index}/>
+                                    <Trait key={traits.indexOf(trait)} trait={trait} index={index}  classname={index}/>
 
                                     )}
                         )}
