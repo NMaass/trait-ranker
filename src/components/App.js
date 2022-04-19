@@ -17,7 +17,7 @@ const App = () => {
     const [name, setName] = useState('Nick');
 
     const [formText, setFromText] = useState('');
-    const [topTraits, setTopTraits] = useState([])
+    const [topTraits, setTopTraits] = useState(['this','is','my','init','array','for','testing','the','rank','component'])
 
     const onDragEnd = ({destination, source, draggableId}) => {
         if(!destination){
@@ -96,7 +96,7 @@ const App = () => {
                 <Landing onFormSubmit={onLandingSubmit} formText={formText} setFormText={setFromText}/>
             </Route>
             <Route path='/Rank'>
-                <RankStack/>
+                <RankStack onDragEnd={onDragEnd} topTraits={topTraits} setTopTraits={setTopTraits} history={history}/>
             </Route>
            <Route exact path='/Selection'>
                 <SelectionPage columnData={columnData} topTraits={topTraits} setTopTraits={setTopTraits} onDragEnd={onDragEnd} setColumnData={setColumnData} history={history}/>

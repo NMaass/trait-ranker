@@ -18,7 +18,6 @@ const Results = ({name, topTraits}) => {
 
     return(
         <div>
-            {console.log(topTraits)}
             <h1>
                 {name}
             </h1>
