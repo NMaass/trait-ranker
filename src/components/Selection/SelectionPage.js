@@ -16,7 +16,9 @@ const SelectionPage = ({columnData, onDragEnd, setTopTraits, setColumnData, hist
         <div>
             <DragDropContext onDragEnd={onDragEnd}>
                 <Container>
-                    {columnData.columnOrder.map(columnId => {
+                    {
+
+                        columnData.columnOrder.map(columnId => {
                         const column = columnData.columns[columnId];
                         const traits = column.traitIds.map(traitId => {
                             return columnData.traits[traitId]
