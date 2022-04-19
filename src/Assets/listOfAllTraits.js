@@ -1,5 +1,5 @@
  const allTraits = [
-    'Music', 'Leadership', 'Excellence', 'Self Control', 'Physical Appearance', 'Independence', 'Flexibility', 'Personal Space',
+    'Art', 'Music', 'Leadership', 'Excellence', 'Self Control', 'Physical Appearance', 'Independence', 'Flexibility', 'Personal Space',
      'Rest', 'Kindness', 'Recreation', 'Strength', 'Wisdom', 'Empathy', 'Trust', 'Spontaneity', 'Obedience', 'Moral Purity',
      'Generosity', 'Patience', 'Perseverance', 'Mercy', 'Romance', 'Athleticism', 'Constructive Criticism',
      'Productivity', 'Nature', 'Peace', 'Determination', 'Resourcefulness', 'Authority', 'Hope','Challenge','Decisiveness',

@@ -10,7 +10,7 @@ const initialTraits = {
         'column2':{
             id: 'column2',
             title:'traits',
-            traitIds:traits,
+            traitIds:traits.slice(0,10),
         },
         'column3':{
             id: 'column3',

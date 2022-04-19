@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import DoneButton from "./DoneButton"
 import Column from "./Column";
 import styled from "styled-components";
@@ -10,7 +10,7 @@ const Container = styled.div`
 
 
 
-const SelectionPage = ({columnData, onDragEnd, setTopTraits, setColumnData, history}) =>{
+const SelectionPage = ({columnData, onDragEnd, topTraits, setTopTraits, setColumnData, history}) =>{
 
     return(
         <div>
@@ -28,7 +28,12 @@ const SelectionPage = ({columnData, onDragEnd, setTopTraits, setColumnData, hist
                         )}
                 </Container>
             </DragDropContext>
-            <DoneButton setTopTraits={setTopTraits} columnData={columnData} setColumnData={setColumnData} history={history}/>
+            <DoneButton
+                topTraits={topTraits}
+                setTopTraits={setTopTraits}
+                columnData={columnData}
+                setColumnData={setColumnData}
+                history={history}/>
         </div>
     )
 };

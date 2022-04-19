@@ -1,6 +1,5 @@
 import React from "react";
 import {AppBar, Box, Button, IconButton, Toolbar} from "@mui/material";
-import SettingsIcon from '@mui/icons-material/Settings';
 
 import HelpDialogBox from "./HelpDialogBox";
 import BackButton from "./BackButton";
@@ -13,14 +12,10 @@ return(
         <AppBar position="fixed">
             <Toolbar>
                 <BackButton history={history}/>
-                <HomeButton history={history} style={{marginLeft: "auto"}}/>
-                <IconButton
-                    size="large"
-                    style ={{marginLeft: 'auto'}}
-                    >
-                    <SettingsIcon/>
-                </IconButton>
-                <HelpDialogBox/>
+                <HomeButton history={history} />
+                <div style={{marginLeft: "auto"}}>
+                    <HelpDialogBox/>
+                </div>
             </Toolbar>
         </AppBar>
     </Box>

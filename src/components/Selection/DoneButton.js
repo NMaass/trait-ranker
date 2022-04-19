@@ -2,17 +2,22 @@ import React, {useState} from "react";
 import likedTraits from "./likedTraits";
 import {Button} from "@mui/material";
 
-const DoneButton = ({setTopTraits, columnData, setColumnData, history}) => {
+const DoneButton = ({topTraits, setTopTraits, columnData, setColumnData, history}) => {
+    const allTraits = likedTraits.traits;
     const [pickingRound, setPickingRound] = React.useState(1);
+    const [currentTraits, setCurrentTraits] = React.useState(allTraits.slice(0,10));
+
 
     const handleDone = () => {
-        if (columnData.columns.column3.traitIds.length < 10){
-            const traitNames = columnData.columns.column3.traitIds.map(traitId => {
-                return columnData.traits[traitId].content;
-            })
-
-            setTopTraits(traitNames);
-            history.push("/Results");
+        console.log(currentTraits);
+        if (currentTraits[currentTraits.length-1] !== allTraits[allTraits.length-1]){
+            addTopTraits(columnData.columns.column3.traitIds);
+            let indexOfLastTrait = allTraits.indexOf(currentTraits[currentTraits.length-1]);
+            let newTraits = allTraits.slice(indexOfLastTrait+1,indexOfLastTrait+11);
+            setCurrentTraits(newTraits);
+            clearColumns();
+            updateColumn(newTraits);
+            console.log(currentTraits);
         }
         else if(pickingRound === 2){
             setTopTraits(columnData.columns.column2.traitIds);
@@ -20,9 +25,27 @@ const DoneButton = ({setTopTraits, columnData, setColumnData, history}) => {
         }
         else{
            setPickingRound(2);
-           likedTraits.columns.column1.traitIds = columnData.columns.column3.traitIds;
+           likedTraits.columns.column1.traitIds = topTraits;
            setColumnData(likedTraits);
         }
+    }
+    const addTopTraits = (traitsToAdd) => {
+        let newTopTraits = topTraits;
+        newTopTraits = newTopTraits.concat(traitsToAdd);
+        setTopTraits(newTopTraits);
+    }
+    const clearColumns = () => {
+        let newColumnData = columnData;
+        for (const [key, value] of Object.entries(newColumnData.columns)){
+            value.traitIds = [];
+        }
+        setColumnData(newColumnData);
+    }
+
+    const updateColumn = (newTraits) => {
+        let newColumnData = columnData;
+        newColumnData.columns.column2.traitIds = newTraits;
+        setColumnData(newColumnData)
     }
 
 
