@@ -4,9 +4,7 @@ import {DragDropContext, Droppable} from "react-beautiful-dnd";
 import styled from "styled-components";
 
 
-const Container = styled.div`
-display: flex;
-`;
+
 
 const RankStack = ({onDragEnd, topTraits, setTopTraits, history}) => {
     return (
@@ -37,3 +35,6 @@ const RankStack = ({onDragEnd, topTraits, setTopTraits, history}) => {
 };
 
 export default RankStack;
+
+const Container = styled.div``
+

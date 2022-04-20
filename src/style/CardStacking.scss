@@ -27,10 +27,11 @@ body {
     z-index: 1;
     background: var(--bg-panel);
     border-radius: 1rem;
-    padding: 2rem;
+    padding: 1rem;
     box-shadow: 4px 4px 12px 2px rgba(black, 0.60);
     transition: 0.4s;
-    width: 12rem;
+    height: 10rem;
+    width: 14rem;
     position: relative;
 .fa-stack {
     color: var(--color-text);
@@ -51,7 +52,7 @@ p {
 
 .card:hover,
 .card:focus-within, {
-    transform: translatey(-1rem);
+    transform: translatey(-5.5rem);
 }
 
 

@@ -17,7 +17,7 @@ const App = () => {
     const [name, setName] = useState('Nick');
 
     const [formText, setFromText] = useState('');
-    const [topTraits, setTopTraits] = useState(['this','is','my','init','array','for','testing','the','rank','component'])
+    const [topTraits, setTopTraits] = useState([])
 
     const onDragEnd = ({destination, source, draggableId}) => {
         if(!destination){
