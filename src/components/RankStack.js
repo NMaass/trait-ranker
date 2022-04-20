@@ -1,40 +1,19 @@
 import React from "react";
 import Trait from "./Trait";
-import {DragDropContext, Droppable} from "react-beautiful-dnd";
 import styled from "styled-components";
 
 
 
 
-const RankStack = ({onDragEnd, topTraits, setTopTraits, history}) => {
+const RankStack = ({ topTraits, setTopTraits, history}) => {
     return (
         <div>
-            <DragDropContext onDragEnd={onDragEnd}>
-                <Container>
-                    <Droppable key={'rank'} droppableId={'rank'} direction='vertical'>
-                        {(provided, snapshot) => (
-                            <Container
-                                ref={provided.innerRef}
-                                isDraggingOver={snapshot.isDraggingOver}
-                                {...provided.draggableProps}>
-                                {topTraits.map((trait, index) =>{
-                                    return(
-                                        <Trait key={topTraits.indexOf(trait)} trait={trait} index={index}/>
-
-                                        )
-                                }
-                                    )}
-                                {provided.placeholder}
-                            </Container>
-                        )}
-                    </Droppable>
-                </Container>
-            </DragDropContext>
+            wip
         </div>
+
     )
 };
 
 export default RankStack;
 
-const Container = styled.div``
 
