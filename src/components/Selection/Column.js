@@ -6,7 +6,7 @@ import SkipButton from "./SkipButton";
 import '../../style/CardStacking.scss'
 
 const Container = styled.div`
-margin: 8px;
+  margin: 8px;
   border: 1px solid lightgray;
   border-radius: 2px;
   min-width: 250px;
