@@ -1,7 +1,7 @@
 import React, {useEffect, useRef} from "react";
-import Trait from "./Trait";
+import Trait from "./Traits/Trait";
 import styled from "styled-components";
-import TraitCard from "./TraitCard";
+import TraitCard from "./Traits/TraitCard";
 import {Button} from "@mui/material";
 
 

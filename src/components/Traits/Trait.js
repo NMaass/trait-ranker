@@ -20,7 +20,10 @@ const Trait = ({ trait, index}) => {
                     ref={provided.innerRef}
                     isDragging={snapshot.isDragging}
                 >
-                    <TraitCard trait={trait}/>
+
+                        <TraitCard trait={trait}/>
+
+
                 </Container>
             )}
 

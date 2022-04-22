@@ -22,7 +22,6 @@ body {
 .cards {
     display: flex;
 }
-
 .card {
     z-index: 1;
     background: var(--bg-panel);
@@ -45,11 +44,6 @@ p {
 }
 }
 
-.card:hover,
-.card:focus-within, {
-    transform: translatey(-5.5rem);
-}
-
 
 .card:last-child{
     z-index: 2;
@@ -58,8 +52,17 @@ p {
 
 
 
-
 .fa-stack {
     margin-left: -1rem;
 }
 //source:https://codepen.io/toddwebdev/pen/yWMgQX
+
+
+.jumper:hover,
+.jumper:focus-within, {
+    transform: translatey(-5.5rem);
+}
+
+.buffer {
+    height: 14rem;
+}
