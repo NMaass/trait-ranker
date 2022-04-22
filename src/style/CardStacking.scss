@@ -45,15 +45,17 @@ p {
 }
 }
 
+.card:hover,
+.card:focus-within, {
+    transform: translatey(-5.5rem);
+}
+
+
 .card:last-child{
     z-index: 2;
     margin-right: calc(var(--distance)*-3.85);
 }
 
-.card:hover,
-.card:focus-within, {
-    transform: translatey(-5.5rem);
-}
 
 
 
