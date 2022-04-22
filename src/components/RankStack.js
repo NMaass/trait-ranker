@@ -41,10 +41,15 @@ const RankStack = ({ topTraits, setTopTraits, history}) => {
         if (initialPairs.current.length !== 0){
             doInitialRound(pick);
         }
-        if (sortedPairs.current.length !== 0 && mergeStack.current.length === 0 && initialPairs.current.length === 0){
-            doBuild(sortedPairs.current[0])
-        }
 
+        let mergeStackHasValues = mergeStack.current.some(function (any) {return any.length});
+        if (sortedPairs.current.length !== 0 && !mergeStackHasValues && initialPairs.current.length === 0){
+            buildMerge(sortedPairs.current[0])
+        }
+        if (sortedPairs.current.length === 0 && !mergeStackHasValues){
+            setTopTraits(finishedList.current);
+            history.push('/Results')
+        }
 
         console.log("initialPairs: ", initialPairs.current)
         console.log("sortedPairs: ", sortedPairs.current)
@@ -73,71 +78,75 @@ const RankStack = ({ topTraits, setTopTraits, history}) => {
     }
 
     const doJoinRound = (pick) => {
-        if(pick === sortingPair.current[0]){
-            finishedList.current = finishedList.current.concat(sortingPair.current)
-            clearStacks();
-        }
-        else if(pick === sortingPair.current[1]){
-            finishedList.current = (sortingPair.current.concat(finishedList.current))
-            clearStacks();
-        }
-        else {
-            if (joinStack.current.length === 2) {
+        if  (joinStack.current.length === 2){
+            if(pick === sortingPair.current[0]){
+                finishedList.current = finishedList.current.concat(sortingPair.current)
+                clearStacks();
+            }
+            else {
                 joinStack.current.shift();
                 setDisplayedPairs(joinStack.current[0])
             }
-            else {
+        }
+        else {
+            if (pick === sortingPair.current[1]){
                 joinStack.current = [];
                 setDisplayedPairs(mergeStack.current[0][0])
+            }
+            else {
+                finishedList.current = (sortingPair.current.concat(finishedList.current))
+                clearStacks();
             }
         }
     }
 
     const doMergeRound = (pick) => {
 
-        if(displayedPairs[0] === mergeStack.current[0][0]) {
-            if (pick === displayedPairs[0]) {
-                finishedList.current.splice(leftGuess.current, 0, pick);
+        if(displayedPairs[0] === sortingPair.current[0]) {
+            if (pick !== displayedPairs[0]) {
+                finishedList.current.splice(leftGuess.current, 0, sortingPair.current[0]);
                 mergeStack.current[0] = [];
             }
             else {
-                mergeStack.current.shift();
+                mergeStack.current[0].shift();
                 leftGuess.current++;
                 console.log("leftGuess ", leftGuess.current);
                 if(mergeStack.current[0].length === 0){
-                    finishedList.current.splice(leftGuess.current, 0, pick);
+                    finishedList.current.splice(leftGuess.current, 0, sortingPair.current[0]);
+                    mergeStack.current[0].shift();
                 }
-                if(mergeStack.current[1].length !== 0){
-                    setDisplayedPairs(mergeStack.current[1][0]);
-                }
-                else {
-                    setDisplayedPairs(mergeStack.current[0][0]);
-                }
+            }
+            if(mergeStack.current[1].length !== 0){
+                setDisplayedPairs(mergeStack.current[1][0]);
+            }
+            else {
+                setDisplayedPairs(mergeStack.current[0][0]);
             }
         }
         else {
             if(pick === displayedPairs[0]){
-                finishedList.current.splice(rightGuess.current, 0, pick);
+                finishedList.current.splice(rightGuess.current, 0, sortingPair.current[1]);
                 mergeStack.current[1] = []
             }
             else {
-                mergeStack.current.shift();
+                mergeStack.current[1].shift();
                 rightGuess.current--;
                 console.log("rightGuess ", rightGuess.current);
                 if(mergeStack.current[1].length === 0){
-                    finishedList.current.splice(rightGuess.current, 0, pick);
+                    finishedList.current.splice(rightGuess.current, 0, sortingPair.current[1]);
+                    mergeStack.current[1].shift();
                 }
-                if(mergeStack.current[0].length !== 0){
-                    setDisplayedPairs(mergeStack.current[0][0]);
-                }
-                else {
-                    setDisplayedPairs(mergeStack.current[1][0])
-                }
+            }
+            if(mergeStack.current[0].length !== 0){
+                setDisplayedPairs(mergeStack.current[0][0]);
+            }
+            else {
+                setDisplayedPairs(mergeStack.current[1][0])
             }
         }
     }
 
-    const doBuild = (list) => {
+    const buildMerge = (list) => {
         console.log("building round 2")
         buildJoinStack(list);
         buildMergeStack(list);
