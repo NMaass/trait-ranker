@@ -3,6 +3,7 @@ import Trait from "./Traits/Trait";
 import styled from "styled-components";
 import TraitCard from "./Traits/TraitCard";
 import {Button} from "@mui/material";
+import StaticTrait from "./Traits/StaticTrait";
 
 
 
@@ -182,8 +183,8 @@ const RankStack = ({ topTraits, setTopTraits, history}) => {
 
     return (
         <div>
-            <Button value={displayedPairs[0]} onClick={e => handlePick(e.target.value)}>{displayedPairs[0]}</Button>
-            <Button value={displayedPairs[1]} onClick={e => handlePick(e.target.value)}>{displayedPairs[1]}</Button>
+            <StaticTrait value={displayedPairs[0]} onClick={e => handlePick(e.target.value)} trait={displayedPairs[0]}/>
+            <StaticTrait value={displayedPairs[1]} onClick={e => handlePick(e.target.value)} trait={displayedPairs[1]}/>
         </div>
 
     )

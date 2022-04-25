@@ -1,6 +1,5 @@
 import React, {useState} from "react";
 import initialTraits from './Selection/initialTraits';
-import Landing from "./Landing";
 import Results from "./Results";
 import RankStack from "./RankStack";
 import NavBar from "./NavBar/NavBar";
@@ -14,10 +13,9 @@ import SelectionPage from "./Selection/SelectionPage";
 const App = () => {
     const history = useHistory();
     const [columnData, setColumnData] = useState(initialTraits);
-    const [name, setName] = useState('Nick');
 
     const [formText, setFromText] = useState('');
-    const [topTraits, setTopTraits] = useState(initialTraits.traits.slice(0,9))
+    const [topTraits, setTopTraits] = useState(initialTraits.traits.slice(0,10))
 
     const onDragEnd = ({destination, source, draggableId}) => {
         if(!destination){
@@ -82,27 +80,18 @@ const App = () => {
         setColumnData(newData);
     }
 
-    const onLandingSubmit = (event) => {
-        event.preventDefault();
-        setName(event.target.value);
-        history.push('/Selection');
-    }
-
 
     return(
         <div>
             <NavBar history={history}/>
             <Route exact path='/'>
-                <Landing onFormSubmit={onLandingSubmit} formText={formText} setFormText={setFromText}/>
+                <SelectionPage columnData={columnData} topTraits={topTraits} setTopTraits={setTopTraits} onDragEnd={onDragEnd} setColumnData={setColumnData} history={history}/>
             </Route>
             <Route path='/Rank'>
                 <RankStack onDragEnd={onDragEnd} topTraits={topTraits} setTopTraits={setTopTraits} history={history}/>
             </Route>
-           <Route exact path='/Selection'>
-                <SelectionPage columnData={columnData} topTraits={topTraits} setTopTraits={setTopTraits} onDragEnd={onDragEnd} setColumnData={setColumnData} history={history}/>
-           </Route>
             <Route path='/Results'>
-                <Results name={name} topTraits={topTraits}/>
+                <Results topTraits={topTraits}/>
             </Route>
         </div>
     )

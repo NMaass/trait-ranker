@@ -1,6 +1,6 @@
 import React from "react";
 import StaticTrait from "./Traits/StaticTrait";
-const Results = ({name, topTraits}) => {
+const Results = ({topTraits}) => {
 
     //might want this to be less wordy
     const listTraitsWithLineBreak = (traits) => {
@@ -18,9 +18,6 @@ const Results = ({name, topTraits}) => {
 
     return(
         <div>
-            <h1>
-                {name}
-            </h1>
             <h3>
                 Top Ten
             </h3>

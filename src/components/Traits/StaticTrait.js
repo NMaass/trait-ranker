@@ -3,9 +3,9 @@ import '../../style/CardStacking.scss'
 
 
 
-const StaticTrait = ({trait}) => {
+const StaticTrait = ({trait, onClick}) => {
     return (
-        <div className='card'>
+        <div className='card' onClick={onClick}>
                 <h1>
                     {trait}
                 </h1>
