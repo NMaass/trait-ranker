@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 import DoneButton from "./DoneButton"
 import Column from "./Column";
 import styled from "styled-components";

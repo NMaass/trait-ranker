@@ -4,17 +4,17 @@ const initialTraits = {
     columns:{
         'column1':{
             id: 'column1',
-            title:'dislikes',
+            title:'Not Valued',
             traitIds:[],
         },
         'column2':{
             id: 'column2',
-            title:'traits',
+            title:'Neutral Value',
             traitIds:traits.slice(0,10),
         },
         'column3':{
             id: 'column3',
-            title:'likes',
+            title:'Valued',
             traitIds:[],
         },
     },

@@ -22,8 +22,6 @@ const Trait = ({ trait, index}) => {
                 >
 
                         <TraitCard trait={trait}/>
-
-
                 </Container>
             )}
 

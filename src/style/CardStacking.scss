@@ -20,7 +20,7 @@ body {
 }
 
 .cards {
-    display: flex;
+
 }
 .card {
     z-index: 1;
@@ -34,6 +34,7 @@ body {
     position: relative;
 .fa-stack {
     color: var(--color-text);
+    margin-left: -1rem;
 }
 a {
     text-decoration: none;
@@ -52,17 +53,12 @@ p {
 
 
 
-.fa-stack {
-    margin-left: -1rem;
-}
 //source:https://codepen.io/toddwebdev/pen/yWMgQX
-
-
-.jumper:hover,
-.jumper:focus-within, {
+.card:hover{
     transform: translatey(-5.5rem);
+
+    border-bottom: 5.5rem solid transparent;
+    margin-bottom: -5.5rem;
+
 }
 
-.buffer {
-    height: 14rem;
-}
