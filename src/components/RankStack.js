@@ -20,10 +20,15 @@ const RankStack = ({ topTraits, setTopTraits, history}) => {
     let rightGuess = React.useRef(0);
 
     let finishedList = React.useRef([]);
+    let unevenList = React.useRef(null);
 
     useEffect(() => {
-        for (let i = 0; i < topTraits.length; i += 2){
-            initialPairs.current.push([topTraits[i],topTraits[i+1]]);
+        let initialTraits = topTraits;
+        if (initialTraits.length % 2){
+            unevenList.current = initialTraits.pop();
+        }
+        for (let i = 0; i < initialTraits.length; i += 2){
+            initialPairs.current.push([initialTraits[i],initialTraits[i+1]]);
         }
     },[topTraits])
 
@@ -45,7 +50,7 @@ const RankStack = ({ topTraits, setTopTraits, history}) => {
         if (!mergeStackHasValues && initialPairs.current.length === 0){
             if (sortedPairs.current.length === 0 ){
                 setTopTraits(finishedList.current);
-                history.push('/Results')
+                history.push('/Results');
             }
             else {
                 buildMerge(sortedPairs.current[0])
@@ -74,8 +79,15 @@ const RankStack = ({ topTraits, setTopTraits, history}) => {
 
         setDisplayedPairs(initialPairs.current[0]);
         if(initialPairs.current.length === 1){
-            finishedList.current = sortedPairs.current.shift();
-            console.log("Prepping for round 2")
+            if(unevenList.current !== null){
+                finishedList.current.push(unevenList.current);
+                console.log("Prepping for round uneven")
+            }
+            else {
+                finishedList.current = sortedPairs.current.shift();
+                console.log("Prepping for round 2")
+            }
+
         }
     }
 
