@@ -127,7 +127,7 @@ const RankStack = ({ topTraits, setTopTraits, history}) => {
         }
         else {
             if(pick === displayedPairs[0]){
-                finishedList.current.splice(rightGuess.current, 0, sortingPair.current[1]);
+                finishedList.current.splice(rightGuess.current+1, 0, sortingPair.current[1]);
                 mergeStack.current[1] = []
             }
             else {
@@ -135,7 +135,7 @@ const RankStack = ({ topTraits, setTopTraits, history}) => {
                 rightGuess.current--;
                 console.log("rightGuess ", rightGuess.current);
                 if(mergeStack.current[1].length === 0){
-                    finishedList.current.splice(rightGuess.current, 0, sortingPair.current[1]);
+                    finishedList.current.splice(rightGuess.current+1, 0, sortingPair.current[1]);
                     mergeStack.current[1].shift();
                 }
             }
@@ -187,10 +187,10 @@ const RankStack = ({ topTraits, setTopTraits, history}) => {
         <div>
             <Grid container spacing={60}>
                 <Grid item>
-                    <StaticTrait onClick={e => handlePick(displayedPairs[0])} trait={displayedPairs[0]}/>
+                    <StaticTrait onClick={() => handlePick(displayedPairs[0])} trait={displayedPairs[0]}/>
                 </Grid>
                 <Grid item>
-                    <StaticTrait onClick={e => handlePick(displayedPairs[1])} trait={displayedPairs[1]}/>
+                    <StaticTrait onClick={() => handlePick(displayedPairs[1])} trait={displayedPairs[1]}/>
                 </Grid>
             </Grid>
         </div>
