@@ -28,7 +28,7 @@ body {
     border-radius: 1rem;
     padding: 1rem;
     box-shadow: 4px 4px 12px 2px rgba(black, 0.60);
-    transition: 0.4s;
+    transition: 0.2s;
     height: 10rem;
     width: 14rem;
     position: relative;
@@ -54,11 +54,8 @@ p {
 
 
 //source:https://codepen.io/toddwebdev/pen/yWMgQX
-.card:hover{
-    transform: translatey(-5.5rem);
-
-    border-bottom: 5.5rem solid transparent;
-    margin-bottom: -5.5rem;
-
+.card:hover,
+{
+    transform: translatey(-.5rem);
 }
 

@@ -3,16 +3,15 @@ import {traitIcons} from "../Assets/listOfAllTraits";
 import {List, ListItem, ListItemAvatar, ListItemText} from "@mui/material";
 
 const Results = ({topTraits}) => {
-
     return(
         <div>
             <h3>
                 Top Ten
             </h3>
             <List>
-                {topTraits.map((trait) =>{
+                {topTraits.reverse().map((trait) =>{
                  return(
-                     <ListItem>
+                     <ListItem key={trait}>
                          <ListItemAvatar>
                              {traitIcons[trait]}
                          </ListItemAvatar>

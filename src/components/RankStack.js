@@ -1,9 +1,7 @@
-import React, {useEffect, useRef} from "react";
-import Trait from "./Traits/Trait";
-import styled from "styled-components";
-import TraitCard from "./Traits/TraitCard";
-import {Button} from "@mui/material";
+import React, {useEffect} from "react";
 import StaticTrait from "./Traits/StaticTrait";
+import {Grid} from "@mui/material";
+
 
 
 
@@ -27,7 +25,7 @@ const RankStack = ({ topTraits, setTopTraits, history}) => {
         for (let i = 0; i < topTraits.length; i += 2){
             initialPairs.current.push([topTraits[i],topTraits[i+1]]);
         }
-    },[])
+    },[topTraits])
 
     const handlePick = (pick) => {
         console.log("pick: " + pick)
@@ -44,13 +42,16 @@ const RankStack = ({ topTraits, setTopTraits, history}) => {
         }
 
         let mergeStackHasValues = mergeStack.current.some(function (any) {return any.length});
-        if (sortedPairs.current.length !== 0 && !mergeStackHasValues && initialPairs.current.length === 0){
-            buildMerge(sortedPairs.current[0])
+        if (!mergeStackHasValues && initialPairs.current.length === 0){
+            if (sortedPairs.current.length === 0 ){
+                setTopTraits(finishedList.current);
+                history.push('/Results')
+            }
+            else {
+                buildMerge(sortedPairs.current[0])
+            }
         }
-        if (sortedPairs.current.length === 0 && !mergeStackHasValues){
-            setTopTraits(finishedList.current);
-            history.push('/Results')
-        }
+
 
         console.log("initialPairs: ", initialPairs.current)
         console.log("sortedPairs: ", sortedPairs.current)
@@ -179,12 +180,19 @@ const RankStack = ({ topTraits, setTopTraits, history}) => {
     const clearStacks = () => {
         joinStack.current = [];
         mergeStack.current = [];
+        sortingPair.current = [];
     }
 
     return (
         <div>
-            <StaticTrait value={displayedPairs[0]} onClick={e => handlePick(e.target.value)} trait={displayedPairs[0]}/>
-            <StaticTrait value={displayedPairs[1]} onClick={e => handlePick(e.target.value)} trait={displayedPairs[1]}/>
+            <Grid container spacing={60}>
+                <Grid item>
+                    <StaticTrait onClick={e => handlePick(displayedPairs[0])} trait={displayedPairs[0]}/>
+                </Grid>
+                <Grid item>
+                    <StaticTrait onClick={e => handlePick(displayedPairs[1])} trait={displayedPairs[1]}/>
+                </Grid>
+            </Grid>
         </div>
 
     )

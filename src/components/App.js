@@ -14,7 +14,6 @@ const App = () => {
     const history = useHistory();
     const [columnData, setColumnData] = useState(initialTraits);
 
-    const [formText, setFromText] = useState('');
     const [topTraits, setTopTraits] = useState(initialTraits.traits.slice(0,10))
 
     const onDragEnd = ({destination, source, draggableId}) => {

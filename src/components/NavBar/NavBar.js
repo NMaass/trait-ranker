@@ -1,5 +1,5 @@
 import React from "react";
-import {AppBar, Box, Button, IconButton, Toolbar} from "@mui/material";
+import {AppBar, Box, Toolbar} from "@mui/material";
 
 import HelpDialogBox from "./HelpDialogBox";
 import BackButton from "./BackButton";

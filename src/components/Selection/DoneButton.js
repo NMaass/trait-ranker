@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React from "react";
 import likedTraits from "./likedTraits";
 import {Button} from "@mui/material";
 
@@ -21,7 +21,7 @@ const DoneButton = ({topTraits, setTopTraits, columnData, setColumnData, history
         }
         else if(pickingRound === 2){
             setTopTraits(columnData.columns.column2.traitIds);
-            history.push("/Results");
+            history.push("/Rank");
         }
         else{
            setPickingRound(2);
@@ -36,6 +36,7 @@ const DoneButton = ({topTraits, setTopTraits, columnData, setColumnData, history
     }
     const clearColumns = () => {
         let newColumnData = columnData;
+        // eslint-disable-next-line no-unused-vars
         for (const [key, value] of Object.entries(newColumnData.columns)){
             value.traitIds = [];
         }
