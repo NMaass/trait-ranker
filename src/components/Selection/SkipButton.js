@@ -13,7 +13,9 @@ const SkipButton = ({column, data, setData, id}) => {
         setData(newData);
     }
   return(
-      <IconButton aria-label="skip" onClick={handleSkip}>
+      <IconButton aria-label="skip"
+                  onClick={handleSkip}
+                  style={{ backgroundColor: 'transparent' }} >
             <SkipNextIcon/>
       </IconButton>
   )

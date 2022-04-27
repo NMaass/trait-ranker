@@ -25,10 +25,14 @@ const TraitList = styled.div`
   transition: background-color 0.2s ease;
   background-color: ${props => (props.isDraggingOver ? 'lightBlue' : 'white')};
   display: flex;
+  min-width: 20rem;
+  min-height: 14rem;
 `;
 
 const Title = styled.h3 `
 padding: 8px;
+  min-width: 20rem;
+
 `;
 
 const Column = ({ column, traits, key, setData, data}) => {
@@ -41,7 +45,7 @@ const Column = ({ column, traits, key, setData, data}) => {
             <Droppable key={column.id} droppableId={column.id} direction='horizontal'>
                 {(provided, snapshot) => (
                     <TraitList
-                        classname='cards fa-stack'
+                        classname='cards stack'
                         ref={provided.innerRef}
                         isDraggingOver={snapshot.isDraggingOver}
                         {...provided.droppableProps}

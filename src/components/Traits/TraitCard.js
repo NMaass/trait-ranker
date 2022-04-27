@@ -6,13 +6,11 @@ import {traitIcons} from "../../Assets/listOfAllTraits";
 const TraitCard = ({trait}) => {
     return (
 
-        <div className='card'>
+        <div className='card jumper'>
             <h1>
                 {trait}
             </h1>
-            <div className='icon'>
-                {traitIcons[trait]}
-             </div>
+                {React.cloneElement(traitIcons[trait],{size: 60})}
          </div>
 
     )

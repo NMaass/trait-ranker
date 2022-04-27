@@ -1,10 +1,9 @@
 import React from "react";
-import likedTraits from "./likedTraits";
 import {Button} from "@mui/material";
+import listOfAllTraits from "../../Assets/listOfAllTraits";
 
 const DoneButton = ({topTraits, setTopTraits, columnData, setColumnData, history}) => {
-    const allTraits = likedTraits.traits;
-    const [pickingRound, setPickingRound] = React.useState(1);
+    const allTraits = listOfAllTraits;
     const [currentTraits, setCurrentTraits] = React.useState(allTraits.slice(0,10));
 
 
@@ -19,14 +18,8 @@ const DoneButton = ({topTraits, setTopTraits, columnData, setColumnData, history
             updateColumn(newTraits);
             console.log(currentTraits);
         }
-        else if(pickingRound === 2){
-            setTopTraits(columnData.columns.column2.traitIds);
-            history.push("/Rank");
-        }
         else{
-           setPickingRound(2);
-           likedTraits.columns.column1.traitIds = topTraits;
-           setColumnData(likedTraits);
+            history.push("/Rank");
         }
     }
     const addTopTraits = (traitsToAdd) => {
@@ -51,7 +44,7 @@ const DoneButton = ({topTraits, setTopTraits, columnData, setColumnData, history
 
 
     return(
-        <Button onClick={handleDone}>
+        <Button onClick={handleDone} size='large'>
             Done
         </Button>
     )

@@ -1,6 +1,6 @@
 
-import {Leaderboard, Psychology, SocialDistance, Handshake, SportsSoccer, FitnessCenter, MenuBook, ConnectWithoutContact, WatchOff, VolunteerActivism, AccessTime, VerifiedUser} from "@mui/icons-material";
 import {
+    BiAlarmOff,
     BiHappyBeaming,
     BsFillShieldLockFill,
     BsFillStopwatchFill,
@@ -32,12 +32,12 @@ import {
     GiSplitArrows,
     GrLineChart,
     HiOutlineScale,
-    HiPuzzle,
-    MdFamilyRestroom,
-    MdOutlineThumbsUpDown,
+    HiPuzzle, MdAccessTime, MdConnectWithoutContact,
+    MdFamilyRestroom, MdFitnessCenter, MdLeaderboard, MdMenuBook,
+    MdOutlineThumbsUpDown, MdOutlineVerifiedUser, MdPsychology, MdSocialDistance, MdSportsSoccer, MdVolunteerActivism,
     RiEmotionSadLine,
     RiGovernmentLine,
-    RiUserHeartFill
+    RiUserHeartFill, SiHandshake
 } from "react-icons/all";
 
 const allTraits = [
@@ -51,26 +51,26 @@ const allTraits = [
 
 export const traitIcons = {
     'Artistry': <GiPalette/>,
-    'Musical Talent': <BsMusicNoteBeamed/>,
+    'Musical Talent': <BsMusicNoteBeamed />,
     'Leadership': <GiFlyingFlag/>,
-    'Excellence': <Leaderboard/>,
-    'Self Control': <Psychology/>,
+    'Excellence': <MdLeaderboard/>,
+    'Self Control': <MdPsychology/>,
     'Physical Appearance': <GiClothes/>,
     'Independence': <GiBreakingChain/> ,
     'Flexibility': <GiSplitArrows/>,
-    'Personal Space': <SocialDistance/>,
+    'Personal Space': <MdSocialDistance/>,
     'Rest': <GiNightSleep/>,
     'Kindness': <RiUserHeartFill/>,
-    'Recreation': <SportsSoccer/>,
-    'Strength': <FitnessCenter/>,
-    'Wisdom': <MenuBook/>,
-    'Empathy': <ConnectWithoutContact/>,
-    'Trust':  <Handshake/>,
-    'Spontaneity': <WatchOff/>,
+    'Recreation': <MdSportsSoccer/>,
+    'Strength': <MdFitnessCenter/>,
+    'Wisdom': <MdMenuBook/>,
+    'Empathy': <MdConnectWithoutContact/>,
+    'Trust':  <SiHandshake/>,
+    'Spontaneity': <BiAlarmOff/>,
     'Adventure': <GiMountainRoad/>,
-    'Integrity': <VerifiedUser/>,
-    'Generosity': <VolunteerActivism/>,
-    'Patience': <AccessTime/>,
+    'Integrity': <MdOutlineVerifiedUser/>,
+    'Generosity': <MdVolunteerActivism/>,
+    'Patience': <MdAccessTime/>,
     'Perseverance': <GiMountainClimbing/>,
     'Mercy': <GiGlowingHands/>,
     'Romance': <GiHeartInside/>,

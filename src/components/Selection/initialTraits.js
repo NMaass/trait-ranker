@@ -9,12 +9,12 @@ const initialTraits = {
         },
         'column2':{
             id: 'column2',
-            title:'Neutral Value',
+            title:'Valued',
             traitIds:traits.slice(0,10),
         },
         'column3':{
             id: 'column3',
-            title:'Valued',
+            title:'Highly Valued',
             traitIds:[],
         },
     },

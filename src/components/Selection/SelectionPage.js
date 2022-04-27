@@ -1,12 +1,9 @@
 import React from "react";
 import DoneButton from "./DoneButton"
 import Column from "./Column";
-import styled from "styled-components";
 import {DragDropContext} from "react-beautiful-dnd";
+import {Grid} from "@mui/material";
 
-const Container = styled.div`
-  display: flex;
-`;
 
 
 
@@ -15,25 +12,33 @@ const SelectionPage = ({columnData, onDragEnd, topTraits, setTopTraits, setColum
     return(
         <div>
             <DragDropContext onDragEnd={onDragEnd}>
-                <Container>
+                <Grid container>
                     {
 
                         columnData.columnOrder.map(columnId => {
                         const column = columnData.columns[columnId];
                         return (
-                            <Container key={column.id}>
+                            <Grid item key={column.id}>
                                 <Column column={column} traits={column.traitIds} setData={setColumnData} data={columnData} />
-                            </Container>
+                            </Grid>
                         )}
                         )}
-                </Container>
+                </Grid>
             </DragDropContext>
-            <DoneButton
-                topTraits={topTraits}
-                setTopTraits={setTopTraits}
-                columnData={columnData}
-                setColumnData={setColumnData}
-                history={history}/>
+            <Grid container
+                  alignItems='center'
+                  justifyContent="center"
+            >
+                <Grid item >
+                    <DoneButton
+                        topTraits={topTraits}
+                        setTopTraits={setTopTraits}
+                        columnData={columnData}
+                        setColumnData={setColumnData}
+                        history={history}/>
+                </Grid>
+            </Grid>
+
         </div>
     )
 };
