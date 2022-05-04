@@ -1,30 +1,36 @@
-import React from "react";
+import React, {useEffect} from "react";
 import DoneButton from "./DoneButton"
 import Column from "./Column";
 import {DragDropContext} from "react-beautiful-dnd";
-import {Grid} from "@mui/material";
+import {Fade, Grid} from "@mui/material";
 import listOfAllTraits from "../../Assets/listOfAllTraits";
 
 
 
 
 const SelectionPage = ({columnData, onDragEnd, topTraits, setTopTraits, setColumnData, history}) =>{
-    const [currentTraits, setCurrentTraits] = React.useState(listOfAllTraits.slice(0,10));
+    const [currentTraits, setCurrentTraits] = React.useState(columnData.columns.column2.traitIds);
+    const selectionFaded= React.useRef(true);
 
-    const handleDone = () => {
-        console.log(currentTraits);
-        if (currentTraits[currentTraits.length-1] !== listOfAllTraits[listOfAllTraits.length-1]){
-            addTopTraits(columnData.columns.column3.traitIds);
-            let indexOfLastTrait = listOfAllTraits.indexOf(currentTraits[currentTraits.length-1]);
-            let newTraits = listOfAllTraits.slice(indexOfLastTrait+1,indexOfLastTrait+11);
-            setCurrentTraits(newTraits);
-            clearColumns();
-            updateColumn(newTraits);
-            console.log(currentTraits);
+    useEffect(()=>{
+        //handleSelected()
+    },[columnData])
+
+    const handleSelected = () => {
+        let currentColumn = columnData.columns.column2.traitIds;
+        console.log("current column length: ", currentColumn.length, "current column: ", currentColumn)
+        if (currentColumn.length < 5) {
+            if (currentTraits[currentTraits.length - 1] !== listOfAllTraits[listOfAllTraits.length - 1]) {
+                addTopTraits(columnData.columns.column3.traitIds);
+                let indexOfFirstTrait = listOfAllTraits.indexOf(currentColumn[0]);
+                currentColumn.push(listOfAllTraits[indexOfFirstTrait+1]);
+                setCurrentTraits(currentColumn);
+                updateStarterColumn(currentColumn);
+                console.log(currentTraits);
+            } else {
+              history.push("/Rank");
         }
-        else{
-            history.push("/Rank");
-        }
+    }
     }
     const addTopTraits = (traitsToAdd) => {
         let newTopTraits = topTraits;
@@ -40,7 +46,7 @@ const SelectionPage = ({columnData, onDragEnd, topTraits, setTopTraits, setColum
         setColumnData(newColumnData);
     }
 
-    const updateColumn = (newTraits) => {
+    const updateStarterColumn = (newTraits) => {
         let newColumnData = columnData;
         newColumnData.columns.column2.traitIds = newTraits;
         setColumnData(newColumnData)
@@ -51,10 +57,10 @@ const SelectionPage = ({columnData, onDragEnd, topTraits, setTopTraits, setColum
 
     return(
         <div>
-            <DragDropContext onDragEnd={onDragEnd}>
-                <Grid container>
-                    {
-
+                <div>
+                    <DragDropContext onDragEnd={onDragEnd}>
+                        <Grid container>
+                        {
                         columnData.columnOrder.map(columnId => {
                         const column = columnData.columns[columnId];
                         return (
@@ -63,18 +69,9 @@ const SelectionPage = ({columnData, onDragEnd, topTraits, setTopTraits, setColum
                             </Grid>
                         )}
                         )}
-                </Grid>
-            </DragDropContext>
-            <Grid container
-                  alignItems='center'
-                  justifyContent="center"
-            >
-                <Grid item >
-                    <DoneButton
-                       onClick={handleDone}/>
-                </Grid>
-            </Grid>
-
+                        </Grid>
+                    </DragDropContext>
+                </div>
         </div>
     )
 };

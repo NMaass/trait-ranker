@@ -1,4 +1,5 @@
 import traits from "../../Assets/listOfAllTraits";
+import listOfAllTraits from "../../Assets/listOfAllTraits";
 const initialTraits = {
     traits,
     columns:{
@@ -9,12 +10,12 @@ const initialTraits = {
         },
         'column2':{
             id: 'column2',
-            title:'Valued',
-            traitIds:traits.slice(0,10),
+            title:'Traits',
+            traitIds:listOfAllTraits.slice(0,5),
         },
         'column3':{
             id: 'column3',
-            title:'Highly Valued',
+            title:'Valued',
             traitIds:[],
         },
     },

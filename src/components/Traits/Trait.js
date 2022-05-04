@@ -8,20 +8,30 @@ const Container = styled.div`
 `;
 
 
-
+const draggingCustomStyle = (style: React.CSSProperties | undefined) => {
+    if (style?.transform) {
+        const axisLockX = `${style.transform.split(",").shift()}, 0px)`;
+        return {
+            ...style,
+            transform: axisLockX,
+        };
+    }
+    return style;
+};
 
 const Trait = ({ trait, index}) => {
     return(
-        <Draggable draggableId={trait} key={trait} index={index}>
+        <Draggable draggableId={trait} key={trait} index={index} >
             {(provided, snapshot) => (
                 <Container
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
                     ref={provided.innerRef}
                     isDragging={snapshot.isDragging}
+                    style={draggingCustomStyle(provided.draggableProps.style)}
                 >
 
-                        <TraitCard trait={trait}/>
+                        <TraitCard trait={trait} />
                 </Container>
             )}
 

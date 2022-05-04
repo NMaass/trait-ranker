@@ -50,7 +50,7 @@ const Column = ({ column, traits, key, setData, data}) => {
                         isDraggingOver={snapshot.isDraggingOver}
                         {...provided.droppableProps}
                     >
-                        {traits.map((trait, index) => {
+                        {traits.reverse().map((trait, index) => {
                             return(
 
                                     <Trait key={trait} trait={trait} index={index}/>

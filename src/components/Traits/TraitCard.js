@@ -6,7 +6,7 @@ import {traitIcons} from "../../Assets/listOfAllTraits";
 const TraitCard = ({trait}) => {
     return (
 
-        <div className='card jumper'>
+        <div className='card'>
             <h1>
                 {trait}
             </h1>

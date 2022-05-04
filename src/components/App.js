@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import initialTraits from './Selection/initialTraits';
 import Results from "./Results";
 import RankStack from "./RankStack";
@@ -13,8 +13,18 @@ import SelectionPage from "./Selection/SelectionPage";
 const App = () => {
     const history = useHistory();
     const [columnData, setColumnData] = useState(initialTraits);
+    const [topTraits, setTopTraits] = useState([]);
 
-    const [topTraits, setTopTraits] = useState([])
+    const [showMobile, setShowMobile] = useState(false);
+
+    useEffect(()=>{
+        if (window.innerWidth > 767){
+            setShowMobile(false);
+        }
+        else if(window.innerWidth < 767){
+            setShowMobile(true);
+        }
+    })
 
     const onDragEnd = ({destination, source, draggableId}) => {
         if(!destination){
