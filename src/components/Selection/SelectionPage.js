@@ -1,5 +1,4 @@
 import React, {useEffect} from "react";
-import DoneButton from "./DoneButton"
 import Column from "./Column";
 import {DragDropContext} from "react-beautiful-dnd";
 import {Fade, Grid} from "@mui/material";
@@ -13,8 +12,14 @@ const SelectionPage = ({columnData, onDragEnd, topTraits, setTopTraits, setColum
     const selectionFaded= React.useRef(true);
 
     useEffect(()=>{
-        //handleSelected()
-    },[columnData])
+        console.log("currentTraits: ", columnData.columns.column2.traitIds)
+        console.log("top traits: ", columnData.columns.column3.traitIds)
+        if(columnData.columns.column2.traitIds.length === 0){
+               setTopTraits(columnData.columns.column3.traitIds);
+               history.push("/Rank");
+           }
+
+    },[columnData, history, setTopTraits])
 
     const handleSelected = () => {
         let currentColumn = columnData.columns.column2.traitIds;
@@ -60,15 +65,15 @@ const SelectionPage = ({columnData, onDragEnd, topTraits, setTopTraits, setColum
                 <div>
                     <DragDropContext onDragEnd={onDragEnd}>
                         <Grid container>
-                        {
-                        columnData.columnOrder.map(columnId => {
-                        const column = columnData.columns[columnId];
-                        return (
-                            <Grid item key={column.id}>
-                                <Column column={column} traits={column.traitIds} setData={setColumnData} data={columnData} />
+                            <Grid item key={columnData.columnOrder[0]}>
+                                <Column column={columnData.columns.column1}/>
                             </Grid>
-                        )}
-                        )}
+                            <Grid item key={columnData.columnOrder[1]}>
+                                <Column column={columnData.columns.column2} isStarter={true} />
+                            </Grid>
+                            <Grid item key={columnData.columnOrder[2]}>
+                                <Column column={columnData.columns.column3}/>
+                            </Grid>
                         </Grid>
                     </DragDropContext>
                 </div>

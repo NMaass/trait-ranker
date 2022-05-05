@@ -10,7 +10,7 @@ const TraitCard = ({trait}) => {
             <h1>
                 {trait}
             </h1>
-                {React.cloneElement(traitIcons[trait],{size: 60})}
+                {trait && React.cloneElement(traitIcons[trait],{size: 60})}
          </div>
 
     )
