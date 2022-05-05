@@ -5,10 +5,10 @@ import Trait from '../Traits/Trait';
 import SkipButton from "./SkipButton";
 import '../../style/CardStacking.scss'
 import listOfAllTraits from "../../Assets/listOfAllTraits";
+import {Grid} from "@mui/material";
 
 const Container = styled.div`
   display: flex;
-  flex-direction: column;
 `;
 
 
@@ -16,8 +16,9 @@ const TraitList = styled.div`
   transition: background-color 0.2s ease;
   background-color: ${props => (props.isDraggingOver ? 'lightBlue' : 'white')};
   display: flex;
-  min-width: ${props => (props.isStarter ? '1px' : '50rem')};
-  min-height: ${props => (props.isStarter ? '1px' : '50rem')};
+  min-width: ${props => (props.isStarter ? '1px' : '49.9vw')};
+  min-height:  100vh;
+  max-width: ${props =>(props.isStarter && '1px')};
 `;
 
 
@@ -34,8 +35,23 @@ const Column = ({ column, isStarter = false}) => {
                         isDraggingOver={snapshot.isDraggingOver}
                         {...provided.droppableProps}
                     >
-                        {isStarter && <Trait key={column?.traitIds[0]} trait={column?.traitIds[0]} index={column?.traitIds.indexOf(column?.traitIds[0])}/>}
+                        <Grid
+                            container
+                            spacing={0}
+                            direction="column"
+                            alignItems="center"
+                            justifyContent="center"
+
+                        >
+                            <Grid item margin="auto">
+                        {isStarter && <Trait key={column?.traitIds[0]}
+                                             trait={column?.traitIds[0]}
+                                             index={column?.traitIds.indexOf(column?.traitIds[0])}
+                                             style={!isStarter && {marginLeft:'24vw'}}
+                        />}
                         {provided.placeholder}
+                            </Grid>
+                        </Grid>
                     </TraitList>
                 )}
             </Droppable>

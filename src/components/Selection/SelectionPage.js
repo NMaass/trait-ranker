@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
 import Column from "./Column";
 import {DragDropContext} from "react-beautiful-dnd";
-import {Fade, Grid} from "@mui/material";
+import {Box, Fade, Grid} from "@mui/material";
 import listOfAllTraits from "../../Assets/listOfAllTraits";
 
 
@@ -61,10 +61,10 @@ const SelectionPage = ({columnData, onDragEnd, topTraits, setTopTraits, setColum
 
 
     return(
-        <div>
+        <Box height={'100vh'} width={'100vw'}>
                 <div>
-                    <DragDropContext onDragEnd={onDragEnd}>
-                        <Grid container>
+                    <DragDropContext onDragEnd={onDragEnd} direction={'row'}>
+                        <Grid container spacing={0}>
                             <Grid item key={columnData.columnOrder[0]}>
                                 <Column column={columnData.columns.column1}/>
                             </Grid>
@@ -77,7 +77,7 @@ const SelectionPage = ({columnData, onDragEnd, topTraits, setTopTraits, setColum
                         </Grid>
                     </DragDropContext>
                 </div>
-        </div>
+        </Box>
     )
 };
 export default SelectionPage;

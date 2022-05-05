@@ -4,7 +4,7 @@ import {Draggable} from "react-beautiful-dnd";
 import TraitCard from "./TraitCard";
 
 const Container = styled.div`
-  
+ 
 `;
 
 
