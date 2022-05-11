@@ -1,19 +1,26 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {traitIcons} from "../Assets/listOfAllTraits";
 import {List, ListItem, ListItemAvatar, ListItemText} from "@mui/material";
+import {IconContext} from "react-icons";
 
-const Results = ({topTraits}) => {
+const Results = ({topTraits, setTopTraits, fetchTopTraits}) => {
+
+    useEffect(()=>{
+        setTopTraits(fetchTopTraits)
+    },[fetchTopTraits, setTopTraits])
     return(
         <div>
             <h3>
                 Top Ten
             </h3>
             <List>
-                {topTraits.reverse().map((trait) =>{
+                {topTraits.reverse().splice(0,10).map((trait) =>{
                  return(
                      <ListItem key={trait}>
                          <ListItemAvatar>
-                             {traitIcons[trait]}
+                             <IconContext.Provider value={{size: '6vw'}}>
+                                 {traitIcons[trait]}
+                             </IconContext.Provider>
                          </ListItemAvatar>
                          <ListItemText>
                              {trait}
@@ -22,12 +29,6 @@ const Results = ({topTraits}) => {
                  )
                 })}
             </List>
-            <div style={{display:'flex'}}>
-                <p>
-                    Lorem ipsum dolar sit amet
-                </p>
-            </div>
-
         </div>)
 };
 

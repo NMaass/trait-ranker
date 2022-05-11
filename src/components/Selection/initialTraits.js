@@ -11,7 +11,7 @@ const initialTraits = {
         'column2':{
             id: 'column2',
             title:'Traits',
-            traitIds:listOfAllTraits.slice(0,5),
+            traitIds:listOfAllTraits,
         },
         'column3':{
             id: 'column3',

@@ -15,6 +15,7 @@ const SelectionPage = ({columnData, onDragEnd, topTraits, setTopTraits, setColum
         console.log("currentTraits: ", columnData.columns.column2.traitIds)
         console.log("top traits: ", columnData.columns.column3.traitIds)
         if(columnData.columns.column2.traitIds.length === 0){
+            console.log(columnData.columns.column3.traitIds)
                setTopTraits(columnData.columns.column3.traitIds);
                history.push("/Rank");
            }
@@ -23,19 +24,18 @@ const SelectionPage = ({columnData, onDragEnd, topTraits, setTopTraits, setColum
 
     const handleSelected = () => {
         let currentColumn = columnData.columns.column2.traitIds;
-        console.log("current column length: ", currentColumn.length, "current column: ", currentColumn)
-        if (currentColumn.length < 5) {
-            if (currentTraits[currentTraits.length - 1] !== listOfAllTraits[listOfAllTraits.length - 1]) {
+        if (currentTraits[currentTraits.length - 1] !== listOfAllTraits[listOfAllTraits.length - 1]) {
                 addTopTraits(columnData.columns.column3.traitIds);
                 let indexOfFirstTrait = listOfAllTraits.indexOf(currentColumn[0]);
                 currentColumn.push(listOfAllTraits[indexOfFirstTrait+1]);
                 setCurrentTraits(currentColumn);
                 updateStarterColumn(currentColumn);
                 console.log(currentTraits);
-            } else {
-              history.push("/Rank");
         }
-    }
+        else {
+                addTopTraits(columnData.columns.column3.traitIds)
+                history.push("/Rank");
+        }
     }
     const addTopTraits = (traitsToAdd) => {
         let newTopTraits = topTraits;

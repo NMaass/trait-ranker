@@ -6,7 +6,7 @@ import {Grid} from "@mui/material";
 
 
 
-const RankStack = ({ topTraits, setTopTraits, history}) => {
+const RankStack = ({ topTraits, setTopTraits, history, fetchTopTraits}) => {
     const [displayedPairs, setDisplayedPairs] = React.useState(topTraits.slice(0,2));
 
     let initialPairs = React.useRef([]);
@@ -23,19 +23,16 @@ const RankStack = ({ topTraits, setTopTraits, history}) => {
     let unevenList = React.useRef(null);
 
     useEffect(() => {
-        let initialTraits = topTraits;
-        if(topTraits.length === 0){
-            initialTraits = sessionStorage.getItem("topTraits").split(',')
-            console.log("grabbing from storage:", initialTraits)
-            setDisplayedPairs(initialTraits.slice(0,2))
-        }
+        let initialTraits = fetchTopTraits()
+        setDisplayedPairs(initialTraits.slice(0,2))
+
         if (initialTraits.length % 2){
             unevenList.current = initialTraits.pop();
         }
         for (let i = 0; i < initialTraits.length; i += 2){
             initialPairs.current.push([initialTraits[i],initialTraits[i+1]]);
         }
-    },[topTraits])
+    },[fetchTopTraits])
 
     const handlePick = (pick) => {
         console.log("pick: " + pick)
