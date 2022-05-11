@@ -15,16 +15,11 @@ const App = () => {
     const [columnData, setColumnData] = useState(initialTraits);
     const [topTraits, setTopTraits] = useState([]);
 
-    const [showMobile, setShowMobile] = useState(false);
-
     useEffect(()=>{
-        if (window.innerWidth > 767){
-            setShowMobile(false);
-        }
-        else if(window.innerWidth < 767){
-            setShowMobile(true);
-        }
-    })
+        sessionStorage.setItem("topTraits", topTraits)
+        console.log("setting storage traits: ", sessionStorage.getItem("topTraits"))
+    },[topTraits, setTopTraits])
+
 
     const onDragEnd = ({destination, source, draggableId}) => {
         if(!destination){

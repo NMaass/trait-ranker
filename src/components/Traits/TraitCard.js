@@ -1,7 +1,7 @@
 import React from "react";
 import '../../style/CardStacking.scss'
 import {traitIcons} from "../../Assets/listOfAllTraits";
-
+import { IconContext } from "react-icons";
 
 const TraitCard = ({trait}) => {
     return (
@@ -10,10 +10,11 @@ const TraitCard = ({trait}) => {
             <h1>
                 {trait}
             </h1>
-                {trait && React.cloneElement(traitIcons[trait],{size: 60})}
+
+
          </div>
 
     )
-};
+}
 
 export default TraitCard;

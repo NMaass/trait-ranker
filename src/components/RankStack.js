@@ -24,6 +24,11 @@ const RankStack = ({ topTraits, setTopTraits, history}) => {
 
     useEffect(() => {
         let initialTraits = topTraits;
+        if(topTraits.length === 0){
+            initialTraits = sessionStorage.getItem("topTraits").split(',')
+            console.log("grabbing from storage:", initialTraits)
+            setDisplayedPairs(initialTraits.slice(0,2))
+        }
         if (initialTraits.length % 2){
             unevenList.current = initialTraits.pop();
         }

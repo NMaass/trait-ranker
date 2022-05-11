@@ -1,6 +1,7 @@
 import React from "react";
 import '../../style/CardStacking.scss'
 import {traitIcons} from "../../Assets/listOfAllTraits";
+import {IconContext} from "react-icons";
 
 
 
@@ -10,7 +11,9 @@ const StaticTrait = ({trait, onClick}) => {
                 <h1>
                     {trait}
                 </h1>
-            {React.cloneElement(traitIcons[trait],{size: 60})}
+            <IconContext.Provider value={{size: '6vw'}}>
+                {traitIcons[trait]}
+            </IconContext.Provider>
         </div>
     )
 };
