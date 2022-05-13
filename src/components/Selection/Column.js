@@ -14,7 +14,7 @@ const Container = styled.div`
 
 const TraitList = styled.div`
   transition: background-color 0.2s ease;
-  background-color: ${props => (props.isDraggingOver ? 'lightBlue' : 'white')};
+  background-color: ${props => (props.isDraggingOver ? props.hoverColor: 'white')};
   display: flex;
   min-width: ${props => (props.isStarter ? '1px' : '49.9vw')};
   min-height:  100vh;
@@ -23,7 +23,7 @@ const TraitList = styled.div`
 
 
 
-const Column = ({ column, isStarter = false}) => {
+const Column = ({ column, isStarter = false, hoverColor = 'lightBlue'}) => {
     return(
         <Container>
             <Droppable key={column.id} droppableId={column.id} direction='horizontal'>
@@ -32,6 +32,7 @@ const Column = ({ column, isStarter = false}) => {
                         classname='cards stack'
                         ref={provided.innerRef}
                         isStarter={isStarter}
+                        hoverColor = {hoverColor}
                         isDraggingOver={snapshot.isDraggingOver}
                         {...provided.droppableProps}
                     >

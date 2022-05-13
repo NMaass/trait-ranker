@@ -26,29 +26,29 @@ const RankStack = ({ topTraits, setTopTraits, history, fetchTopTraits}) => {
         let initialTraits = fetchTopTraits()
         setDisplayedPairs(initialTraits.slice(0,2))
 
-        if (initialTraits.length % 2){
+        if (initialTraits.length % 2){ //initialize finished list with first element if uneven
             unevenList.current = initialTraits.pop();
         }
-        for (let i = 0; i < initialTraits.length; i += 2){
+        for (let i = 0; i < initialTraits.length; i += 2){ //generate pairs for the user to sort
             initialPairs.current.push([initialTraits[i],initialTraits[i+1]]);
         }
     },[fetchTopTraits])
 
-    const handlePick = (pick) => {
+    const handlePick = (pick) => {  //looks at which arrays are empty to determine what stage the sort is in
         console.log("pick: " + pick)
 
-        if(joinStack.current.length !== 0){
+        if(joinStack.current.length !== 0){ //checking for 'easy' joins
             doJoinRound(pick)
         }
         else if (mergeStack.current.length !== 0){
             doMergeRound(pick)
         }
 
-        if (initialPairs.current.length !== 0){
+        if (initialPairs.current.length !== 0){ //sorting pairs
             doInitialRound(pick);
         }
 
-        let mergeStackHasValues = mergeStack.current.some(function (any) {return any.length});
+        let mergeStackHasValues = mergeStack.current.some(function (any) {return any.length}); //check if all arrays are empty
         if (!mergeStackHasValues && initialPairs.current.length === 0){
             if (sortedPairs.current.length === 0 ){
                 setTopTraits(finishedList.current);
@@ -80,13 +80,13 @@ const RankStack = ({ topTraits, setTopTraits, history, fetchTopTraits}) => {
         sortedPairs.current.push(initialPairs.current.shift());
 
         setDisplayedPairs(initialPairs.current[0]);
-        if(initialPairs.current.length === 1){
-            if(unevenList.current !== null){
+        if(initialPairs.current.length === 1){ //set up the merges one render ahead
+            if(unevenList.current !== null){ //populate finished list with uneven element
                 finishedList.current.push(unevenList.current);
                 console.log("Prepping for round uneven")
             }
             else {
-                finishedList.current = sortedPairs.current.shift();
+                finishedList.current = sortedPairs.current.shift(); //populate list with first sorted pair
                 console.log("Prepping for round 2")
             }
 
@@ -94,9 +94,9 @@ const RankStack = ({ topTraits, setTopTraits, history, fetchTopTraits}) => {
     }
 
     const doJoinRound = (pick) => {
-        if  (joinStack.current.length === 2){
+        if (joinStack.current.length === 2){ //check if left or right join
             if(pick === sortingPair.current[0]){
-                finishedList.current = finishedList.current.concat(sortingPair.current)
+                finishedList.current = finishedList.current.concat(sortingPair.current) //a 'successful' join
                 clearStacks();
             }
             else {
@@ -116,14 +116,14 @@ const RankStack = ({ topTraits, setTopTraits, history, fetchTopTraits}) => {
         }
     }
 
-    const doMergeRound = (pick) => {
+    const doMergeRound = (pick) => { //tries to shift back and forth between items to reduce fatigue
 
-        if(displayedPairs[0] === sortingPair.current[0]) {
-            if (pick !== displayedPairs[0]) {
+        if(displayedPairs[0] === sortingPair.current[0]) { //lower
+            if (pick !== displayedPairs[0]) { //found what is liked more
                 finishedList.current.splice(leftGuess.current, 0, sortingPair.current[0]);
                 mergeStack.current[0] = [];
             }
-            else {
+            else { //keeps going
                 mergeStack.current[0].shift();
                 leftGuess.current++;
                 console.log("leftGuess ", leftGuess.current);
@@ -139,7 +139,7 @@ const RankStack = ({ topTraits, setTopTraits, history, fetchTopTraits}) => {
                 setDisplayedPairs(mergeStack.current[0][0]);
             }
         }
-        else {
+        else { // higher
             if(pick === displayedPairs[0]){
                 finishedList.current.splice(rightGuess.current+1, 0, sortingPair.current[1]);
                 mergeStack.current[1] = []

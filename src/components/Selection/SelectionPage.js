@@ -66,13 +66,13 @@ const SelectionPage = ({columnData, onDragEnd, topTraits, setTopTraits, setColum
                     <DragDropContext onDragEnd={onDragEnd} direction={'row'}>
                         <Grid container spacing={0}>
                             <Grid item key={columnData.columnOrder[0]}>
-                                <Column column={columnData.columns.column1}/>
+                                <Column column={columnData.columns.column1} hoverColor={'LightPink'}/>
                             </Grid>
                             <Grid item key={columnData.columnOrder[1]}>
                                 <Column column={columnData.columns.column2} isStarter={true} />
                             </Grid>
                             <Grid item key={columnData.columnOrder[2]}>
-                                <Column column={columnData.columns.column3}/>
+                                <Column column={columnData.columns.column3} hoverColor={'LightGreen'}/>
                             </Grid>
                         </Grid>
                     </DragDropContext>

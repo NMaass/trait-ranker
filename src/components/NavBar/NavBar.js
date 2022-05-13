@@ -11,7 +11,6 @@ return(
     <Box sx={{flexGrow: 1}}>
         <AppBar position="fixed">
             <Toolbar>
-                <BackButton history={history}/>
                 <HomeButton history={history} />
                 <div style={{marginLeft: "auto"}}>
                     <HelpDialogBox/>

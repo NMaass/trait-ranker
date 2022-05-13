@@ -14,7 +14,7 @@ import allTraits from "../Assets/listOfAllTraits";
 const App = () => {
     const history = useHistory();
     const [columnData, setColumnData] = useState(initialTraits);
-    const [topTraits, setTopTraits] = useState(allTraits.slice(0,10));
+    const [topTraits, setTopTraits] = useState([]);
 
     useEffect(()=>{
         sessionStorage.setItem("topTraits", topTraits)

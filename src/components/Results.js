@@ -3,18 +3,21 @@ import {traitIcons} from "../Assets/listOfAllTraits";
 import {List, ListItem, ListItemAvatar, ListItemText} from "@mui/material";
 import {IconContext} from "react-icons";
 
+
 const Results = ({topTraits, setTopTraits, fetchTopTraits}) => {
 
     useEffect(()=>{
-        setTopTraits(fetchTopTraits)
-    },[fetchTopTraits, setTopTraits])
+        if(topTraits.length === 0){
+            setTopTraits(fetchTopTraits)
+        }
+    },[fetchTopTraits,topTraits, setTopTraits])
     return(
         <div>
             <h3>
-                Top Ten
+                Top Traits
             </h3>
             <List>
-                {topTraits.reverse().splice(0,10).map((trait) =>{
+                {topTraits.reverse().splice(0,7).map((trait) =>{
                  return(
                      <ListItem key={trait}>
                          <ListItemAvatar>
@@ -22,7 +25,7 @@ const Results = ({topTraits, setTopTraits, fetchTopTraits}) => {
                                  {traitIcons[trait]}
                              </IconContext.Provider>
                          </ListItemAvatar>
-                         <ListItemText>
+                         <ListItemText >
                              {trait}
                          </ListItemText>
                      </ListItem>
