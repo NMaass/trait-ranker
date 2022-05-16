@@ -30,7 +30,7 @@ const Trait = ({ trait, index}) => {
                     isDragging={snapshot.isDragging}
                     style={draggingCustomStyle(provided.draggableProps.style)}
                 >
-                        <TraitCard trait={trait} />
+                        <TraitCard trait={trait} provided={provided} />
                 </Container>
             )}
 
