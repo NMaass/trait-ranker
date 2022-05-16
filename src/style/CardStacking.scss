@@ -28,6 +28,15 @@ body {
     height: 12vw;
     width: 16vw;
     position: relative;
+}
+
+@media (max-width: 1024px) {
+    .card{
+        margin-left: -43.5vw;
+        height: 80vh;
+        width: 80vw;
+    }
+}
 .stack {
     color: var(--color-text);
     margin-left: -1rem;
@@ -39,7 +48,7 @@ a {
 p {
     color: var(--color-text);
 }
-}
+
 
 
 .card:last-child{
