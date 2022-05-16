@@ -2,9 +2,7 @@ import React from "react";
 import {Droppable} from "react-beautiful-dnd";
 import styled from 'styled-components'
 import Trait from '../Traits/Trait';
-import SkipButton from "./SkipButton";
 import '../../style/CardStacking.scss'
-import listOfAllTraits from "../../Assets/listOfAllTraits";
 import {Grid} from "@mui/material";
 
 const Container = styled.div`
