@@ -11,12 +11,9 @@ const TraitCard = ({trait, provided}) => {
             <h1>
                 {trait}
             </h1>
-            <IconContext.Provider value={isMobile ? {size: '6vw'} : {size: '70vw'} }>
+            <IconContext.Provider value={isMobile ? {size: '6vw'} : {size: '70vw'}}>
                 {traitIcons[trait]}
             </IconContext.Provider>
-         </div>
-
-    )
-}
-
-export default TraitCard;
+        </div>
+        )}
+export default TraitCard

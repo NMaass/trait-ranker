@@ -5,11 +5,16 @@ import RankStack from "./RankStack";
 import NavBar from "./NavBar/NavBar";
 import {BrowserRouter, Route, useHistory} from "react-router-dom";
 import SelectionPage from "./Selection/SelectionPage";
+import allTraits from "../Assets/listOfAllTraits";
+
+
+
+
 
 const App = () => {
     const history = useHistory();
     const [columnData, setColumnData] = useState(initialTraits);
-    const [topTraits, setTopTraits] = useState(initialTraits.columns.column2.traitIds.splice(0,10));
+    const [topTraits, setTopTraits] = useState([]);
 
     useEffect(()=>{
         sessionStorage.setItem("topTraits", topTraits)
