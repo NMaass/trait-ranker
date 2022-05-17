@@ -5,7 +5,6 @@ import RankStack from "./RankStack";
 import NavBar from "./NavBar/NavBar";
 import {BrowserRouter, Route, useHistory} from "react-router-dom";
 import SelectionPage from "./Selection/SelectionPage";
-import allTraits from "../Assets/listOfAllTraits";
 
 
 

@@ -25,15 +25,15 @@ body {
     padding: 1rem;
     box-shadow: 4px 4px 12px 2px rgba(black, 0.60);
     margin-left: -8vw;
-    height: 12vw;
-    width: 16vw;
+    height: 14vw;
+    width: 18vw;
     position: relative;
 }
 
 @media (max-width: 1024px) {
     .selectionCard{
         margin-left: -43.5vw;
-        height: 40vh;
+        height: 50vh;
         width: 80vw;
     }
     .rankCard{
