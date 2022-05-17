@@ -31,10 +31,16 @@ body {
 }
 
 @media (max-width: 1024px) {
-    .card{
+    .selectionCard{
         margin-left: -43.5vw;
         height: 40vh;
         width: 80vw;
+    }
+    .rankCard{
+        height: 40vw;
+        width: 55vw;
+        margin-left: -30vw;
+        margin-top: 20vw;
     }
 }
 .stack {

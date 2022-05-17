@@ -9,7 +9,7 @@ import SelectionPage from "./Selection/SelectionPage";
 const App = () => {
     const history = useHistory();
     const [columnData, setColumnData] = useState(initialTraits);
-    const [topTraits, setTopTraits] = useState([]);
+    const [topTraits, setTopTraits] = useState(initialTraits.columns.column2.traitIds.splice(0,10));
 
     useEffect(()=>{
         sessionStorage.setItem("topTraits", topTraits)

@@ -7,7 +7,7 @@ import {useMediaQuery} from "@mui/material";
 const TraitCard = ({trait, provided}) => {
     const isMobile = useMediaQuery('(min-width:1024px')
     return (
-        <div className='card' {...provided.dragHandleProps}>
+        <div className='card selectionCard' {...provided.dragHandleProps}>
             <h1>
                 {trait}
             </h1>
