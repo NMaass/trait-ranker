@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.css": "/trait-ranker/static/css/main.c3a84db1.chunk.css",
+    "main.js": "/trait-ranker/static/js/main.4ba2dfcb.chunk.js",
+    "main.js.map": "/trait-ranker/static/js/main.4ba2dfcb.chunk.js.map",
+    "runtime-main.js": "/trait-ranker/static/js/runtime-main.19a30d92.js",
+    "runtime-main.js.map": "/trait-ranker/static/js/runtime-main.19a30d92.js.map",
+    "static/js/2.caa97026.chunk.js": "/trait-ranker/static/js/2.caa97026.chunk.js",
+    "static/js/2.caa97026.chunk.js.map": "/trait-ranker/static/js/2.caa97026.chunk.js.map",
+    "index.html": "/trait-ranker/index.html",
+    "static/css/main.c3a84db1.chunk.css.map": "/trait-ranker/static/css/main.c3a84db1.chunk.css.map",
+    "static/js/2.caa97026.chunk.js.LICENSE.txt": "/trait-ranker/static/js/2.caa97026.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.19a30d92.js",
+    "static/js/2.caa97026.chunk.js",
+    "static/css/main.c3a84db1.chunk.css",
+    "static/js/main.4ba2dfcb.chunk.js"
+  ]
+}
