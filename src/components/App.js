@@ -29,7 +29,7 @@ const App = () => {
             storedTraits = sessionStorage.getItem("topTraits").split(',')
             console.log("grabbing from storage:", initialTraits)
             setTopTraits(storedTraits)
-            if(storedTraits[0] === " "){
+            if(storedTraits.length === 0){
                 history.push('/')
             }
         }

@@ -25,7 +25,6 @@ const Trait = ({ trait, index}) => {
             {(provided, snapshot) => (
                 <Container
                     {...provided.draggableProps}
-                    {...provided.dragHandleProps}
                     ref={provided.innerRef}
                     isDragging={snapshot.isDragging}
                     style={draggingCustomStyle(provided.draggableProps.style)}

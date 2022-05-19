@@ -6,12 +6,14 @@ import {useMediaQuery} from "@mui/material";
 
 const TraitCard = ({trait, provided}) => {
     const isMobile = useMediaQuery('(min-width:1024px')
+
+
     return (
-        <div className='card selectionCard' {...provided.dragHandleProps}>
+        <div className='card selectionCard jumper' {...provided.dragHandleProps} draggable={true} id={trait}>
             <h1>
                 {trait}
             </h1>
-            <IconContext.Provider value={isMobile ? {size: '6vw'} : {size: '70vw'}}>
+            <IconContext.Provider value={isMobile ? {size: '6vw'} : {size: '60vw'}}>
                 {traitIcons[trait]}
             </IconContext.Provider>
         </div>
