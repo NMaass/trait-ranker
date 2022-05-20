@@ -53,7 +53,6 @@ const allTraits = [
     'Strength',
     'Wisdom',
     'Empathy',
-    'Trust',
     'Spontaneity',
     'Adventure',
     'Integrity',

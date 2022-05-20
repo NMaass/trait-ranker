@@ -24,6 +24,9 @@ const RankStack = ({ topTraits, setTopTraits, history, fetchTopTraits}) => {
 
     useEffect(() => {
         let initialTraits = fetchTopTraits()
+        if(topTraits.length === 0){
+            setTopTraits(fetchTopTraits)
+        }
         setDisplayedPairs(initialTraits.slice(0,2))
 
         if (initialTraits.length % 2){ //initialize finished list with first element if uneven
@@ -32,7 +35,7 @@ const RankStack = ({ topTraits, setTopTraits, history, fetchTopTraits}) => {
         for (let i = 0; i < initialTraits.length; i += 2){ //generate pairs for the user to sort
             initialPairs.current.push([initialTraits[i],initialTraits[i+1]]);
         }
-    },[fetchTopTraits])
+    },[fetchTopTraits, setTopTraits, topTraits])
 
     const handlePick = (pick) => {  //looks at which arrays are empty to determine what stage the sort is in
         console.log("pick: " + pick)

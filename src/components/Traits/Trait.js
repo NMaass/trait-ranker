@@ -13,11 +13,29 @@ const draggingCustomStyle = (style: React.CSSProperties | undefined) => {
         const axisLockX = `${style.transform.split(",").shift()}, 0px)`;
         return {
             ...style,
-            transform: axisLockX,
+            transform: axisLockX
         };
     }
     return style;
 };
+
+function getStyle(style, snapshot) {
+    style = draggingCustomStyle(style)
+    if (!snapshot.isDropAnimating) {
+        return style;
+    }
+    const { moveTo, curve, duration } = snapshot.dropAnimation;
+    // move to the right spot
+    const translate = `translate(${moveTo.x}px, ${moveTo.y}px)`;
+
+    // patching the existing style
+    return {
+        ...style,
+        transform: translate,
+        // slowing down the drop because we can
+        transition: `all ${curve} ${duration + 1}s`,
+    };
+}
 
 const Trait = ({ trait, index}) => {
     return(
@@ -27,7 +45,7 @@ const Trait = ({ trait, index}) => {
                     {...provided.draggableProps}
                     ref={provided.innerRef}
                     isDragging={snapshot.isDragging}
-                    style={draggingCustomStyle(provided.draggableProps.style)}
+                    style={getStyle(provided.draggableProps.style, snapshot)}
                 >
                         <TraitCard trait={trait} provided={provided} />
                 </Container>
