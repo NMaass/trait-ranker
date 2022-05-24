@@ -6,11 +6,12 @@ import {IconContext} from "react-icons";
 
 const Results = ({topTraits, setTopTraits, fetchTopTraits}) => {
 
+
     useEffect(()=>{
         if(topTraits.length === 0){
             setTopTraits(fetchTopTraits)
         }
-    },[fetchTopTraits,topTraits, setTopTraits])
+    },[])
     return(
         <div>
             <h3>
@@ -21,7 +22,7 @@ const Results = ({topTraits, setTopTraits, fetchTopTraits}) => {
                     return(
                         <ListItem key={trait}>
                             <ListItemAvatar>
-                                <IconContext.Provider value={{size: '6vw'}}>
+                                <IconContext.Provider value={{size: '5vw'}}>
                                     {traitIcons[trait]}
                                 </IconContext.Provider>
                             </ListItemAvatar>

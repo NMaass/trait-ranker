@@ -9,7 +9,7 @@ const TraitCard = ({trait, provided}) => {
 
 
     return (
-        <div className='card selectionCard jumper' {...provided.dragHandleProps} draggable={true} id={trait}>
+        <div className='card selectionCard' {...provided.dragHandleProps} draggable={true} id={trait}>
             <h1>
                 {trait}
             </h1>

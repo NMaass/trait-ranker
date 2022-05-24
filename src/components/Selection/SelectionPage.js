@@ -21,7 +21,7 @@ const SelectionPage = ({columnData, onDragEnd,  setTopTraits,  history}) =>{
     },[columnData, history, setTopTraits])
 
     return(
-        <Box height={'100vh'} width={'100vw'}>
+        <Box>
                 <div>
                     <DragDropContext onDragEnd={onDragEnd} direction={'row'}>
                         <Grid container

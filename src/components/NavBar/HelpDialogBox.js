@@ -25,13 +25,10 @@ const HelpDialogBox = () => {
             onClose={handleClose}
             open = {open}
             maxWidth={"xl"}
-            sx={{
-
-            }}
+            contentStyle={{margin:'100px'}}
         >
             <DialogTitle>Instructions</DialogTitle>
             <DialogContentText paragraph={true}>
-                <br/>
                 <br/>-Drag the traits into the stack you best describes how you feel about them
                 <br/>- This is for your personal use so the definitions are subjective to you
             </DialogContentText>

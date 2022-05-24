@@ -35,7 +35,7 @@ const RankStack = ({ topTraits, setTopTraits, history, fetchTopTraits}) => {
         for (let i = 0; i < initialTraits.length; i += 2){ //generate pairs for the user to sort
             initialPairs.current.push([initialTraits[i],initialTraits[i+1]]);
         }
-    },[fetchTopTraits, setTopTraits, topTraits])
+    },[])
 
     const handlePick = (pick) => {  //looks at which arrays are empty to determine what stage the sort is in
         console.log("pick: " + pick)
@@ -205,7 +205,7 @@ const RankStack = ({ topTraits, setTopTraits, history, fetchTopTraits}) => {
     return (
         <div>
             <Grid container
-                  spacing={isMobile ? 60 : 8}
+                  spacing={isMobile ? 60 : 6}
                   alignItems="center"
                   justifyContent="center"
                   direction={isMobile ? "row" : "column"}

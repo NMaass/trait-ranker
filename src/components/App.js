@@ -5,7 +5,7 @@ import RankStack from "./RankStack";
 import NavBar from "./NavBar/NavBar";
 import {BrowserRouter, Route, useHistory} from "react-router-dom";
 import SelectionPage from "./Selection/SelectionPage";
-
+import ReactGA from 'react-ga';
 
 
 
@@ -14,6 +14,8 @@ const App = () => {
     const history = useHistory();
     const [columnData, setColumnData] = useState(initialTraits);
     const [topTraits, setTopTraits] = useState([]);
+    const TRACKING_ID = "G-4RLGL8ENZC";
+    ReactGA.initialize(TRACKING_ID);
 
     useEffect(()=>{
         sessionStorage.setItem("topTraits", topTraits)
