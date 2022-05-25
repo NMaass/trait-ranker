@@ -6,6 +6,7 @@ import NavBar from "./NavBar/NavBar";
 import {BrowserRouter, Route, useHistory} from "react-router-dom";
 import SelectionPage from "./Selection/SelectionPage";
 import ReactGA from 'react-ga';
+import allTraits from "../Assets/listOfAllTraits";
 
 
 
@@ -13,7 +14,7 @@ import ReactGA from 'react-ga';
 const App = () => {
     const history = useHistory();
     const [columnData, setColumnData] = useState(initialTraits);
-    const [topTraits, setTopTraits] = useState([]);
+    const [topTraits, setTopTraits] = useState(allTraits.splice(0,10));
     const TRACKING_ID = "G-4RLGL8ENZC";
     ReactGA.initialize(TRACKING_ID);
 
