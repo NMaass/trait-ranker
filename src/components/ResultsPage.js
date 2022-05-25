@@ -4,7 +4,7 @@ import {List, ListItem, ListItemAvatar, ListItemText} from "@mui/material";
 import {IconContext} from "react-icons";
 
 
-const Results = ({topTraits, setTopTraits, fetchTopTraits}) => {
+const ResultsPage = ({topTraits, setTopTraits, fetchTopTraits}) => {
 
 
     useEffect(()=>{
@@ -36,4 +36,4 @@ const Results = ({topTraits, setTopTraits, fetchTopTraits}) => {
         </div>)
 };
 
-export default Results;
+export default ResultsPage;

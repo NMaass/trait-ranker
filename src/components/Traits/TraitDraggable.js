@@ -2,7 +2,7 @@ import React from 'react';
 import styled from "styled-components";
 import {Draggable } from "react-beautiful-dnd";
 
-import TraitCard from "./TraitCard";
+import SelectionTrait from "./SelectionTrait";
 
 
 
@@ -49,7 +49,7 @@ function getStyle(style, snapshot) {
     };
 }
 
-const Trait = ({ trait, index}) => {
+const TraitDraggable = ({ trait, index}) => {
 
 
     return(
@@ -61,11 +61,11 @@ const Trait = ({ trait, index}) => {
                     isDragging={snapshot.isDragging}
                     style={getStyle(provided.draggableProps.style, snapshot)}
                 >
-                        <TraitCard trait={trait} provided={provided} />
+                        <SelectionTrait trait={trait} provided={provided} />
                 </Container>
             )}
 
         </Draggable>
     )
 }
-export default Trait
+export default TraitDraggable

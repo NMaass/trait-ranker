@@ -1,13 +1,13 @@
-import React, {useEffect} from "react";
+import React from "react";
 import '../../style/CardStacking.scss'
 import {traitIcons} from "../../Assets/listOfAllTraits";
 import {IconContext} from "react-icons";
-import {useMediaQuery, Zoom} from "@mui/material";
+import {useMediaQuery} from "@mui/material";
 import TouchRipple from "@mui/material/ButtonBase/TouchRipple";
 
 
 
-const StaticTrait = ({trait, onClick}) => {
+const RankingTrait = ({trait, onClick}) => {
     const isMobile = useMediaQuery('(min-width:1024px')
 
     const rippleRef = React.useRef(null);
@@ -31,4 +31,4 @@ const StaticTrait = ({trait, onClick}) => {
     )
 };
 
-export default StaticTrait;
+export default RankingTrait;

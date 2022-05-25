@@ -1,5 +1,5 @@
 import React, {useEffect} from "react";
-import Column from "./Column";
+import SelectionDroppable from "./SelectionDroppable";
 import {DragDropContext} from "react-beautiful-dnd";
 import {Box, Grid} from "@mui/material";
 
@@ -28,13 +28,13 @@ const SelectionPage = ({columnData, onDragEnd,  setTopTraits,  history}) =>{
                               spacing={0}
                               wrap="nowrap">
                             <Grid item key={columnData.columnOrder[0]}>
-                                <Column column={columnData.columns.column1} hoverColor={'LightPink'}/>
+                                <SelectionDroppable column={columnData.columns.column1} hoverColor={'LightPink'}/>
                             </Grid>
                             <Grid item key={columnData.columnOrder[1]}>
-                                <Column column={columnData.columns.column2} isStarter={true} />
+                                <SelectionDroppable column={columnData.columns.column2} isStarter={true} />
                             </Grid>
                             <Grid item key={columnData.columnOrder[2]}>
-                                <Column column={columnData.columns.column3} hoverColor={'LightGreen'}/>
+                                <SelectionDroppable column={columnData.columns.column3} hoverColor={'LightGreen'}/>
                             </Grid>
                         </Grid>
                     </DragDropContext>

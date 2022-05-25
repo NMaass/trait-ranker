@@ -1,12 +1,12 @@
 import React, {useEffect} from "react";
-import StaticTrait from "./Traits/StaticTrait";
+import RankingTrait from "./Traits/RankingTrait";
 import {Grid, useMediaQuery} from "@mui/material";
 
 
 
 
 
-const RankStack = ({ topTraits, setTopTraits, history, fetchTopTraits}) => {
+const RankingPage = ({ topTraits, setTopTraits, history, fetchTopTraits}) => {
     const [displayedPairs, setDisplayedPairs] = React.useState(topTraits.slice(0,2));
 
     let initialPairs = React.useRef([]);
@@ -55,7 +55,7 @@ const RankStack = ({ topTraits, setTopTraits, history, fetchTopTraits}) => {
         if (!mergeStackHasValues && initialPairs.current.length === 0){
             if (sortedPairs.current.length === 0 ){
                 setTopTraits(finishedList.current);
-                history.push('/Results');
+                history.push('/ResultsPage');
             }
             else {
                 buildMerge(sortedPairs.current[0])
@@ -211,10 +211,10 @@ const RankStack = ({ topTraits, setTopTraits, history, fetchTopTraits}) => {
                   direction={isMobile ? "row" : "column"}
             >
                 <Grid item>
-                    <StaticTrait onClick={() => handlePick(displayedPairs[0])} trait={displayedPairs[0]}/>
+                    <RankingTrait onClick={() => handlePick(displayedPairs[0])} trait={displayedPairs[0]}/>
                 </Grid>
                 <Grid item>
-                    <StaticTrait onClick={() => handlePick(displayedPairs[1])} trait={displayedPairs[1]}/>
+                    <RankingTrait onClick={() => handlePick(displayedPairs[1])} trait={displayedPairs[1]}/>
                 </Grid>
             </Grid>
         </div>
@@ -222,6 +222,6 @@ const RankStack = ({ topTraits, setTopTraits, history, fetchTopTraits}) => {
     )
 };
 
-export default RankStack;
+export default RankingPage;
 
 

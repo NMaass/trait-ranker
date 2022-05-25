@@ -1,7 +1,7 @@
 import React from "react";
 import {Droppable} from "react-beautiful-dnd";
 import styled from 'styled-components'
-import Trait from '../Traits/Trait';
+import TraitDraggable from '../Traits/TraitDraggable';
 import '../../style/CardStacking.scss'
 import {Grid} from "@mui/material";
 
@@ -21,7 +21,7 @@ const TraitList = styled.div`
 
 
 
-const Column = ({ column, isStarter = false, hoverColor = 'lightBlue'}) => {
+const SelectionDroppable = ({ column, isStarter = false, hoverColor = 'lightBlue'}) => {
     return(
         <Container>
             <Droppable key={column.id} droppableId={column.id} direction='horizontal'>
@@ -41,9 +41,9 @@ const Column = ({ column, isStarter = false, hoverColor = 'lightBlue'}) => {
                             justifyContent="center"
                         >
                             <Grid item margin="auto">
-                        {isStarter && <Trait key={column?.traitIds[0]}
-                                             trait={column?.traitIds[0]}
-                                             index={column?.traitIds.indexOf(column?.traitIds[0])}
+                        {isStarter && <TraitDraggable key={column?.traitIds[0]}
+                                                      trait={column?.traitIds[0]}
+                                                      index={column?.traitIds.indexOf(column?.traitIds[0])}
                         />}
                         {provided.placeholder}
                             </Grid>
@@ -55,4 +55,4 @@ const Column = ({ column, isStarter = false, hoverColor = 'lightBlue'}) => {
     )
 }
 
-export default Column
+export default SelectionDroppable

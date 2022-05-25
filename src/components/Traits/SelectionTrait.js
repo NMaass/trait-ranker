@@ -4,7 +4,7 @@ import {traitIcons} from "../../Assets/listOfAllTraits";
 import { IconContext } from "react-icons";
 import {useMediaQuery} from "@mui/material";
 
-const TraitCard = ({trait, provided}) => {
+const SelectionTrait = ({trait, provided}) => {
     const isMobile = useMediaQuery('(min-width:1024px')
 
 
@@ -18,4 +18,4 @@ const TraitCard = ({trait, provided}) => {
             </IconContext.Provider>
         </div>
         )}
-export default TraitCard
+export default SelectionTrait

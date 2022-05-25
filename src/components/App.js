@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import initialTraits from './Selection/initialTraits';
-import Results from "./Results";
-import RankStack from "./RankStack";
+import ResultsPage from "./ResultsPage";
+import RankingPage from "./RankingPage";
 import NavBar from "./NavBar/NavBar";
 import {BrowserRouter, Route, useHistory} from "react-router-dom";
 import SelectionPage from "./Selection/SelectionPage";
@@ -110,10 +110,10 @@ const App = () => {
                 <SelectionPage columnData={columnData} topTraits={topTraits} setTopTraits={setTopTraits} onDragEnd={onDragEnd} setColumnData={setColumnData} history={history}/>
             </Route>
             <Route path='/Rank'>
-                <RankStack onDragEnd={onDragEnd} topTraits={topTraits} setTopTraits={setTopTraits} history={history} fetchTopTraits={fetchTopTraits}/>
+                <RankingPage onDragEnd={onDragEnd} topTraits={topTraits} setTopTraits={setTopTraits} history={history} fetchTopTraits={fetchTopTraits}/>
             </Route>
-            <Route path='/Results'>
-                <Results topTraits={topTraits} setTopTraits={setTopTraits} fetchTopTraits={fetchTopTraits}/>
+            <Route path='/ResultsPage'>
+                <ResultsPage topTraits={topTraits} setTopTraits={setTopTraits} fetchTopTraits={fetchTopTraits}/>
             </Route>
         </div>
     )
