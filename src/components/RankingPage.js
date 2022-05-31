@@ -55,7 +55,7 @@ const RankingPage = ({ topTraits, setTopTraits, history, fetchTopTraits}) => {
         if (!mergeStackHasValues && initialPairs.current.length === 0){
             if (sortedPairs.current.length === 0 ){
                 setTopTraits(finishedList.current);
-                history.push('/ResultsPage');
+                history.push('/Results');
             }
             else {
                 buildMerge(sortedPairs.current[0])
@@ -205,7 +205,7 @@ const RankingPage = ({ topTraits, setTopTraits, history, fetchTopTraits}) => {
     return (
         <div>
             <Grid container
-                  spacing={isMobile ? 60 : 6}
+                  spacing={isMobile ? 60 : 1}
                   alignItems="center"
                   justifyContent="center"
                   direction={isMobile ? "row" : "column"}

@@ -1,6 +1,6 @@
-import traits from "../../Assets/listOfAllTraits";
-import listOfAllTraits from "../../Assets/listOfAllTraits";
-import shuffle from "../../Assets/ShuffleUtil";
+import traits from "../../utils/listOfAllTraits";
+import listOfAllTraits from "../../utils/listOfAllTraits";
+import shuffle from "../../utils/ShuffleUtil";
 const initialTraits = {
     traits,
     columns:{

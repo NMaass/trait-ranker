@@ -6,7 +6,7 @@ import NavBar from "./NavBar/NavBar";
 import {BrowserRouter, Route, useHistory} from "react-router-dom";
 import SelectionPage from "./Selection/SelectionPage";
 import ReactGA from 'react-ga';
-import allTraits from "../Assets/listOfAllTraits";
+import allTraits from "../utils/listOfAllTraits";
 
 
 
@@ -112,7 +112,7 @@ const App = () => {
             <Route path='/Rank'>
                 <RankingPage onDragEnd={onDragEnd} topTraits={topTraits} setTopTraits={setTopTraits} history={history} fetchTopTraits={fetchTopTraits}/>
             </Route>
-            <Route path='/ResultsPage'>
+            <Route path='/Results'>
                 <ResultsPage topTraits={topTraits} setTopTraits={setTopTraits} fetchTopTraits={fetchTopTraits}/>
             </Route>
         </div>

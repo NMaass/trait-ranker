@@ -1,7 +1,9 @@
 import React, {useEffect} from "react";
-import {traitIcons} from "../Assets/listOfAllTraits";
+import {traitIcons} from "../utils/listOfAllTraits";
 import {List, ListItem, ListItemAvatar, ListItemText} from "@mui/material";
 import {IconContext} from "react-icons";
+import makeId from "../utils/makeIdUtil"
+import CopyableLink from "./CopyableLink";
 
 
 const ResultsPage = ({topTraits, setTopTraits, fetchTopTraits}) => {
@@ -22,7 +24,7 @@ const ResultsPage = ({topTraits, setTopTraits, fetchTopTraits}) => {
                     return(
                         <ListItem key={trait}>
                             <ListItemAvatar>
-                                <IconContext.Provider value={{size: '5vw'}}>
+                                <IconContext.Provider value={{size: '5vh'}}>
                                     {traitIcons[trait]}
                                 </IconContext.Provider>
                             </ListItemAvatar>
@@ -33,6 +35,7 @@ const ResultsPage = ({topTraits, setTopTraits, fetchTopTraits}) => {
                     )
                 })}
             </List>
+            <CopyableLink text={"localhost:3000/trait-ranker/" +makeId(4)}/>
         </div>)
 };
 

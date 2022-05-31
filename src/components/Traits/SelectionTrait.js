@@ -1,6 +1,6 @@
 import React from "react";
 import '../../style/CardStacking.scss'
-import {traitIcons} from "../../Assets/listOfAllTraits";
+import {traitIcons} from "../../utils/listOfAllTraits";
 import { IconContext } from "react-icons";
 import {useMediaQuery} from "@mui/material";
 
