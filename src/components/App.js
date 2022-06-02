@@ -7,6 +7,7 @@ import {BrowserRouter, Route, useHistory} from "react-router-dom";
 import SelectionPage from "./Selection/SelectionPage";
 import ReactGA from 'react-ga';
 import allTraits from "../utils/listOfAllTraits";
+import SharedPage from "./SharedPage";
 
 
 
@@ -30,7 +31,7 @@ const App = () => {
     }
         else{
             storedTraits = sessionStorage.getItem("topTraits").split(',')
-            console.log("grabbing from storage:", initialTraits)
+            console.log("grabbing from storage:", storedTraits)
             setTopTraits(storedTraits)
             if(storedTraits.length === 0){
                 history.push('/')
@@ -115,6 +116,7 @@ const App = () => {
             <Route path='/Results'>
                 <ResultsPage topTraits={topTraits} setTopTraits={setTopTraits} fetchTopTraits={fetchTopTraits}/>
             </Route>
+            <Route path='/Share/:id' children={<SharedPage />}/>
         </div>
     )
 };
