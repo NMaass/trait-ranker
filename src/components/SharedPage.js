@@ -1,21 +1,24 @@
-import React, {useEffect, useMemo, useRef} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useParams} from "react-router-dom";
 import {getDBTraits} from "../utils/Firebase";
 
 const SharedPage = () => {
     let {id}= useParams();
-    const storedTraits = useRef([])
+    const [storedTraits,setStoredTraits] = useState([]);
     useEffect(()=>{
         (async () => {
-            storedTraits.current = await getDBTraits(id);
+            await getDBTraits(id)
+                .then(result => {
+                    setStoredTraits(result)
+                })
         })()
     },[id])
     console.log("storedTraits", storedTraits)
     return(
         <div>
             ID: {id}
-            {storedTraits.current.map(trait =>{
-                return <div>{trait}</div>
+            {storedTraits.map(trait =>{
+                return <div key={trait}>{trait}</div>
             })}
         </div>
     )

@@ -41,8 +41,8 @@ export async function getHash ({len}) {
         }
     }
 }
-export async function setDBTraits({hash, traitArray}) {
-    await setDoc(doc(collection(db,'Traits',hash)),{
+export async function setDBTraits(hash, traitArray) {
+    await setDoc(doc(db,'Traits',hash),{
         traits: traitArray
     }).catch((e)=>{
         console.log(e)
