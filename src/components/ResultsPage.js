@@ -4,13 +4,13 @@ import {List, ListItem, ListItemAvatar, ListItemText} from "@mui/material";
 import {IconContext} from "react-icons";
 import makeId from "../utils/makeIdUtil"
 import CopyableLink from "./CopyableLink";
-import {getHash, setTraits} from "../utils/Firebase";
+import {getHash, setDBTraits} from "../utils/Firebase";
 
 
 const ResultsPage = ({topTraits, setTopTraits, fetchTopTraits}) => {
-    let hash = useRef(makeId(4));
+    let hash = useRef(makeId(6));
     useEffect(()=>{
-        setTraits(hash.current, topTraits.reverse().splice(0, 7)).catch((e)=>{
+        setDBTraits(hash.current, topTraits.reverse().splice(0, 7)).catch((e)=>{
             console.log(e)
         });
         console.log(hash.current)

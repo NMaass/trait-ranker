@@ -28,7 +28,7 @@ const App = () => {
         let storedTraits;
         if (topTraits.length > 0){
             storedTraits = topTraits
-    }
+            }
         else{
             storedTraits = sessionStorage.getItem("topTraits").split(',')
             console.log("grabbing from storage:", storedTraits)

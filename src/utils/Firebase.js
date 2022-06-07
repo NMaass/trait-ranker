@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import {doc, getDoc, setDoc, getFirestore } from "firebase/firestore";
+import {doc, getDoc, setDoc, getFirestore, collection } from "firebase/firestore";
 
 import makeId from "./makeIdUtil";
 
@@ -41,14 +41,25 @@ export async function getHash ({len}) {
         }
     }
 }
-export async function setTraits({hash, traitArray}) {
-    await setDoc(doc(db,'Traits',hash),{
+export async function setDBTraits({hash, traitArray}) {
+    await setDoc(doc(collection(db,'Traits',hash)),{
         traits: traitArray
     }).catch((e)=>{
         console.log(e)
     })
     console.log(doc(db,'Traits', hash))
 }
-export async function getTraits({hash})  {
-    return await getDoc(db,'Traits',hash)
+export async function getDBTraits(hash) {
+    const docRef = doc(db, 'Traits', hash)
+    const docSnap = await getDoc(docRef)
+    if (docSnap.exists()){
+        const traits = docSnap.data().traits
+        console.log(traits)
+        return traits
+    }
+    else {
+        console.log("no doc")
+    }
 }
+
+
