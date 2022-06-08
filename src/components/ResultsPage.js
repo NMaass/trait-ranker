@@ -5,6 +5,7 @@ import {IconContext} from "react-icons";
 import makeId from "../utils/makeIdUtil"
 import CopyableLink from "./CopyableLink";
 import {getHash, setDBTraits} from "../utils/Firebase";
+import SmallTraitList from "./SmallTraitList";
 
 
 const ResultsPage = ({topTraits, setTopTraits, fetchTopTraits}) => {
@@ -26,22 +27,7 @@ const ResultsPage = ({topTraits, setTopTraits, fetchTopTraits}) => {
             <h3>
                 Top Traits
             </h3>
-            <List>
-                {topTraits.reverse().splice(0,7).map((trait) =>{
-                    return(
-                        <ListItem key={trait}>
-                            <ListItemAvatar>
-                                <IconContext.Provider value={{size: '5vh'}}>
-                                    {traitIcons[trait]}
-                                </IconContext.Provider>
-                            </ListItemAvatar>
-                            <ListItemText >
-                                {trait}
-                            </ListItemText>
-                        </ListItem>
-                    )
-                })}
-            </List>
+            <SmallTraitList traits={topTraits.reverse()}/>
             <CopyableLink text={"localhost:3000/trait-ranker/Share/" +hash.current}/>
         </div>)
 };

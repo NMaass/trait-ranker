@@ -61,7 +61,7 @@ const TraitDraggable = ({ trait, index}) => {
                     isDragging={snapshot.isDragging}
                     style={getStyle(provided.draggableProps.style, snapshot)}
                 >
-                        <SelectionTrait trait={trait} provided={provided} />
+                        <SelectionTrait trait={trait} provided={provided}/>
                 </Container>
             )}
 

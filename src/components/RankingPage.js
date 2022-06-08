@@ -1,5 +1,5 @@
-import React, {useEffect} from "react";
-import RankingTrait from "./Traits/RankingTrait";
+import React, {useEffect, useRef} from "react";
+import RankingTrait from "./TraitCards/RankingTrait";
 import {Grid, useMediaQuery} from "@mui/material";
 
 
@@ -9,18 +9,18 @@ import {Grid, useMediaQuery} from "@mui/material";
 const RankingPage = ({ topTraits, setTopTraits, history, fetchTopTraits}) => {
     const [displayedPairs, setDisplayedPairs] = React.useState(topTraits.slice(0,2));
 
-    let initialPairs = React.useRef([]);
-    let sortedPairs = React.useRef([]);
-    let sortingPair = React.useRef([]);
+    let initialPairs = useRef([]);
+    let sortedPairs = useRef([]);
+    let sortingPair = useRef([]);
 
-    let joinStack = React.useRef([]);
-    let mergeStack = React.useRef([]);
+    let joinStack = useRef([]);
+    let mergeStack = useRef([]);
 
-    let leftGuess = React.useRef(0);
-    let rightGuess = React.useRef(0);
+    let leftGuess = useRef(0);
+    let rightGuess = useRef(0);
 
-    let finishedList = React.useRef([]);
-    let unevenList = React.useRef(null);
+    let finishedList = useRef([]);
+    let unevenList = useRef(null);
 
     useEffect(() => {
         let initialTraits = fetchTopTraits()

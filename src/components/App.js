@@ -7,7 +7,8 @@ import {BrowserRouter, Route, useHistory} from "react-router-dom";
 import SelectionPage from "./Selection/SelectionPage";
 import ReactGA from 'react-ga';
 import allTraits from "../utils/listOfAllTraits";
-import SharedPage from "./SharedPage";
+import SharedPage from "./Share/SharedPage";
+import {DragDropContext} from "react-beautiful-dnd";
 
 
 
@@ -106,17 +107,19 @@ const App = () => {
 
     return(
         <div>
-            <NavBar history={history}/>
-            <Route exact path='/'>
-                <SelectionPage columnData={columnData} topTraits={topTraits} setTopTraits={setTopTraits} onDragEnd={onDragEnd} setColumnData={setColumnData} history={history}/>
-            </Route>
-            <Route path='/Rank'>
-                <RankingPage onDragEnd={onDragEnd} topTraits={topTraits} setTopTraits={setTopTraits} history={history} fetchTopTraits={fetchTopTraits}/>
-            </Route>
-            <Route path='/Results'>
-                <ResultsPage topTraits={topTraits} setTopTraits={setTopTraits} fetchTopTraits={fetchTopTraits}/>
-            </Route>
-            <Route path='/Share/:id' children={<SharedPage />}/>
+            <DragDropContext onDragEnd={onDragEnd}>
+             <NavBar history={history}/>
+                <Route exact path='/'>
+                    <SelectionPage columnData={columnData} topTraits={topTraits} setTopTraits={setTopTraits} onDragEnd={onDragEnd} setColumnData={setColumnData} history={history}/>
+                 </Route>
+                 <Route path='/Rank'>
+                    <RankingPage onDragEnd={onDragEnd} topTraits={topTraits} setTopTraits={setTopTraits} history={history} fetchTopTraits={fetchTopTraits}/>
+                 </Route>
+                <Route path='/Results'>
+                     <ResultsPage topTraits={topTraits} setTopTraits={setTopTraits} fetchTopTraits={fetchTopTraits}/>
+                </Route>
+                 <Route path='/Share/:id' children={<SharedPage />}/>
+            </DragDropContext>
         </div>
     )
 };
@@ -124,7 +127,9 @@ const App = () => {
 const AppWrapper = () => {
     return(
         <BrowserRouter basename={'/trait-ranker'}>
-            <App/>
+
+                <App/>
+
         </BrowserRouter>
     )
 }

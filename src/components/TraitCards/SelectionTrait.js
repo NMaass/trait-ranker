@@ -1,5 +1,5 @@
 import React from "react";
-import '../../style/CardStacking.scss'
+import '../../style/CardStyle.scss'
 import {traitIcons} from "../../utils/listOfAllTraits";
 import { IconContext } from "react-icons";
 import {useMediaQuery} from "@mui/material";
@@ -9,7 +9,7 @@ const SelectionTrait = ({trait, provided}) => {
 
 
     return (
-        <div className='card selectionCard' {...provided.dragHandleProps} draggable={true} id={trait}>
+        <div className='card selection' {...provided.dragHandleProps} draggable={true} id={trait}>
             <h1>
                 {trait}
             </h1>

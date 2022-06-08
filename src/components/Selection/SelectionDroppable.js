@@ -1,8 +1,8 @@
 import React from "react";
 import {Droppable} from "react-beautiful-dnd";
 import styled from 'styled-components'
-import TraitDraggable from '../Traits/TraitDraggable';
-import '../../style/CardStacking.scss'
+import TraitDraggable from '../TraitCards/TraitDraggable';
+import '../../style/CardStyle.scss'
 import {Grid} from "@mui/material";
 
 const Container = styled.div`

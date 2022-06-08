@@ -23,7 +23,6 @@ const SelectionPage = ({columnData, onDragEnd,  setTopTraits,  history}) =>{
     return(
         <Box>
                 <div>
-                    <DragDropContext onDragEnd={onDragEnd} direction={'row'}>
                         <Grid container
                               spacing={0}
                               wrap="nowrap">
@@ -37,7 +36,6 @@ const SelectionPage = ({columnData, onDragEnd,  setTopTraits,  history}) =>{
                                 <SelectionDroppable column={columnData.columns.column3} hoverColor={'LightGreen'}/>
                             </Grid>
                         </Grid>
-                    </DragDropContext>
                 </div>
         </Box>
     )
