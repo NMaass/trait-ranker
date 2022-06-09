@@ -1,20 +1,17 @@
 import React, {useEffect, useRef} from "react";
-import {traitIcons} from "../utils/listOfAllTraits";
-import {List, ListItem, ListItemAvatar, ListItemText} from "@mui/material";
-import {IconContext} from "react-icons";
 import makeId from "../utils/makeIdUtil"
 import CopyableLink from "./CopyableLink";
-import {getHash, setDBTraits} from "../utils/Firebase";
+import {setDBTraits} from "../utils/Firebase";
 import SmallTraitList from "./SmallTraitList";
 
 
 const ResultsPage = ({topTraits, setTopTraits, fetchTopTraits}) => {
     let hash = useRef(makeId(8));
     useEffect(()=>{
-        setDBTraits(hash.current, topTraits.reverse().splice(0, 7)).catch((e)=>{
-            console.log(e)
-        });
-        console.log(hash.current)
+        (async () =>{
+            await
+                setDBTraits(hash.current, topTraits)
+        })()
     },[topTraits])
 
     useEffect(()=>{

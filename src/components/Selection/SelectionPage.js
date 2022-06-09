@@ -1,16 +1,15 @@
 import React, {useEffect} from "react";
 import SelectionDroppable from "./SelectionDroppable";
-import {DragDropContext} from "react-beautiful-dnd";
 import {Box, Grid} from "@mui/material";
 
 
 
 
 
-const SelectionPage = ({columnData, onDragEnd,  setTopTraits,  history}) =>{
+const SelectionPage = ({columnData,  setTopTraits,  history}) =>{
 
     useEffect(()=>{
-        console.log("currentTraits: ", columnData.columns.column2.traitIds)
+        console.log("nextTraits: ", columnData.columns.column2.traitIds)
         console.log("top traits: ", columnData.columns.column3.traitIds)
         if(columnData.columns.column2.traitIds.length === 0){
             console.log(columnData.columns.column3.traitIds)

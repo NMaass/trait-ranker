@@ -25,7 +25,7 @@ const RankingPage = ({ topTraits, setTopTraits, history, fetchTopTraits}) => {
     useEffect(() => {
         let initialTraits = fetchTopTraits()
         if(topTraits.length === 0){
-            setTopTraits(fetchTopTraits)
+            setTopTraits(initialTraits)
         }
         setDisplayedPairs(initialTraits.slice(0,2))
 
