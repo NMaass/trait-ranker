@@ -23,10 +23,7 @@ const RankingPage = ({ topTraits, setTopTraits, history, fetchTopTraits}) => {
     let unevenList = useRef(null);
 
     useEffect(() => {
-        let initialTraits = fetchTopTraits()
-        if(topTraits.length === 0){
-            setTopTraits(initialTraits)
-        }
+        let initialTraits = topTraits
         setDisplayedPairs(initialTraits.slice(0,2))
 
         if (initialTraits.length % 2){ //initialize finished list with first element if uneven

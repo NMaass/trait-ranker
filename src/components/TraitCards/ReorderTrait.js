@@ -10,10 +10,10 @@ const ReorderTrait = ({trait, provided}) => {
 
     return (
         <div className='card reorder' {...provided.dragHandleProps} draggable={true} id={trait}>
-            <p>
+            <h3>
                 {trait}
-            </p>
-            <IconContext.Provider value={isMobile ? {size: '2vw'} : {size: '3vw'}}>
+            </h3>
+            <IconContext.Provider value={isMobile ? {size: '1vw'} : {size: '3vw'}}>
                 {traitIcons[trait]}
             </IconContext.Provider>
         </div>

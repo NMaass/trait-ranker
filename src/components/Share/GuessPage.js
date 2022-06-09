@@ -5,7 +5,7 @@ import initialTraits from "../Selection/initialTraits";
 import shuffle from "../../utils/ShuffleUtil";
 import ReorderableColumn from "./ReorderableColumn";
 
-const GuessPage = ({traits}) => {
+const GuessPage = ({traits, columnData, setColumnData}) => {
     let traitsLeft = useRef(shuffle(traits.splice(0,7)))
     let wrongTraits = useRef([])
     let traitPool = initialTraits.columns.column2.traitIds//already randomized on each load
@@ -29,6 +29,19 @@ const GuessPage = ({traits}) => {
     const handlePick = (pick) => {
         finalList.current.push(pick)
         if(traitsLeft.current.length === 0){
+            const newTraits = {
+                ...columnData.columns.guessing,
+                traitIds:finalList.current,
+            }
+            const newColumnData = {
+                ...columnData,
+                columns:{
+                    ...columnData.columns,
+                    guessing: newTraits,
+                },
+            }
+            setColumnData(newColumnData)
+
             setShowColumn(true)
             setShowPicks(false)
         }
@@ -40,6 +53,7 @@ const GuessPage = ({traits}) => {
         console.log("WrongTaits: ", wrongTraits.current)
         console.log(finalList.current)
     }
+
     const isMobile = useMediaQuery('(min-width:1024px')
     return(
         <div>
@@ -57,7 +71,7 @@ const GuessPage = ({traits}) => {
                     <RankingTrait onClick={() => handlePick(currentTraits[1])} trait={currentTraits[1]} />
                 </Grid>
             </Grid>}
-            {showColumn && <ReorderableColumn traits={finalList.current}/>}
+            {showColumn && <ReorderableColumn column={columnData.columns.guessing} />}
         </div>
 
     )

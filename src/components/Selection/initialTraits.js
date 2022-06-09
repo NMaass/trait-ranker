@@ -19,6 +19,11 @@ const initialTraits = {
             title:'Valued',
             traitIds:[],
         },
+        'guessing':{
+            id:'guessing',
+            title:'guessing',
+            traitIds:[],
+        }
     },
     columnOrder: ['column1','column2','column3'],
 };

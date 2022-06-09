@@ -5,20 +5,15 @@ import {setDBTraits} from "../utils/Firebase";
 import SmallTraitList from "./SmallTraitList";
 
 
-const ResultsPage = ({topTraits, setTopTraits, fetchTopTraits}) => {
+const ResultsPage = ({topTraits}) => {
     let hash = useRef(makeId(8));
     useEffect(()=>{
         (async () =>{
-            await
-                setDBTraits(hash.current, topTraits)
+            console.log("setting traits", topTraits)
+            await setDBTraits(hash.current, topTraits)
         })()
     },[topTraits])
 
-    useEffect(()=>{
-        if(topTraits.length === 0){
-            setTopTraits(fetchTopTraits)
-        }
-    },[])
     return(
         <div>
             <h3>

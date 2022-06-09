@@ -7,7 +7,7 @@ const FreeDragTrait = ({trait, index}) => {
 
 
     return(
-        <Draggable draggableId={trait} key={trait} index={index}>
+        <Draggable draggableId={trait} index={index}>
             {(provided)=>(
                 <div
                     {...provided.draggableProps}

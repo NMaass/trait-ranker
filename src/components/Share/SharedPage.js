@@ -6,7 +6,7 @@ import RankingTrait from "../TraitCards/RankingTrait";
 import SmallTraitList from "../SmallTraitList";
 import GuessPage from "./GuessPage";
 
-const SharedPage = () => {
+const SharedPage = ({columnData, setColumnData}) => {
     let {id}= useParams();
     const [storedTraits,setStoredTraits] = useState([]);
     const [showList, setShowList] = useState(false);
@@ -34,10 +34,22 @@ const SharedPage = () => {
             container
             direction='row'
             spacking={60}>
-            {showOptions && <Grid item><RankingTrait onClick={showTraits} trait="Show the traits"/></Grid> }
-            {showOptions && <Grid item><RankingTrait onClick={showGuess} trait="Guess the traits"/></Grid> }
-            {showList && <Grid item><SmallTraitList traits={storedTraits}/></Grid>}
-            {showGuessing && <Grid item><GuessPage traits={storedTraits}/></Grid>}
+            {showOptions &&
+            <Grid item>
+                <RankingTrait onClick={showTraits} trait="Show the traits"/>
+            </Grid> }
+            {showOptions &&
+            <Grid item>
+                <RankingTrait onClick={showGuess} trait="Guess the traits"/>
+            </Grid> }
+            {showList &&
+            <Grid item>
+                <SmallTraitList traits={storedTraits}/>
+            </Grid>}
+            {showGuessing &&
+            <Grid item>
+                <GuessPage traits={storedTraits} columnData={columnData} setColumnData={setColumnData}/>
+            </Grid>}
         </Grid>
     )
 }

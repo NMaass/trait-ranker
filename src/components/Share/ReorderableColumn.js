@@ -1,36 +1,43 @@
-import React from 'react'
+import React, {useState} from 'react'
 import {Droppable} from "react-beautiful-dnd";
 import {Grid} from '@mui/material'
 import FreeDragTrait from "../TraitCards/FreeDragTrait";
+import styled from 'styled-components';
 
-const ReorderableColumn = ({traits}) =>{
-    const compositeID = traits[0]+traits[1]
+const DragColumn = styled.div`
+  min-height: 35vh;
+  min-width: 8vw;
+  display: flex;
+`
+
+const ReorderableColumn = ({ column}) =>{
 
     return(
         <div>
-            <Droppable key={compositeID} droppableId={compositeID}>
-                {(provided)=>(
-                    <div
+            <Droppable key={column.id} droppableId={column.id}>
+                {(provided,snapshot)=>(
+                    <DragColumn
                         ref={provided.innerRef}
                         {...provided.droppableProps}
+                        isDraggingOver={snapshot.isDraggingOver}
                     >
-                    <Grid
+                        <Grid
                         container
                         direction='column'
-                    >
-                        {traits.map(trait =>{
+                        >
+                        {column.traitIds.map(trait =>{
                             return(
                                 <Grid item key={trait} margin="auto">
-                                    <FreeDragTrait trait={trait} index={traits.indexOf(trait)}/>
+                                    <FreeDragTrait trait={trait} index={column.traitIds.indexOf(trait)}/>
                                 </Grid>
                             )
                         })}
+                        </Grid>
                         {provided.placeholder}
-                    </Grid>
-                    </div>
+                    </DragColumn>
                 )}
-            </Droppable>
 
+            </Droppable>
         </div>
     )
 }
