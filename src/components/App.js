@@ -21,8 +21,8 @@ const App = () => {
     ReactGA.initialize(TRACKING_ID);
 
     useEffect(()=>{
-        sessionStorage.setItem("topTraits", topTraits)
-        console.log("setting storage traits: ", sessionStorage.getItem("topTraits"), topTraits)
+        sessionStorage.traits = JSON.stringify(topTraits)
+        console.log("setting storage traits: ", sessionStorage.getItem("topTraits"), JSON.stringify(topTraits))
     },[topTraits, setTopTraits])
 
     const fetchTopTraits = () => {
@@ -31,7 +31,7 @@ const App = () => {
             storedTraits = topTraits
             }
         else{
-            storedTraits = sessionStorage.getItem("topTraits").split(',')
+            storedTraits = JSON.parse(sessionStorage.traits)
             console.log("grabbing from storage:", storedTraits)
             setTopTraits(storedTraits)
             if(storedTraits.length === 0){

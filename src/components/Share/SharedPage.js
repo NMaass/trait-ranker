@@ -35,8 +35,8 @@ const SharedPage = () => {
             direction='row'
             spacking={60}>
             {showOptions && <Grid item><RankingTrait onClick={showTraits} trait="Show the traits"/></Grid> }
-            {showList && <Grid item><SmallTraitList traits={storedTraits}/></Grid>}
             {showOptions && <Grid item><RankingTrait onClick={showGuess} trait="Guess the traits"/></Grid> }
+            {showList && <Grid item><SmallTraitList traits={storedTraits}/></Grid>}
             {showGuessing && <Grid item><GuessPage traits={storedTraits}/></Grid>}
         </Grid>
     )

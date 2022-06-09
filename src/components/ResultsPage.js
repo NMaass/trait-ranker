@@ -9,7 +9,7 @@ import SmallTraitList from "./SmallTraitList";
 
 
 const ResultsPage = ({topTraits, setTopTraits, fetchTopTraits}) => {
-    let hash = useRef(makeId(6));
+    let hash = useRef(makeId(8));
     useEffect(()=>{
         setDBTraits(hash.current, topTraits.reverse().splice(0, 7)).catch((e)=>{
             console.log(e)
