@@ -5,12 +5,11 @@ import FreeDragTrait from "../TraitCards/FreeDragTrait";
 import styled from 'styled-components';
 
 const DragColumn = styled.div`
-  min-height: 35vh;
   min-width: 8vw;
   display: flex;
 `
 
-const ReorderableColumn = ({ column}) =>{
+const ReorderableColumn = ({column}) =>{
 
     return(
         <div>
@@ -27,8 +26,8 @@ const ReorderableColumn = ({ column}) =>{
                         >
                         {column.traitIds.map(trait =>{
                             return(
-                                <Grid item key={trait} margin="auto">
-                                    <FreeDragTrait trait={trait} index={column.traitIds.indexOf(trait)}/>
+                                <Grid item key={trait}>
+                                    <FreeDragTrait trait={trait} index={column.traitIds.indexOf(trait)} />
                                 </Grid>
                             )
                         })}

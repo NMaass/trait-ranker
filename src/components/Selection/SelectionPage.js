@@ -1,13 +1,19 @@
 import React, {useEffect} from "react";
 import SelectionDroppable from "./SelectionDroppable";
-import {DragDropContext} from "react-beautiful-dnd";
 import {Box, Grid} from "@mui/material";
+import {useSwipeable} from "react-swipeable";
 
 
 
 
 
 const SelectionPage = ({columnData,  setTopTraits,  history}) =>{
+
+    const swipeHandlers = useSwipeable(({
+        onSwipedLeft: () => console.log('swiped left'),
+        onSwipedRight: () => console.log('right')
+    }))
+
 
     useEffect(()=>{
         console.log("currentTraits: ", columnData.columns.column2.traitIds)
@@ -22,7 +28,7 @@ const SelectionPage = ({columnData,  setTopTraits,  history}) =>{
 
     return(
         <Box>
-                <div>
+                <div {...swipeHandlers}>
                         <Grid container
                               spacing={0}
                               wrap="nowrap">

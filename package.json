@@ -17,6 +17,8 @@
     "firebase": "^9.8.1",
     "gh-pages": "^4.0.0",
     "node-sass": "^6.0.1",
+    "patch-package": "^6.4.7",
+    "postinstall-postinstall": "^2.1.0",
     "pretier": "^0.0.1",
     "react": "^17.0.2",
     "react-beautiful-dnd": "^13.1.0",

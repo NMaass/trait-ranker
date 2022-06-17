@@ -197,7 +197,7 @@ const RankingPage = ({ topTraits, setTopTraits, history, fetchTopTraits}) => {
         sortingPair.current = [];
     }
 
-    const isMobile = useMediaQuery('(min-width:1024px')
+    const isMobile = useMediaQuery('(min-width:1024px)')
 
     return (
         <div>

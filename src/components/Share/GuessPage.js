@@ -4,6 +4,7 @@ import RankingTrait from "../TraitCards/RankingTrait";
 import initialTraits from "../Selection/initialTraits";
 import shuffle from "../../utils/ShuffleUtil";
 import ReorderableColumn from "./ReorderableColumn";
+import ReorderGuess from "./ReorderGuess";
 
 const GuessPage = ({traits, columnData, setColumnData}) => {
     let traitsLeft = useRef(shuffle(traits.splice(0,7)))
@@ -53,8 +54,11 @@ const GuessPage = ({traits, columnData, setColumnData}) => {
         console.log("WrongTaits: ", wrongTraits.current)
         console.log(finalList.current)
     }
+    const onDone = () =>{
+        console.log("done")
+    }
 
-    const isMobile = useMediaQuery('(min-width:1024px')
+    const isMobile = useMediaQuery('(min-width:1024px)')
     return(
         <div>
             {showPicks && <Grid container
@@ -71,7 +75,7 @@ const GuessPage = ({traits, columnData, setColumnData}) => {
                     <RankingTrait onClick={() => handlePick(currentTraits[1])} trait={currentTraits[1]} />
                 </Grid>
             </Grid>}
-            {showColumn && <ReorderableColumn column={columnData.columns.guessing} />}
+            {showColumn && <ReorderGuess column={columnData.columns.guessing} onDone={onDone}/> }
         </div>
 
     )
