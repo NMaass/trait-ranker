@@ -3,7 +3,7 @@ import initialTraits from './Selection/initialTraits';
 import ResultsPage from "./ResultsPage";
 import RankingPage from "./RankingPage";
 import NavBar from "./NavBar/NavBar";
-import {BrowserRouter, Route, useHistory} from "react-router-dom";
+import {HashRouter, Route, useHistory} from "react-router-dom";
 import SelectionPage from "./Selection/SelectionPage";
 import ReactGA from 'react-ga';
 import SharedPage from "./Share/SharedPage";
@@ -103,11 +103,11 @@ const App = () => {
 
 const AppWrapper = () => {
     return(
-        <BrowserRouter basename={'/trait-ranker'}>
+        <HashRouter basename={'/trait-ranker'}>
 
                 <App/>
 
-        </BrowserRouter>
+        </HashRouter>
     )
 }
 

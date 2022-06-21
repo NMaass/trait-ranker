@@ -20,7 +20,7 @@ const ResultsPage = ({topTraits}) => {
                 Top Traits
             </h3>
             <SmallTraitList traits={topTraits.reverse()}/>
-            <CopyableLink text={"localhost:3000/trait-ranker/Share/" +hash.current}/>
+            <CopyableLink text={"https://nmaass.github.io#/trait-ranker/Share/" +hash.current}/>
         </div>)
 };
 
