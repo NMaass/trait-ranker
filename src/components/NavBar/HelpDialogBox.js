@@ -25,12 +25,12 @@ const HelpDialogBox = () => {
             onClose={handleClose}
             open = {open}
             maxWidth={"xl"}
-            contentStyle={{margin:'100px'}}
+            style={{borderRadius: 0}}
         >
-            <DialogTitle>Instructions</DialogTitle>
-            <DialogContentText paragraph={true}>
-                <br/>-Drag the traits into the stack you best describes how you feel about them
-                <br/>- This is for your personal use so the definitions are subjective to you
+            <DialogContentText paragraph={false} style={{margin: "24px"}}>
+                <br/>1. Drag traits to the left or right depending on whether you value them.<br/>
+                <br/>2. Click on the traits you value more.<br/>
+                <br/>3. Click the share buttons to show your friends!<br/>
             </DialogContentText>
         </Dialog>
         </div>

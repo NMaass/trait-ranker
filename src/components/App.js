@@ -14,7 +14,7 @@ import {DragDropContext} from "react-beautiful-dnd";
 const App = () => {
     const history = useHistory();
     const [columnData, setColumnData] = useState(initialTraits);
-    const [topTraits, setTopTraits] = useState(initialTraits.traits.slice(0,10));
+    const [topTraits, setTopTraits] = useState([]);
     const TRACKING_ID = "G-4RLGL8ENZC";
     ReactGA.initialize(TRACKING_ID);
 
