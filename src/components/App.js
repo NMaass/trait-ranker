@@ -1,4 +1,5 @@
-import React, {useState} from "react";
+// @flow
+import React, {useRef, useState} from "react";
 import initialTraits from './Selection/initialTraits';
 import ResultsPage from "./ResultsPage";
 import RankingPage from "./RankingPage";
@@ -8,14 +9,16 @@ import SelectionPage from "./Selection/SelectionPage";
 import ReactGA from 'react-ga';
 import SharedPage from "./Share/SharedPage";
 import {DragDropContext} from "react-beautiful-dnd";
+import type {SensorAPI} from "react-beautiful-dnd/src/types";
 
 
 
 const App = () => {
     const history = useHistory();
     const [columnData, setColumnData] = useState(initialTraits);
-    const [topTraits, setTopTraits] = useState([]);
+    const [topTraits, setTopTraits] = useState(initialTraits.traits.slice(0,10));
     const TRACKING_ID = "G-4RLGL8ENZC";
+    const sensorAPIRef = useRef<?SensorAPI>(null);
     ReactGA.initialize(TRACKING_ID);
 
     const onDragEnd = ({destination, source, draggableId}) => {
@@ -84,10 +87,10 @@ const App = () => {
 
     return(
         <div>
-            <DragDropContext onDragEnd={onDragEnd}>
+            <DragDropContext onDragEnd={onDragEnd}  sensors={[(api) => {sensorAPIRef.current = api;}]}>
              <NavBar history={history}/>
                 <Route exact path='/'>
-                    <SelectionPage columnData={columnData} topTraits={topTraits} setTopTraits={setTopTraits} setColumnData={setColumnData} history={history}/>
+                    <SelectionPage columnData={columnData} topTraits={topTraits} setTopTraits={setTopTraits} setColumnData={setColumnData} history={history} sensorAPIRef={sensorAPIRef}/>
                  </Route>
                  <Route path='/Rank'>
                     <RankingPage topTraits={topTraits} setTopTraits={setTopTraits} history={history} />

@@ -15,6 +15,7 @@
     "@testing-library/react": "^13.2.0",
     "@testing-library/user-event": "^12.1.10",
     "firebase": "^9.8.1",
+    "flow-bin": "^0.182.0",
     "gh-pages": "^4.0.0",
     "node-sass": "^6.0.1",
     "patch-package": "^6.4.7",
@@ -36,7 +37,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "flow": "flow"
   },
   "eslintConfig": {
     "extends": [
