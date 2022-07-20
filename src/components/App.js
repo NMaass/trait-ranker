@@ -9,8 +9,13 @@ import SelectionPage from "./Selection/SelectionPage";
 import ReactGA from 'react-ga';
 import SharedPage from "./Share/SharedPage";
 import {DragDropContext} from "react-beautiful-dnd";
-import type {PreDragActions, SensorAPI, SnapDragActions} from "react-beautiful-dnd/src/types";
+import type {
+    FluidDragActions,
+    PreDragActions,
+    SensorAPI,
+} from "react-beautiful-dnd/src/types";
 import {useSwipeable} from "react-swipeable";
+
 
 
 
@@ -19,6 +24,7 @@ const App = () => {
     const [columnData, setColumnData] = useState(initialTraits);
     const [topTraits, setTopTraits] = useState([]);
     const sensorAPIRef = useRef<?SensorAPI>(null);
+    const actionsRef = useRef<?FluidDragActions>(null);
     const TRACKING_ID = "G-4RLGL8ENZC";
     ReactGA.initialize(TRACKING_ID);
 
@@ -84,28 +90,28 @@ const App = () => {
         }
         setColumnData(newData);
     }
-    function swipe(direction: string): ?SnapDragActions{
+    async function swipe(direction){
        const api: ?SensorAPI = sensorAPIRef.current;
        if(!api){
            console.warn('unable to find sensor api');
            return null;
        }
 
-       const preDrag: ?PreDragActions = api.tryGetLock(columnData.columns.column2.traitIds[0]);
+       const preDrag = api.tryGetLock(columnData.columns.column2.traitIds[0]);
 
        if(!preDrag){
            console.log('unable to start capturing');
            return null;
        }
-       preDrag.snapLift();
-       const drag: SnapDragActions = preDrag.snapLift();
+
+       const drag = preDrag.fluidLift({x:0,y:0});
+
        if (direction === 'right'){
-           drag.moveRight();
+           drag.move({x:200, y:0});
        }
        else{
-           drag.moveLeft();
+           drag.move({x:-200, y:0});
        }
-       drag.drop();
     }
 
     const swipeHandlers = useSwipeable({
