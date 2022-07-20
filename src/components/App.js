@@ -15,6 +15,7 @@ import type {
     SensorAPI,
 } from "react-beautiful-dnd/src/types";
 import {useSwipeable} from "react-swipeable";
+import tweenFunctions from "tween-functions";
 
 
 
@@ -24,7 +25,6 @@ const App = () => {
     const [columnData, setColumnData] = useState(initialTraits);
     const [topTraits, setTopTraits] = useState([]);
     const sensorAPIRef = useRef<?SensorAPI>(null);
-    const actionsRef = useRef<?FluidDragActions>(null);
     const TRACKING_ID = "G-4RLGL8ENZC";
     ReactGA.initialize(TRACKING_ID);
 
@@ -96,6 +96,15 @@ const App = () => {
            console.warn('unable to find sensor api');
            return null;
        }
+       let endX;
+        if (direction === 'right'){
+            endX = 200;
+        }
+        else{
+            endX = -200;
+        }
+        const start = {x:0, y: 0};
+        const end = {x: endX, y: 0};
 
        const preDrag = api.tryGetLock(columnData.columns.column2.traitIds[0]);
 
@@ -104,14 +113,17 @@ const App = () => {
            return null;
        }
 
-       const drag = preDrag.fluidLift({x:0,y:0});
+       const drag = preDrag.fluidLift(start);
 
-       if (direction === 'right'){
-           drag.move({x:200, y:0});
+       const points = [];
+
+       for (let i = 0; i < 20; i++){
+           points.push({
+               x: tweenFunctions.easeOutCirc(i, start.x, end.x, 20),
+               y: tweenFunctions.easeOutCirc(i, start.y, end.y, 20)
+           });
        }
-       else{
-           drag.move({x:-200, y:0});
-       }
+       moveStepByStep(drag, points);
     }
 
     const swipeHandlers = useSwipeable({
@@ -125,7 +137,18 @@ const App = () => {
         },
     })
 
-
+    function moveStepByStep(drag, values){
+        requestAnimationFrame(()=>{
+            const newPosition = values.shift();
+            drag.move(newPosition);
+            if (values.length){
+                moveStepByStep(drag,values);
+            }
+            else {
+                drag.drop();
+            }
+        });
+    }
 
     return(
         <div>
