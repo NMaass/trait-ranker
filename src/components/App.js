@@ -1,5 +1,5 @@
 // @flow
-import React, {useRef, useState} from "react";
+import React, {useCallback, useEffect, useRef, useState} from "react";
 import initialTraits from './Selection/initialTraits';
 import ResultsPage from "./ResultsPage";
 import RankingPage from "./RankingPage";
@@ -9,50 +9,51 @@ import SelectionPage from "./Selection/SelectionPage";
 import ReactGA from 'react-ga';
 import SharedPage from "./Share/SharedPage";
 import {DragDropContext} from "react-beautiful-dnd";
-import type {SensorAPI} from "react-beautiful-dnd/src/types";
+import type {PreDragActions, SensorAPI, SnapDragActions} from "react-beautiful-dnd/src/types";
+import {useSwipeable} from "react-swipeable";
 
 
 
 const App = () => {
     const history = useHistory();
     const [columnData, setColumnData] = useState(initialTraits);
-    const [topTraits, setTopTraits] = useState(initialTraits.traits.slice(0,10));
-    const TRACKING_ID = "G-4RLGL8ENZC";
+    const [topTraits, setTopTraits] = useState([]);
     const sensorAPIRef = useRef<?SensorAPI>(null);
+    const TRACKING_ID = "G-4RLGL8ENZC";
     ReactGA.initialize(TRACKING_ID);
 
     const onDragEnd = ({destination, source, draggableId}) => {
-        if(!destination){
+        if (!destination) {
             return;
         }
         //make sure the draggable moved
-        if(
+        if (
             destination.droppableId === source.droppableId &&
             destination.index === source.index
-        ){
+        ) {
             return;
         }
         const start = columnData.columns[source.droppableId];
         const finish = columnData.columns[destination.droppableId];
 
         //if moving within the same column
-        if(start === finish){
+        if (start === finish) {
 
             const newTraitIds = Array.from(start.traitIds);
             newTraitIds.splice(source.index, 1);
-            newTraitIds.splice(destination.index,0,draggableId);
+            newTraitIds.splice(destination.index, 0, draggableId);
 
             const newColumn = {
                 ...start,
-                traitIds:newTraitIds,
+                traitIds: newTraitIds,
             };
 
             //override existing column
             const newData = {
                 ...columnData,
-                columns:{
+                columns: {
                     ...columnData.columns,
-                    [newColumn.id]:newColumn,
+                    [newColumn.id]: newColumn,
                 }
             }
             setColumnData(newData);
@@ -60,14 +61,14 @@ const App = () => {
         }
         //cross column moving
         const startTraitIds = Array.from(start.traitIds);
-        startTraitIds.splice(source.index,1);
+        startTraitIds.splice(source.index, 1);
         const newStart = {
             ...start,
             traitIds: startTraitIds,
         }
 
         const finishTraitIds = Array.from(finish.traitIds);
-        finishTraitIds.splice(destination.index,0,draggableId);
+        finishTraitIds.splice(destination.index, 0, draggableId);
         const newFinish = {
             ...finish,
             traitIds: finishTraitIds
@@ -75,7 +76,7 @@ const App = () => {
 
         const newData = {
             ...columnData,
-            columns:{
+            columns: {
                 ...columnData.columns,
                 [newStart.id]: newStart,
                 [newFinish.id]: newFinish,
@@ -83,14 +84,50 @@ const App = () => {
         }
         setColumnData(newData);
     }
+    function swipe(direction: string): ?SnapDragActions{
+       const api: ?SensorAPI = sensorAPIRef.current;
+       if(!api){
+           console.warn('unable to find sensor api');
+           return null;
+       }
+
+       const preDrag: ?PreDragActions = api.tryGetLock(columnData.columns.column2.traitIds[0]);
+
+       if(!preDrag){
+           console.log('unable to start capturing');
+           return null;
+       }
+       preDrag.snapLift();
+       const drag: SnapDragActions = preDrag.snapLift();
+       if (direction === 'right'){
+           drag.moveRight();
+       }
+       else{
+           drag.moveLeft();
+       }
+       drag.drop();
+    }
+
+    const swipeHandlers = useSwipeable({
+        onSwipedLeft: () => {
+            console.log("left swiped")
+            swipe('left')
+        },
+        onSwipedRight: () => {
+            console.log("right swiped")
+            swipe('right')
+        },
+    })
+
 
 
     return(
         <div>
-            <DragDropContext onDragEnd={onDragEnd}  sensors={[(api) => {sensorAPIRef.current = api;}]}>
+            <DragDropContext onDragEnd={onDragEnd}  sensors={[(api) => {sensorAPIRef.current = api;},
+            ]}>
              <NavBar history={history}/>
                 <Route exact path='/'>
-                    <SelectionPage columnData={columnData} topTraits={topTraits} setTopTraits={setTopTraits} setColumnData={setColumnData} history={history} sensorAPIRef={sensorAPIRef}/>
+                    <SelectionPage columnData={columnData} topTraits={topTraits} setTopTraits={setTopTraits} setColumnData={setColumnData} history={history} swipeHandlers={swipeHandlers} />
                  </Route>
                  <Route path='/Rank'>
                     <RankingPage topTraits={topTraits} setTopTraits={setTopTraits} history={history} />
@@ -107,9 +144,7 @@ const App = () => {
 const AppWrapper = () => {
     return(
         <HashRouter basename={'/trait-ranker'}>
-
                 <App/>
-
         </HashRouter>
     )
 }

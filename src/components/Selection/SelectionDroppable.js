@@ -23,7 +23,7 @@ const TraitList = styled.div`
 
 const SelectionDroppable = ({ column, isStarter = false, hoverColor = 'lightBlue'}) => {
     return(
-        <Container>
+
             <Droppable key={column.id} droppableId={column.id} direction='horizontal'>
                 {(provided, snapshot) => (
                     <TraitList
@@ -51,7 +51,6 @@ const SelectionDroppable = ({ column, isStarter = false, hoverColor = 'lightBlue
                     </TraitList>
                 )}
             </Droppable>
-        </Container>
     )
 }
 

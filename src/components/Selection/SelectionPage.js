@@ -10,61 +10,8 @@ import type {PreDragActions, SensorAPI, SnapDragActions} from "react-beautiful-d
 function noop() {}
 
 
-const SelectionPage = ({columnData,  setTopTraits,  history, sensorAPIRef}) =>{
-    const [isDragging, setIsDragging] = useState(false);
-    const [isControlDragging, setIsControlDragging] = useState(false);
-    const actionsRef = useRef<?SnapDragActions>(null);
+const SelectionPage = ({columnData,  setTopTraits,  history, swipeHandlers}) =>{
 
-    const swipeHandlers = useSwipeable(({
-        onSwipedLeft: () => {
-            console.log("swiped left")
-            const currentTrait = columnData.columns.column2.traitIds[0]
-            lift(currentTrait);
-            maybe((callbacks: SnapDragActions) => callbacks.moveDown());
-            maybe((callbacks: SnapDragActions) => {
-                actionsRef.current = null;
-                callbacks.drop();
-            })
-            setIsDragging(false);
-            setIsControlDragging(false);
-        },
-        onSwipedRight: () => {
-            const currentTrait = columnData.columns.column2.traitIds[0];
-            lift(currentTrait);
-            maybe((callbacks:SnapDragActions) => callbacks.moveUp());
-            maybe((callbacks: SnapDragActions) => {
-                actionsRef.current = null;
-                callbacks.drop();
-            })
-            setIsDragging(false);
-            setIsControlDragging(false);
-
-        }
-    }))
-    function maybe(fn: (callbacks: SnapDragActions) => void) {
-        if (actionsRef.current) {
-            fn(actionsRef.current);
-        }
-    }
-    function lift(traitId: string): ?SnapDragActions{
-        if (isDragging){
-            return null;
-        }
-        const api: ?SensorAPI = sensorAPIRef.current;
-
-        if(!api){
-            console.warn('unable to find sensor api');
-            return null;
-        }
-        const preDrag: ?PreDragActions = api.tryGetLock(traitId, noop);
-
-        if(!preDrag) {
-            console.log('unable to start capturing')
-            return null;
-        }
-        setIsControlDragging(true);
-        return preDrag.snapLift();
-    }
     useEffect(()=>{
         console.log("currentTraits: ", columnData.columns.column2.traitIds)
         console.log("top traits: ", columnData.columns.column3.traitIds)
@@ -78,19 +25,13 @@ const SelectionPage = ({columnData,  setTopTraits,  history, sensorAPIRef}) =>{
 
     return(
         <Box>
-                <div {...swipeHandlers}>
+                <div {...swipeHandlers} >
                         <Grid container
                               spacing={0}
                               wrap="nowrap">
-                            <Grid item key={columnData.columnOrder[0]}>
-                                <SelectionDroppable column={columnData.columns.column1} hoverColor={'LightPink'}/>
-                            </Grid>
-                            <Grid item key={columnData.columnOrder[1]}>
-                                <SelectionDroppable column={columnData.columns.column2} isStarter={true} />
-                            </Grid>
-                            <Grid item key={columnData.columnOrder[2]}>
-                                <SelectionDroppable column={columnData.columns.column3} hoverColor={'LightGreen'}/>
-                            </Grid>
+                                <SelectionDroppable key={columnData.columns.column1.id} column={columnData.columns.column1} hoverColor={'LightPink'}/>
+                                <SelectionDroppable key={columnData.columns.column2.id} column={columnData.columns.column2} isStarter={true} />
+                                <SelectionDroppable key={columnData.columns.column3.id} column={columnData.columns.column3} hoverColor={'LightGreen'}/>
                         </Grid>
                 </div>
         </Box>
