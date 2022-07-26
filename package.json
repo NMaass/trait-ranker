@@ -1,0 +1,71 @@
+{
+  "name": "trait-ranker",
+  "version": "0.1.0",
+  "homepage": "https://nmaass.github.io/trait-ranker/",
+  "private": true,
+  "dependencies": {
+    "@emotion/react": "^11.5.0",
+    "@emotion/styled": "^11.3.0",
+    "@mui/icons-material": "^5.6.2",
+    "@mui/material": "^5.0.3",
+    "@mui/styled-engine-sc": "^5.0.3",
+    "@mui/styles": "^5.0.2",
+    "@testing-library/dom": "^8.9.1",
+    "@testing-library/jest-dom": "^5.11.4",
+    "@testing-library/react": "^13.2.0",
+    "@testing-library/user-event": "^12.1.10",
+    "firebase": "^9.8.1",
+    "flow-bin": "^0.182.0",
+    "gh-pages": "^4.0.0",
+    "logrocket": "^3.0.1",
+    "mixpanel-browser": "^2.45.0",
+    "node-sass": "^6.0.1",
+    "patch-package": "^6.4.7",
+    "postinstall-postinstall": "^2.1.0",
+    "pretier": "^0.0.1",
+    "react": "^17.0.2",
+    "react-beautiful-dnd": "^13.1.0",
+    "react-dom": "^17.0.2",
+    "react-ga": "^3.3.0",
+    "react-icons": "^4.3.1",
+    "react-router-dom": "^5.3.0",
+    "react-scripts": "4.0.3",
+    "react-swipeable": "^7.0.0",
+    "styled-components": "^5.3.1",
+    "tween-functions": "^1.2.0",
+    "web-vitals": "^1.0.1"
+  },
+  "scripts": {
+    "deploy": "gh-pages -d build",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "flow": "flow"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.17.10",
+    "@babel/core": "^7.18.0",
+    "@babel/preset-flow": "^7.17.12",
+    "@mui/core": "^5.0.0-alpha.51",
+    "react-beautiful-dnd-test-utils": "^3.2.1"
+  }
+}
