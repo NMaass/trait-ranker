@@ -7,34 +7,37 @@ import type {PreDragActions, SensorAPI, SnapDragActions} from "react-beautiful-d
 import FadeTextSeries from "../../utils/FadeTextSeries";
 
 
+function noop() {
+}
 
-function noop() {}
 
+const SelectionPage = ({columnData, setTopTraits, history, swipeHandlers}) => {
 
-const SelectionPage = ({columnData,  setTopTraits,  history, swipeHandlers}) =>{
-
-    useEffect(()=>{
+    useEffect(() => {
         console.log("currentTraits: ", columnData.columns.column2.traitIds)
         console.log("top traits: ", columnData.columns.column3.traitIds)
-        if(columnData.columns.column2.traitIds.length === 0){
+        if (columnData.columns.column2.traitIds.length === 0) {
             console.log(columnData.columns.column3.traitIds)
-               setTopTraits(columnData.columns.column3.traitIds);
-               history.push("/Rank");
-           }
+            setTopTraits(columnData.columns.column3.traitIds);
+            history.push("/Rank");
+        }
 
-    },[columnData, history, setTopTraits])
+    }, [columnData, history, setTopTraits])
 
-    return(
+    return (
         <Box>
-                <div {...swipeHandlers} >
-                        <Grid container
-                              spacing={0}
-                              wrap="nowrap">
-                                <SelectionDroppable key={columnData.columns.column1.id} column={columnData.columns.column1} hoverColor={'LightPink'}/>
-                                <SelectionDroppable key={columnData.columns.column2.id} column={columnData.columns.column2} isStarter={true} />
-                                <SelectionDroppable key={columnData.columns.column3.id} column={columnData.columns.column3} hoverColor={'LightGreen'}/>
-                        </Grid>
-                </div>
+            <div {...swipeHandlers} >
+                <Grid container
+                      spacing={0}
+                      wrap="nowrap">
+                    <SelectionDroppable key={columnData.columns.column1.id} column={columnData.columns.column1}
+                                        hoverColor={'LightPink'}/>
+                    <SelectionDroppable key={columnData.columns.column2.id} column={columnData.columns.column2}
+                                        isStarter={true}/>
+                    <SelectionDroppable key={columnData.columns.column3.id} column={columnData.columns.column3}
+                                        hoverColor={'LightGreen'}/>
+                </Grid>
+            </div>
         </Box>
     )
 };

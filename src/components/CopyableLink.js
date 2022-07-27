@@ -1,57 +1,56 @@
-import React, {useState} from 'react';
-import {Button, Grid, InputLabel, Tooltip} from "@mui/material";
+import React, { useState } from "react";
+import { Button, Grid, InputLabel, Tooltip } from "@mui/material";
 
-const CopyableLink = ({text}) =>{
-    const [showTooltip, setShowTooltip] = useState(false);
-    const [showLink, setShowLink] = useState(false);
-    const onCopy = () =>{
-        if (navigator.share){
-            navigator.share({
-                text: 'Take a look at my most valued traits',
-                url: text,
-            })
-                .then(()=> console.log('successful share'))
-                .catch((error) => console.log('error sharing', error));
-        }
-        else{
-            navigator.clipboard.writeText(text)
-                .then(() => console.log("Copied!"))
-                .catch(()=> console.log("Copy failed"));
-            setShowTooltip(true);
-            setShowLink(true);
-        }
+const CopyableLink = ({ text }) => {
+  const [showTooltip, setShowTooltip] = useState(false);
+  const [showLink, setShowLink] = useState(false);
+  const onCopy = () => {
+    if (navigator.share) {
+      navigator
+        .share({
+          text: "Take a look at my most valued traits",
+          url: text,
+        })
+        .then(() => console.log("successful share"))
+        .catch((error) => console.log("error sharing", error));
+    } else {
+      navigator.clipboard
+        .writeText(text)
+        .then(() => console.log("Copied!"))
+        .catch(() => console.log("Copy failed"));
+      setShowTooltip(true);
+      setShowLink(true);
     }
-    const onTipClose = () => {
-        setShowTooltip(false)
-    }
-    return(
-        <Grid container
-              direction="row"
-              alignItems="center"
-              justifyContent="center"
-              spacing={2}
+  };
+  const onTipClose = () => {
+    setShowTooltip(false);
+  };
+  return (
+    <Grid
+      container
+      direction="column"
+      alignItems="center"
+      justifyContent="center"
+      spacing={2}
+    >
+      <Grid item>
+        <Tooltip
+          title={"Copied to clipboard!"}
+          open={showTooltip}
+          leaveDelay={1000}
+          onClose={onTipClose}
         >
-            <Grid item>
-                <Tooltip
-                    title={"Copied to clipboard!"}
-                    open={showTooltip}
-                    leaveDelay={1000}
-                    onClose={onTipClose}
-                >
-                <Button
-                    variant="contained"
-                    onClick={onCopy}
-                >
-                    Copy and Share!
-                </Button>
-                </Tooltip>
-            </Grid>
-            {showLink && <Grid item>
-                            <InputLabel>
-                                {text}
-                            </InputLabel>
-                        </Grid>}
+          <Button variant="contained" onClick={onCopy}>
+            Share
+          </Button>
+        </Tooltip>
+      </Grid>
+      {showLink && (
+        <Grid item>
+          <InputLabel>{text}</InputLabel>
         </Grid>
-    )
-}
-export default CopyableLink
+      )}
+    </Grid>
+  );
+};
+export default CopyableLink;

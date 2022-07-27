@@ -1,33 +1,38 @@
-import React, {useEffect, useRef} from "react";
-import makeId from "../utils/makeIdUtil"
+import React, { useEffect, useRef } from "react";
+import makeId from "../utils/makeIdUtil";
 import CopyableLink from "./CopyableLink";
-import {setDBTraits} from "../utils/Firebase";
+import { setDBTraits } from "../utils/Firebase";
 import SmallTraitList from "./SmallTraitList";
-import {Grid} from "@mui/material";
+import { Grid } from "@mui/material";
 
+const ResultsPage = ({ topTraits, userID }) => {
+  useEffect(() => {
+    (async () => {
+      console.log("setting traits", topTraits);
+      await setDBTraits(userID, topTraits);
+    })();
+  }, [topTraits]);
 
-const ResultsPage = ({topTraits, userID}) => {
-    useEffect(()=>{
-        (async () =>{
-            console.log("setting traits", topTraits)
-            await setDBTraits(userID, topTraits)
-        })()
-    },[topTraits])
-
-    return(
-        <Grid container direction="column" alignItems="center" justifyContent="center">
-            <Grid item>
-                <h3>
-                    Top Traits
-                </h3>
-            </Grid>
-            <Grid item>
-                <SmallTraitList traits={topTraits.reverse()}/>
-            </Grid>
-            <Grid item>
-                <CopyableLink text={"https://nmaass.github.io/trait-ranker/#/Share/" +userID}/>
-            </Grid>
-        </Grid>)
+  return (
+    <Grid
+      container
+      direction="column"
+      alignItems="center"
+      justifyContent="center"
+    >
+      <Grid item>
+        <h3>Top Traits</h3>
+      </Grid>
+      <Grid item>
+        <SmallTraitList traits={topTraits.reverse()} />
+      </Grid>
+      <Grid item>
+        <CopyableLink
+          text={"https://nmaass.github.io/trait-ranker/#/Share/" + userID}
+        />
+      </Grid>
+    </Grid>
+  );
 };
 
 export default ResultsPage;
