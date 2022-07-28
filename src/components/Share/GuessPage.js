@@ -46,7 +46,7 @@ const GuessPage = ({ traits, columnData, setColumnData, history }) => {
         },
       };
       setColumnData(newColumnData);
-      trackGuessed(columnData.columns.guessing);
+      trackGuessed(newColumnData.columns.guessing);
       setShowColumn(true);
       setShowPicks(false);
     }
