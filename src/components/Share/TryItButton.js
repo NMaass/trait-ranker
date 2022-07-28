@@ -1,8 +1,10 @@
 import React from 'react';
-import {Button} from "@mui/material"
+import {Button} from "@mui/material";
+import {trackShareConversion} from "../../utils/mixpanel"
 
-const TryItButton = ({history}) =>{
+const TryItButton = ({history, source}) =>{
     const tryIt = () =>{
+        trackShareConversion(source);
         history.push('/');
     }
     return(

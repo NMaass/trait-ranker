@@ -6,6 +6,7 @@ import RankingTrait from "../TraitCards/RankingTrait";
 import SmallTraitList from "../SmallTraitList";
 import GuessPage from "./GuessPage";
 import TryItButton from "./TryItButton";
+import {trackShowTraits, trackGuessTraits} from "../../utils/mixpanel"
 
 const SharedPage = ({ columnData, setColumnData, history }) => {
   let { id } = useParams();
@@ -22,10 +23,12 @@ const SharedPage = ({ columnData, setColumnData, history }) => {
     })();
   }, [id]);
   const showTraits = () => {
+    trackShowTraits();
     setShowList(true);
     setShowOptions(false);
   };
   const showGuess = () => {
+    trackGuessTraits();
     setShowGuessing(true);
     setShowOptions(false);
   };
@@ -59,7 +62,7 @@ const SharedPage = ({ columnData, setColumnData, history }) => {
               <SmallTraitList traits={storedTraits} />
             </Grid>
             <Grid>
-              <TryItButton history={history}/>
+              <TryItButton history={history} source="Guess"/>
             </Grid>
           </Grid>
         </Grid>
@@ -70,6 +73,7 @@ const SharedPage = ({ columnData, setColumnData, history }) => {
             traits={storedTraits}
             columnData={columnData}
             setColumnData={setColumnData}
+            history={history}
           />
         </Grid>
       )}

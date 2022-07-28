@@ -3,7 +3,7 @@ import "../../style/CardStyle.scss";
 import { traitIcons } from "../../utils/listOfAllTraits";
 import { Chip, useMediaQuery } from "@mui/material";
 
-const ReorderTrait = ({ trait, provided, color }) => {
+const ReorderTrait = ({ trait, provided, color, }) => {
   const isMobile = useMediaQuery("(min-width:1024px");
 
   return (

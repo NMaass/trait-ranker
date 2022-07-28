@@ -3,7 +3,7 @@ import ReorderableColumn from "./ReorderableColumn";
 import { Button, Grid } from "@mui/material";
 import TryItButton from "./TryItButton";
 
-const ReorderGuess = ({ column, onDone, colors, showTryIt, history }) => {
+const ReorderGuess = ({ column, onDone, colors, showTryIt, history, isDraggable }) => {
   return (
     <Grid
       container
@@ -14,7 +14,7 @@ const ReorderGuess = ({ column, onDone, colors, showTryIt, history }) => {
       <Grid item sx={{ padding: "5vh" }}>
       </Grid>
       <Grid item>
-        <ReorderableColumn column={column} colors={colors} />
+        <ReorderableColumn column={column} colors={colors}  />
       </Grid>
       <Grid item sx={{ padding: "5vh" }}>
         <Button

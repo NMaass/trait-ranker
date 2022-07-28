@@ -6,7 +6,7 @@ import styled from "styled-components";
 
 const DragColumn = styled.div``;
 
-const ReorderableColumn = ({ column, colors }) => {
+const ReorderableColumn = ({ column, colors, isDraggable }) => {
   return (
     <div>
       <Droppable key={column.id} droppableId={column.id}>

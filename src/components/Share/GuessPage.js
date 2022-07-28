@@ -5,13 +5,15 @@ import initialTraits from "../Selection/initialTraits";
 import shuffle from "../../utils/ShuffleUtil";
 import ReorderableColumn from "./ReorderableColumn";
 import ReorderGuess from "./ReorderGuess";
+import {trackGuessed} from "../../utils/mixpanel"
 
 const GuessPage = ({ traits, columnData, setColumnData, history }) => {
   let traitsLeft = useRef(shuffle(traits.slice(0, 7)));
   let wrongTraits = useRef([]);
   let traitPool = initialTraits.columns.column2.traitIds; //already randomized on each load
   let finalList = useRef([]);
-  let [colors, setColors] = useState([]);
+  const [colors, setColors] = useState([]);
+  const [isDraggable, setIsDraggable] = useState(true);
 
   const [currentTraits, setCurrentTraits] = useState([]);
   const [showPicks, setShowPicks] = useState(true);
@@ -44,7 +46,7 @@ const GuessPage = ({ traits, columnData, setColumnData, history }) => {
         },
       };
       setColumnData(newColumnData);
-
+      trackGuessed(columnData.columns.guessing);
       setShowColumn(true);
       setShowPicks(false);
     }
@@ -76,7 +78,8 @@ const GuessPage = ({ traits, columnData, setColumnData, history }) => {
       }
     }
     setColors(guessColors);
-    setShowIt(true)
+    setShowIt(true);
+    setIsDraggable(false);
   };
 
   const isMobile = useMediaQuery("(min-width:1024px)");
@@ -111,6 +114,7 @@ const GuessPage = ({ traits, columnData, setColumnData, history }) => {
           colors={colors}
           showTryIt={showTryIt}
           history={history}
+          isDraggable={isDraggable}
         />
       )}
     </div>

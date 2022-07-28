@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { Button, Grid, InputLabel, Tooltip } from "@mui/material";
+import {trackShare} from "../utils/mixpanel"
 
 const CopyableLink = ({ text }) => {
   const [showTooltip, setShowTooltip] = useState(false);
   const [showLink, setShowLink] = useState(false);
   const onCopy = () => {
+    trackShare();
     if (navigator.share) {
       navigator
         .share({

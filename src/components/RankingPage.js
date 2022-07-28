@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import RankingTrait from "./TraitCards/RankingTrait";
 import { Grid, useMediaQuery, Box } from "@mui/material";
 import FadeTextSeries from "../utils/FadeTextSeries";
+import {trackRankingPage} from "../utils/mixpanel"
 
 const RankingPage = ({ topTraits, setTopTraits, history, fetchTopTraits }) => {
   const [displayedPairs, setDisplayedPairs] = React.useState(
@@ -218,6 +219,10 @@ const RankingPage = ({ topTraits, setTopTraits, history, fetchTopTraits }) => {
   };
 
   const isMobile = useMediaQuery("(min-width:1024px)");
+
+  useEffect(()=>{
+    trackRankingPage(topTraits)
+  },[])
 
   return (
       <div>
