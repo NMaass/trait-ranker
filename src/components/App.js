@@ -20,7 +20,6 @@ const App = () => {
   const [topTraits, setTopTraits] = useState([]);
   const [userId, setUserId] = useState(makeAndTrackId(8));
   const sensorAPIRef = useRef<?SensorAPI>(null);
-  let finalList = useRef([]);
   const TRACKING_ID = "G-4RLGL8ENZC";
   ReactGA.initialize(TRACKING_ID);
 
@@ -175,13 +174,13 @@ const App = () => {
           <RankingPage
             topTraits={topTraits}
             setTopTraits={setTopTraits}
-            finalList={finalList}
             history={history}
           />
         </Route>
         <Route path="/Results">
           <ResultsPage
-            topTraits={finalList}
+            topTraits={topTraits}
+            setTopTraits={setTopTraits}
             userID={userId}
           />
         </Route>

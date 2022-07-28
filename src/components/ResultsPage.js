@@ -8,13 +8,12 @@ import {trackResultsPage} from "../utils/mixpanel"
 
 const ResultsPage = ({ topTraits, userID }) => {
   useEffect(() => {
-    trackResultsPage(topTraits.current);
-    console.log("tracking top traits", topTraits.current);
+    trackResultsPage(topTraits);
     (async () => {
-      console.log("setting traits", topTraits.current);
-      await setDBTraits(userID, topTraits.current);
+      console.log("setting traits", topTraits);
+      await setDBTraits(userID, topTraits);
     })();
-  }, []);
+  }, [topTraits]);
 
   return (
     <Grid
@@ -27,7 +26,7 @@ const ResultsPage = ({ topTraits, userID }) => {
         <h3>Top Traits</h3>
       </Grid>
       <Grid item>
-        <SmallTraitList traits={topTraits.current.reverse()} />
+        <SmallTraitList traits={topTraits.reverse()} />
       </Grid>
       <Grid item>
         <CopyableLink

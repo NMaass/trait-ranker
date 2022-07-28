@@ -64,7 +64,7 @@ const RankingPage = ({ topTraits, setTopTraits, history, finalList }) => {
       }); //check if all arrays are empty
       if (!mergeStackHasValues && initialPairs.current.length === 0) {
         if (sortedPairs.current.length === 0) {
-          finalList.current = finishedList.current;
+          setTopTraits(finishedList.current);
           console.log("finished the list" + finishedList.current)
           history.push("/Results");
         }
