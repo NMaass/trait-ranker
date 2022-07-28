@@ -58,6 +58,7 @@ import {
   FaUserGraduate,
   GiMeditation,
   FaShapes,
+  BiGlasses,
 } from "react-icons/all";
 
 const allTraits = [
@@ -153,5 +154,6 @@ export const traitIcons = {
   Loyality: <GiSittingDog/>,
   'Self-Improvement': <GiMeditation/>,
   Creativity: <FaShapes/>,
+  Realism: <BiGlasses/>,
 };
 export default allTraits;
