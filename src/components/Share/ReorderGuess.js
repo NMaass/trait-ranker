@@ -12,7 +12,6 @@ const ReorderGuess = ({ column, onDone, colors, showTryIt, history }) => {
       justifyContent="center"
     >
       <Grid item sx={{ padding: "5vh" }}>
-        Rearange the traits to your best guess
       </Grid>
       <Grid item>
         <ReorderableColumn column={column} colors={colors} />

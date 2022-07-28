@@ -17,7 +17,7 @@ const SelectionTrait = ({ trait, provided }) => {
       <Grid container
             alignItems='center'
             justifyContent='center'
-            dirction='column'>
+            direction="column">
         <Grid item>
           <h1>{trait}</h1>
         </Grid>

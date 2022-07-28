@@ -55,6 +55,9 @@ import {
   GiTeacher,
   FaThumbsDown,
   GiSittingDog,
+  FaUserGraduate,
+  GiMeditation,
+  FaShapes,
 } from "react-icons/all";
 
 const allTraits = [
@@ -145,9 +148,10 @@ export const traitIcons = {
   Confrontation: <GiCrossedSwords/>,
   Charisma: <FaGrinStars/>,
   Ingenuity: <HiPuzzle/>,
-  Teachability: <GiTeacher/>,
+  Teachability: <FaUserGraduate/>,
   Pessimism: <FaThumbsDown/>,
-  Loyal: <GiSittingDog/>
-
+  Loyality: <GiSittingDog/>,
+  'Self-Improvement': <GiMeditation/>,
+  Creativity: <FaShapes/>,
 };
 export default allTraits;
