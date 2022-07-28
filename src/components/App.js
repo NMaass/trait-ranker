@@ -22,9 +22,7 @@ const App = () => {
   const sensorAPIRef = useRef<?SensorAPI>(null);
   const TRACKING_ID = "G-4RLGL8ENZC";
   ReactGA.initialize(TRACKING_ID);
-  if (process.env.NODE_ENV === "production"){
-    console.log = function no_console() {};
-  }
+
   const onDragEnd = ({ destination, source, draggableId }) => {
     if (!destination) {
       return;
