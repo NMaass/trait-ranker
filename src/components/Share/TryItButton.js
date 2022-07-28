@@ -5,7 +5,7 @@ import {trackShareConversion} from "../../utils/mixpanel"
 const TryItButton = ({history, source}) =>{
     const tryIt = () =>{
         trackShareConversion(source);
-        history.push('/');
+        history.replace('/');
     }
     return(
         <Button onClick={tryIt}
