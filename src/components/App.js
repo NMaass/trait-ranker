@@ -17,7 +17,7 @@ import { makeAndTrackId } from "../utils/mixpanel";
 const App = () => {
   const history = useHistory();
   const [columnData, setColumnData] = useState(initialTraits);
-  const [topTraits, setTopTraits] = useState([]);
+  const [topTraits, setTopTraits] = useState(initialTraits.columns.column2.traitIds.slice(0,20));
   const [userId, setUserId] = useState(makeAndTrackId(8));
   const sensorAPIRef = useRef<?SensorAPI>(null);
   const TRACKING_ID = "G-4RLGL8ENZC";

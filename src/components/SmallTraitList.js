@@ -6,7 +6,7 @@ import { traitIcons } from "../utils/listOfAllTraits";
 const SmallTraitList = ({ traits }) => {
   return (
     <List>
-      {traits.splice(0, 7).map((trait) => {
+      {traits.slice(0, 7).map((trait) => {
         return (
           <ListItem key={trait}>
             <ListItemAvatar>

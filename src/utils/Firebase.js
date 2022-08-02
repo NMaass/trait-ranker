@@ -40,7 +40,7 @@ export async function setDBTraits(hash, traitArray) {
   }).catch((e) => {
     console.log(e);
   });
-  console.log(doc(db, "Traits", hash));
+  console.log(doc(db, "Traits", hash),traitArray);
 }
 
 export async function getDBTraits(hash) {

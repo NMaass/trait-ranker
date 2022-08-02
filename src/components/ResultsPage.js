@@ -13,7 +13,7 @@ const ResultsPage = ({ topTraits, userID }) => {
       console.log("setting traits", topTraits);
       await setDBTraits(userID, topTraits);
     })();
-  }, [topTraits]);
+  }, []);
 
   return (
     <Grid
