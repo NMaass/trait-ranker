@@ -234,6 +234,11 @@ const RankingPage = ({ topTraits, setTopTraits, history, finalList }) => {
         direction={isMobile ? "row" : "column"}
       >
         <Grid item>
+          <FadeTextSeries
+              stringArray={['this is the ranking page', 'this is a test of a very ']}
+              variant={isMobile ? "h3" : "h5"}/>
+        </Grid>
+        <Grid item>
           <RankingTrait
             onClick={() => handlePick(displayedPairs[0])}
             trait={displayedPairs[0]}
