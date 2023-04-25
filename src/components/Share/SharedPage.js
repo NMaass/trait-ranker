@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getDBTraits } from "../../utils/Firebase";
-import { Grid, useMediaQuery } from "@mui/material";
+import { Grid, Typography, useMediaQuery } from "@mui/material";
 import RankingTrait from "../TraitCards/RankingTrait";
 import SmallTraitList from "../SmallTraitList";
 import GuessPage from "./GuessPage";
 import TryItButton from "./TryItButton";
-import {trackShowTraits, trackGuessTraits} from "../../utils/mixpanel"
+import { trackShowTraits, trackGuessTraits } from "../../utils/mixpanel";
 
 const SharedPage = ({ columnData, setColumnData, history }) => {
   let { id } = useParams();
@@ -53,16 +53,23 @@ const SharedPage = ({ columnData, setColumnData, history }) => {
       )}
       {showList && (
         <Grid item>
-          <Grid container
-                alignItems="center"
-                justifyContent="center"
-                direction='column'
+          <Grid
+            container
+            alignItems="center"
+            justifyContent="center"
+            direction="column"
+            style={{ transform: "Scale(1.25)" }}
           >
+            <Grid item>
+              <Typography variant={isMobile ? "h3" : "h5"} color="black">
+                Top traits
+              </Typography>
+            </Grid>
             <Grid item>
               <SmallTraitList traits={storedTraits} />
             </Grid>
-            <Grid>
-              <TryItButton history={history} source="Guess"/>
+            <Grid item>
+              <TryItButton history={history} source="Guess" />
             </Grid>
           </Grid>
         </Grid>
@@ -80,4 +87,4 @@ const SharedPage = ({ columnData, setColumnData, history }) => {
     </Grid>
   );
 };
-export default SharedPage
+export default SharedPage;

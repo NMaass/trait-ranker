@@ -1,6 +1,6 @@
 {
   "name": "trait-ranker",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "homepage": "https://nmaass.github.io/trait-ranker/",
   "private": true,
   "dependencies": {

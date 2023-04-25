@@ -27,14 +27,14 @@ const ReorderGuess = ({
           isDraggable={isDraggable}
         />
       </Grid>
-      {showLockIn && (
-        <Grid item sx={{ padding: "5vh" }}>
+      <Grid item sx={{ padding: "5vh" }}>
+        {showLockIn && (
           <Button onClick={onDone} variant="contained">
             Lock in
           </Button>
-        </Grid>
-      )}
-      <Grid item>{showTryIt && <TryItButton history={history} />}</Grid>
+        )}
+        {showTryIt && <TryItButton history={history} />}
+      </Grid>
     </Grid>
   );
 };

@@ -229,7 +229,7 @@ const RankingPage = ({ topTraits, setTopTraits, history, finalList }) => {
       <div className="rankingFade">
         <FadeTextSeries
           stringArray={[
-            `${isMobile ? "Tap" : "Click"} on the trait you value more`,
+            `${isMobile ? "Click" : "Tap"} on the trait you value more`,
           ]}
           variant={isMobile ? "h3" : "h5"}
         />

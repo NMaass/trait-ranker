@@ -24,7 +24,7 @@ const SelectionPage = ({
   }, [columnData, history, setTopTraits]);
 
   const selectionIntro = [
-    `${isMobile ? "Swipe " : "Drag"} left to pass, right to like`,
+    `${isMobile ? "Drag" : "Swipe "} right to like, left to pass.`,
   ];
 
   return (
