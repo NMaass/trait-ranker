@@ -19,7 +19,6 @@ const ReorderGuess = ({
       alignItems="center"
       justifyContent="center"
     >
-      <Grid item sx={{ padding: "5vh" }}></Grid>
       <Grid item>
         <ReorderableColumn
           column={column}
@@ -27,7 +26,7 @@ const ReorderGuess = ({
           isDraggable={isDraggable}
         />
       </Grid>
-      <Grid item sx={{ padding: "5vh" }}>
+      <Grid item sx={{ padding: "4vh" }}>
         {showLockIn && (
           <Button onClick={onDone} variant="contained">
             Lock in

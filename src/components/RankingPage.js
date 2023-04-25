@@ -231,7 +231,6 @@ const RankingPage = ({ topTraits, setTopTraits, history, finalList }) => {
           stringArray={[
             `${isMobile ? "Click" : "Tap"} on the trait you value more`,
           ]}
-          variant={isMobile ? "h3" : "h5"}
         />
       </div>
       <Grid

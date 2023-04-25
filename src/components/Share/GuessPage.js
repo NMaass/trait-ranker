@@ -6,6 +6,7 @@ import shuffle from "../../utils/ShuffleUtil";
 import ReorderableColumn from "./ReorderableColumn";
 import ReorderGuess from "./ReorderGuess";
 import { trackGuessed } from "../../utils/mixpanel";
+import FadeTextSeries from "../../utils/FadeTextSeries";
 
 const GuessPage = ({ traits, columnData, setColumnData, history }) => {
   let traitsLeft = useRef(shuffle(traits.slice(0, 7)));
@@ -85,12 +86,17 @@ const GuessPage = ({ traits, columnData, setColumnData, history }) => {
   };
 
   const isMobile = useMediaQuery("(min-width:1024px)");
+
+  const guessTutorial = ["Select the traits actually in the list"];
   return (
     <div>
+      <div className="rankingFade" style={{ marginTop: "-12vh" }}>
+        <FadeTextSeries stringArray={guessTutorial} />
+      </div>
       {showPicks && (
         <Grid
           container
-          spacing={isMobile ? 60 : 1}
+          spacing={isMobile ? 60 : 3}
           alignItems="center"
           justifyContent="center"
           direction={isMobile ? "row" : "column"}

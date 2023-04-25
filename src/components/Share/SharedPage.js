@@ -43,14 +43,15 @@ const SharedPage = ({ columnData, setColumnData, history }) => {
     >
       {showOptions && (
         <Grid item>
-          <RankingTrait onClick={showTraits} trait="Show the traits" />
+          <RankingTrait onClick={showGuess} trait="Guess the traits" />
         </Grid>
       )}
       {showOptions && (
         <Grid item>
-          <RankingTrait onClick={showGuess} trait="Guess the traits" />
+          <RankingTrait onClick={showTraits} trait="Show the traits" />
         </Grid>
       )}
+
       {showList && (
         <Grid item>
           <Grid

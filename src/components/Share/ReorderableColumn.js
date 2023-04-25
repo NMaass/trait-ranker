@@ -3,12 +3,18 @@ import { Droppable } from "react-beautiful-dnd";
 import { Grid } from "@mui/material";
 import FreeDragTrait from "../TraitCards/FreeDragTrait";
 import styled from "styled-components";
+import FadeTextSeries from "../../utils/FadeTextSeries";
 
 const DragColumn = styled.div``;
 
 const ReorderableColumn = ({ column, colors, isDraggable }) => {
+  const tutorialStrings = ["Rearrange to the guess list order"];
   return (
     <div>
+      <div className="rankingFade" style={{ marginBottom: "2vh" }}>
+        <FadeTextSeries stringArray={tutorialStrings} />
+      </div>
+
       <Droppable key={column.id} droppableId={column.id}>
         {(provided, snapshot) => (
           <DragColumn

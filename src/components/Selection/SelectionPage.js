@@ -25,11 +25,12 @@ const SelectionPage = ({
 
   const selectionIntro = [
     `${isMobile ? "Drag" : "Swipe "} right to like, left to pass.`,
+    "Press the ? button at any time to see an example.",
   ];
 
   return (
     <Box>
-      <FadeTextSeries stringArray={selectionIntro} variant={"h5"} />
+      <FadeTextSeries stringArray={selectionIntro} />
       <div {...swipeHandlers}>
         <Grid container spacing={0} wrap="nowrap">
           <SelectionDroppable

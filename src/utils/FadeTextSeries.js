@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Fade, Typography } from "@mui/material";
+import { Fade, Typography, useMediaQuery } from "@mui/material";
 
 const FadeTextSeries = ({ stringArray, variant }) => {
   const [currentText, setCurrentText] = useState(stringArray[0]);
   const [checked, setChecked] = useState(true);
   const fadeTime = 3000;
-
+  const isMobile = useMediaQuery("(min-width:1024px)");
   useEffect(() => {
     let count = 0;
 
@@ -39,7 +39,7 @@ const FadeTextSeries = ({ stringArray, variant }) => {
           width: "100%",
         }}
         align="center"
-        variant={variant}
+        variant={isMobile ? "h3" : "h5"}
       >
         {currentText}
       </Typography>
