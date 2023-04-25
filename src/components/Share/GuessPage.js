@@ -75,7 +75,7 @@ const GuessPage = ({ traits, columnData, setColumnData, history }) => {
         guessColors.push("gold");
         console.log("in there", correctTraits[i], guess[i]);
       } else {
-        guessColors.push("");
+        guessColors.push("LightGray");
         console.log("incorrect", correctTraits[i], guess[i]);
       }
     }
@@ -87,7 +87,7 @@ const GuessPage = ({ traits, columnData, setColumnData, history }) => {
 
   const isMobile = useMediaQuery("(min-width:1024px)");
 
-  const guessTutorial = ["Select the traits actually in the list"];
+  const guessTutorial = ["Select the traits actually in the list."];
   return (
     <div>
       <div className="rankingFade" style={{ marginTop: "-12vh" }}>

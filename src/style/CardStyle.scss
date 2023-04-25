@@ -84,9 +84,9 @@ p {
   min-height: 20rem;
 }
 
-.jumper:hover {
-  transition: 0.2s;
-  transform: translatey(-0.5rem);
+.bounce {
+  transition: 250;
+  transform: translatey(-2vh);
 }
 
 .wideColumn {
