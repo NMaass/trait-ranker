@@ -42,14 +42,14 @@ const SharedPage = ({ columnData, setColumnData, history }) => {
       direction={isMobile ? "row" : "column"}
     >
       {showOptions && (
-        <Grid item>
-          <RankingTrait onClick={showTraits} trait="Show the traits" />
-        </Grid>
-      )}
-      {showOptions && (
-        <Grid item>
-          <RankingTrait onClick={showGuess} trait="Guess the traits" />
-        </Grid>
+        <div>
+          <Grid item>
+            <RankingTrait onClick={showGuess} trait="Guess the traits" />
+          </Grid>
+          <Grid item>
+            <RankingTrait onClick={showTraits} trait="Show the traits" />
+          </Grid>
+        </div>
       )}
       {showList && (
         <Grid item>

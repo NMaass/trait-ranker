@@ -236,7 +236,7 @@ const RankingPage = ({ topTraits, setTopTraits, history, finalList }) => {
       </div>
       <Grid
         container
-        spacing={isMobile ? 60 : 1}
+        spacing={isMobile ? 60 : 3}
         alignItems="center"
         justifyContent="center"
         direction={isMobile ? "row" : "column"}

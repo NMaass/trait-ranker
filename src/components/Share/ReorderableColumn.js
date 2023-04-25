@@ -34,8 +34,8 @@ const ReorderableColumn = ({ column, colors, isDraggable }) => {
                   </Grid>
                 );
               })}
+              {provided.placeholder}
             </Grid>
-            {provided.placeholder}
           </DragColumn>
         )}
       </Droppable>
