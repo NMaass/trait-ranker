@@ -36,20 +36,20 @@ const SharedPage = ({ columnData, setColumnData, history }) => {
   return (
     <Grid
       container
-      spacing={isMobile ? 60 : 1}
+      spacing={isMobile ? 60 : 3}
       alignItems="center"
       justifyContent="center"
       direction={isMobile ? "row" : "column"}
     >
       {showOptions && (
-        <div>
-          <Grid item>
-            <RankingTrait onClick={showGuess} trait="Guess the traits" />
-          </Grid>
-          <Grid item>
-            <RankingTrait onClick={showTraits} trait="Show the traits" />
-          </Grid>
-        </div>
+        <Grid item>
+          <RankingTrait onClick={showTraits} trait="Show the traits" />
+        </Grid>
+      )}
+      {showOptions && (
+        <Grid item>
+          <RankingTrait onClick={showGuess} trait="Guess the traits" />
+        </Grid>
       )}
       {showList && (
         <Grid item>
@@ -58,7 +58,7 @@ const SharedPage = ({ columnData, setColumnData, history }) => {
             alignItems="center"
             justifyContent="center"
             direction="column"
-            style={{ transform: "Scale(1.25)" }}
+            style={{ transform: "Scale(1.15)" }}
           >
             <Grid item>
               <Typography variant={isMobile ? "h3" : "h5"} color="black">

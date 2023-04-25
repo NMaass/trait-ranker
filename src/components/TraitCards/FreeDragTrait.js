@@ -1,6 +1,5 @@
 import React from "react";
 import { Draggable } from "react-beautiful-dnd";
-import ReorderTrait from "./ReorderTrait";
 import { Card, Grid } from "@mui/material";
 
 const FreeDragTrait = ({ trait, index, color, isDraggable }) => {
