@@ -1,16 +1,25 @@
 import React from "react";
 import { Draggable } from "react-beautiful-dnd";
 import ReorderTrait from "./ReorderTrait";
-import styled from "styled-components";
+import { Card, Grid } from "@mui/material";
 
 const FreeDragTrait = ({ trait, index, color, isDraggable }) => {
-  const Container = styled.div``;
   return (
-    <Draggable draggableId={trait} index={index}>
+    <Draggable draggableId={trait} index={index} isDragDisabled={!isDraggable}>
       {(provided) => (
-        <Container {...provided.draggableProps} ref={provided.innerRef}>
-          <ReorderTrait trait={trait} provided={provided} color={color} />
-        </Container>
+        <div
+          {...provided.dragHandleProps}
+          {...provided.draggableProps}
+          ref={provided.innerRef}
+        >
+          <Card className="wideCard" sx={{ backgroundColor: color }}>
+            <Grid container justifyContent="center">
+              <Grid item>
+                <h3>{trait}</h3>
+              </Grid>
+            </Grid>
+          </Card>
+        </div>
       )}
     </Draggable>
   );

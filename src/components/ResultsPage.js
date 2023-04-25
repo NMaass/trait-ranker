@@ -4,7 +4,7 @@ import CopyableLink from "./CopyableLink";
 import { setDBTraits } from "../utils/Firebase";
 import SmallTraitList from "./SmallTraitList";
 import { Grid } from "@mui/material";
-import {trackResultsPage} from "../utils/mixpanel"
+import { trackResultsPage } from "../utils/mixpanel";
 
 const ResultsPage = ({ topTraits, userID }) => {
   useEffect(() => {
@@ -21,6 +21,7 @@ const ResultsPage = ({ topTraits, userID }) => {
       direction="column"
       alignItems="center"
       justifyContent="center"
+      style={{ transform: "Scale(1.25)" }}
     >
       <Grid item>
         <h3>Top Traits</h3>

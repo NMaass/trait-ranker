@@ -3,7 +3,15 @@ import ReorderableColumn from "./ReorderableColumn";
 import { Button, Grid } from "@mui/material";
 import TryItButton from "./TryItButton";
 
-const ReorderGuess = ({ column, onDone, colors, showTryIt, history, isDraggable }) => {
+const ReorderGuess = ({
+  column,
+  onDone,
+  colors,
+  showTryIt,
+  history,
+  isDraggable,
+  showLockIn,
+}) => {
   return (
     <Grid
       container
@@ -11,23 +19,23 @@ const ReorderGuess = ({ column, onDone, colors, showTryIt, history, isDraggable 
       alignItems="center"
       justifyContent="center"
     >
-      <Grid item sx={{ padding: "5vh" }}>
-      </Grid>
+      <Grid item sx={{ padding: "5vh" }}></Grid>
       <Grid item>
-        <ReorderableColumn column={column} colors={colors}  />
+        <ReorderableColumn
+          column={column}
+          colors={colors}
+          isDraggable={isDraggable}
+        />
       </Grid>
-      <Grid item sx={{ padding: "5vh" }}>
-        <Button
-          onClick={onDone}
-          variant="contained"
-        >
-          Lock in
-        </Button>
-      </Grid>
-       <Grid item>
-         { showTryIt && <TryItButton history={history}/>}
-       </Grid>
+      {showLockIn && (
+        <Grid item sx={{ padding: "5vh" }}>
+          <Button onClick={onDone} variant="contained">
+            Lock in
+          </Button>
+        </Grid>
+      )}
+      <Grid item>{showTryIt && <TryItButton history={history} />}</Grid>
     </Grid>
   );
 };
-export default ReorderGuess
+export default ReorderGuess;

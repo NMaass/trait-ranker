@@ -5,7 +5,7 @@ import initialTraits from "../Selection/initialTraits";
 import shuffle from "../../utils/ShuffleUtil";
 import ReorderableColumn from "./ReorderableColumn";
 import ReorderGuess from "./ReorderGuess";
-import {trackGuessed} from "../../utils/mixpanel"
+import { trackGuessed } from "../../utils/mixpanel";
 
 const GuessPage = ({ traits, columnData, setColumnData, history }) => {
   let traitsLeft = useRef(shuffle(traits.slice(0, 7)));
@@ -18,7 +18,8 @@ const GuessPage = ({ traits, columnData, setColumnData, history }) => {
   const [currentTraits, setCurrentTraits] = useState([]);
   const [showPicks, setShowPicks] = useState(true);
   const [showColumn, setShowColumn] = useState(false);
-  const [showTryIt, setShowIt] = useState(false)
+  const [showTryIt, setShowIt] = useState(false);
+  const [showLockIn, setShowLockIn] = useState(true);
 
   useEffect(() => {
     while (wrongTraits.current.length < 7) {
@@ -67,18 +68,19 @@ const GuessPage = ({ traits, columnData, setColumnData, history }) => {
     const guess = columnData.columns.guessing.traitIds;
     for (let i = 0; i < correctTraits.length; i++) {
       if (correctTraits[i] === guess[i]) {
-        guessColors.push("success");
+        guessColors.push("green");
         console.log("correct", correctTraits[i], guess[i]);
       } else if (correctTraits.includes(guess[i])) {
-        guessColors.push("warning");
+        guessColors.push("gold");
         console.log("in there", correctTraits[i], guess[i]);
       } else {
-        guessColors.push("default");
+        guessColors.push("");
         console.log("incorrect", correctTraits[i], guess[i]);
       }
     }
     setColors(guessColors);
     setShowIt(true);
+    setShowLockIn(false);
     setIsDraggable(false);
   };
 
@@ -113,6 +115,7 @@ const GuessPage = ({ traits, columnData, setColumnData, history }) => {
           onDone={onDone}
           colors={colors}
           showTryIt={showTryIt}
+          showLockIn={showLockIn}
           history={history}
           isDraggable={isDraggable}
         />
@@ -120,4 +123,4 @@ const GuessPage = ({ traits, columnData, setColumnData, history }) => {
     </div>
   );
 };
-export default GuessPage
+export default GuessPage;

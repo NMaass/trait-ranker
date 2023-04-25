@@ -31,7 +31,18 @@ const FadeTextSeries = ({ stringArray, variant }) => {
         exit: fadeTime * 1.9,
       }}
     >
-      <Typography sx={{minHeight: '1.9rem', marginTop: '1vh'}} variant={variant}>{currentText}</Typography>
+      <Typography
+        sx={{
+          minHeight: "1.9rem",
+          marginTop: "8vh",
+          position: "absolute",
+          width: "100%",
+        }}
+        align="center"
+        variant={variant}
+      >
+        {currentText}
+      </Typography>
     </Fade>
   );
 };

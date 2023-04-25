@@ -226,6 +226,14 @@ const RankingPage = ({ topTraits, setTopTraits, history, finalList }) => {
 
   return (
     <div>
+      <div className="rankingFade">
+        <FadeTextSeries
+          stringArray={[
+            `${isMobile ? "Tap" : "Click"} on the trait you value more`,
+          ]}
+          variant={isMobile ? "h3" : "h5"}
+        />
+      </div>
       <Grid
         container
         spacing={isMobile ? 60 : 1}
@@ -233,11 +241,6 @@ const RankingPage = ({ topTraits, setTopTraits, history, finalList }) => {
         justifyContent="center"
         direction={isMobile ? "row" : "column"}
       >
-        <Grid item>
-          <FadeTextSeries
-              stringArray={['this is the ranking page', 'this is a test of a very ']}
-              variant={isMobile ? "h3" : "h5"}/>
-        </Grid>
         <Grid item>
           <RankingTrait
             onClick={() => handlePick(displayedPairs[0])}

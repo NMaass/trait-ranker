@@ -29,6 +29,7 @@ const ReorderableColumn = ({ column, colors, isDraggable }) => {
                       trait={trait}
                       index={column.traitIds.indexOf(trait)}
                       color={colors[index]}
+                      isDraggable={isDraggable}
                     />
                   </Grid>
                 );
@@ -41,4 +42,4 @@ const ReorderableColumn = ({ column, colors, isDraggable }) => {
     </div>
   );
 };
-export default ReorderableColumn
+export default ReorderableColumn;
