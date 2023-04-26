@@ -9,19 +9,20 @@ const SelectionPage = ({
   setTopTraits,
   history,
   swipeHandlers,
+  topTraits,
 }) => {
   const isMobile = useMediaQuery("(min-width:1024px");
 
   useEffect(() => {
     console.log("currentTraits: ", columnData.columns.column2.traitIds);
     console.log("top traits: ", columnData.columns.column3.traitIds);
-    if (columnData.columns.column2.traitIds.length === 0) {
+    if (columnData.columns.column2.traitIds.length === 0 && topTraits) {
       console.log(columnData.columns.column3.traitIds);
       setTopTraits(columnData.columns.column3.traitIds);
       console.log("setting traits from selection");
       history.push("/Rank");
     }
-  }, [columnData, history, setTopTraits]);
+  }, [columnData, history, setTopTraits, topTraits]);
 
   const selectionIntro = [
     `${isMobile ? "Drag" : "Swipe "} right to like, left to pass.`,

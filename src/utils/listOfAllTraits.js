@@ -68,6 +68,7 @@ import {
   FaRegSmileBeam,
   FaDoorOpen,
   GiPencilBrush,
+  GiButterfly,
 } from "react-icons/all";
 
 const allTraits = [
@@ -86,7 +87,7 @@ const allTraits = [
   "Detachment",
   "Discipline",
   "Empathy",
-  "Enthusiam",
+  "Enthusiasm",
   "Flexibility",
   "Frugality",
   "Independence",
@@ -176,7 +177,7 @@ export const traitIcons = {
   Enthusiasm: <GiFireworkRocket />,
   "Self-care": <MdBathtub />,
   Spirituality: <GiMeditation />,
-  Detachment: <GiFlyingTrout />,
+  Detachment: <GiButterfly />,
   Vision: <GiBinoculars />,
   Simplicity: <FaShapes />,
   "Open-mindedness": <FaDoorOpen />,
