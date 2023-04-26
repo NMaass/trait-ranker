@@ -3,7 +3,7 @@ import { Draggable } from "react-beautiful-dnd";
 import { Card, Grid } from "@mui/material";
 
 const FreeDragTrait = ({ trait, index, color, isDraggable }) => {
-  const [isBouncing, setIsBouncing] = useState(false);
+  const [isBouncing, setIsBouncing] = useState("");
   const [currentColor, setCurrentColor] = useState("");
   const firstUpdate = useRef(true);
   useEffect(() => {

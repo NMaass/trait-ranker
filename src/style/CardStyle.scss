@@ -36,6 +36,11 @@ body {
 .selection {
   margin-left: -9vw;
 }
+.rankingFade {
+  position: absolute;
+  width: 100%;
+  left: 0;
+}
 
 @media (max-width: 1024px) {
   .selection {
@@ -49,9 +54,6 @@ body {
     margin-left: 1.7vw;
   }
   .rankingFade {
-    position: absolute;
-    width: 100%;
-    left: 0;
     margin-top: -10vh;
   }
   .wideCard {
@@ -85,8 +87,18 @@ p {
 }
 
 .bounce {
-  transition: 250;
-  transform: translatey(-2vh);
+  animation: bounce 0.5s ease;
+}
+@keyframes bounce {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-2vh);
+  }
+  100% {
+    transform: translateY(0);
+  }
 }
 
 .wideColumn {
