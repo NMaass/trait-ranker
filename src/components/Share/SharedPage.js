@@ -59,7 +59,6 @@ const SharedPage = ({ columnData, setColumnData, history }) => {
             alignItems="center"
             justifyContent="center"
             direction="column"
-            style={{ transform: "Scale(1.15)" }}
           >
             <Grid item>
               <Typography variant={isMobile ? "h3" : "h5"} color="black">
@@ -69,7 +68,7 @@ const SharedPage = ({ columnData, setColumnData, history }) => {
             <Grid item>
               <SmallTraitList traits={storedTraits} />
             </Grid>
-            <Grid item>
+            <Grid item style={{ marginTop: "5vw" }}>
               <TryItButton history={history} source="Guess" />
             </Grid>
           </Grid>

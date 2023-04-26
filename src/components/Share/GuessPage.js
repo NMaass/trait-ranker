@@ -87,7 +87,10 @@ const GuessPage = ({ traits, columnData, setColumnData, history }) => {
 
   const isMobile = useMediaQuery("(min-width:1024px)");
 
-  const guessTutorial = ["Select the traits actually in the list."];
+  const guessTutorial = [
+    "Select the traits actually in the list.",
+    "Press the ? button at any time to see an example.",
+  ];
   return (
     <div>
       <div className="rankingFade" style={{ marginTop: "-12vh" }}>

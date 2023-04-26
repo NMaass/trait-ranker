@@ -21,7 +21,7 @@ const ResultsPage = ({ topTraits, userID }) => {
       direction="column"
       alignItems="center"
       justifyContent="center"
-      style={{ transform: "Scale(1.25)" }}
+      style={{ height: "100vh" }}
     >
       <Grid item>
         <h3>Top Traits</h3>
@@ -29,7 +29,7 @@ const ResultsPage = ({ topTraits, userID }) => {
       <Grid item>
         <SmallTraitList traits={topTraits.reverse()} />
       </Grid>
-      <Grid item>
+      <Grid item sx={{ padding: "1rem" }}>
         <CopyableLink
           text={"https://nmaass.github.io/trait-ranker/#/Share/" + userID}
         />

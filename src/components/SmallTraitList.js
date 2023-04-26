@@ -1,24 +1,18 @@
 import React from "react";
-import { List, ListItem, ListItemAvatar, ListItemText } from "@mui/material";
-import { IconContext } from "react-icons";
-import { traitIcons } from "../utils/listOfAllTraits";
+import { Grid } from "@mui/material";
+import FlipCard from "./FlipCard";
 
 const SmallTraitList = ({ traits }) => {
   return (
-    <List>
-      {traits.slice(0, 7).map((trait) => {
+    <Grid container justifyContent="center" alignItems="center">
+      {traits.splice(0, 7).map((trait, index) => {
         return (
-          <ListItem key={trait}>
-            <ListItemAvatar>
-              <IconContext.Provider value={{ size: "5vh" }}>
-                {traitIcons[trait]}
-              </IconContext.Provider>
-            </ListItemAvatar>
-            <ListItemText>{trait}</ListItemText>
-          </ListItem>
+          <Grid item>
+            <FlipCard trait={trait} index={index} />
+          </Grid>
         );
       })}
-    </List>
+    </Grid>
   );
 };
 export default SmallTraitList;
