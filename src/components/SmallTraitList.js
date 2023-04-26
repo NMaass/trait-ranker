@@ -5,7 +5,7 @@ import FlipCard from "./FlipCard";
 const SmallTraitList = ({ traits }) => {
   return (
     <Grid container justifyContent="center" alignItems="center">
-      {traits.splice(0, 7).map((trait, index) => {
+      {traits.slice(0, 7).map((trait, index) => {
         return (
           <Grid item>
             <FlipCard trait={trait} index={index} />
