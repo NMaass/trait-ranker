@@ -16,7 +16,7 @@ const SelectionPage = ({
   useEffect(() => {
     console.log("currentTraits: ", columnData.columns.column2.traitIds);
     console.log("top traits: ", columnData.columns.column3.traitIds);
-    if (columnData.columns.column2.traitIds.length === 0 && topTraits) {
+    if (columnData.columns.column2.traitIds.length === 0) {
       console.log(columnData.columns.column3.traitIds);
       setTopTraits(columnData.columns.column3.traitIds);
       console.log("setting traits from selection");
@@ -31,7 +31,6 @@ const SelectionPage = ({
 
   return (
     <Box>
-      <FadeTextSeries stringArray={selectionIntro} />
       <div {...swipeHandlers}>
         <Grid container spacing={0} wrap="nowrap">
           <SelectionDroppable

@@ -93,9 +93,6 @@ const GuessPage = ({ traits, columnData, setColumnData, history }) => {
   ];
   return (
     <div>
-      <div className="rankingFade" style={{ marginTop: "-12vh" }}>
-        <FadeTextSeries stringArray={guessTutorial} />
-      </div>
       {showPicks && (
         <Grid
           container

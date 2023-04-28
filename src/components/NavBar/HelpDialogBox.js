@@ -1,11 +1,16 @@
-import React from "react";
+import React, { forwardRef } from "react";
 import {
   Dialog,
   DialogContentText,
   DialogTitle,
   IconButton,
+  Slide,
 } from "@mui/material";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
+
+const Transition = forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 const HelpDialogBox = () => {
   const [open, setOpen] = React.useState(false);
@@ -25,11 +30,10 @@ const HelpDialogBox = () => {
 
       <Dialog
         onClose={handleClose}
+        TransitionComponent={Transition}
         open={open}
-        maxWidth={"xl"}
-        style={{ borderRadius: 0 }}
       >
-        <DialogContentText paragraph={false} style={{ margin: "24px" }}>
+        <DialogContentText paragraph={false} className="helpDialog">
           <br />
           1. Drag traits to the left or right depending on whether you value
           them.

@@ -11,10 +11,6 @@ const ReorderableColumn = ({ column, colors, isDraggable }) => {
   const tutorialStrings = ["Rearrange to the guess list order"];
   return (
     <div>
-      <div className="rankingFade" style={{ marginBottom: "2vh" }}>
-        <FadeTextSeries stringArray={tutorialStrings} />
-      </div>
-
       <Droppable key={column.id} droppableId={column.id}>
         {(provided, snapshot) => (
           <DragColumn
