@@ -5,14 +5,16 @@ import {
   DialogTitle,
   IconButton,
   Slide,
+  useMediaQuery,
 } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const HelpDialogBox = () => {
+const HelpDialogBox = ({ currentPage }) => {
   const [open, setOpen] = React.useState(false);
   const [grow, setGrow] = React.useState(false);
 
@@ -31,6 +33,18 @@ const HelpDialogBox = () => {
     setOpen(true);
   };
 
+  const isMobile = useMediaQuery("(min-width:1024px)");
+  const helpData = {
+    Selection: {
+      title: "Selection",
+      description: `Trait Ranker helps you discover and prioritize your most important personality traits. ${
+        isMobile ? "Drag" : "Swipe "
+      } right to mark a trait as valuable or left to skip it. Press the help button anytime for guidance.`,
+      media:
+        "https://github.com/NMaass/trait-ranker/blob/master/src/Assets/MobileDrag.gif",
+    },
+  };
+
   return (
     <div>
       <IconButton
@@ -45,19 +59,29 @@ const HelpDialogBox = () => {
         onClose={handleClose}
         TransitionComponent={Transition}
         open={open}
+        fullScreen
+        style={{
+          marginTop: "10vh",
+          marginLeft: "1vw",
+          marginRight: "1vw",
+        }}
+        PaperProps={{
+          style: { borderTopLeftRadius: 6, borderTopRightRadius: 6 },
+        }}
       >
-        <DialogContentText paragraph={false} className="helpDialog">
-          <br />
-          1. Drag traits to the left or right depending on whether you value
-          them.
-          <br />
-          <br />
-          2. Click on the traits you value more.
-          <br />
-          <br />
-          3. Click the share buttons to show your friends!
-          <br />
-        </DialogContentText>
+        <DialogTitle>{helpData[currentPage].title}</DialogTitle>
+        <IconButton
+          style={{ position: "absolute", right: "0", top: "0" }}
+          color="inherit"
+          onClick={handleClose}
+          aria-label="close"
+        >
+          <CloseIcon />
+        </IconButton>
+        <DialogContentText
+          paragraph={false}
+          style={{ margin: 10 }}
+        ></DialogContentText>
       </Dialog>
     </div>
   );
