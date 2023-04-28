@@ -14,9 +14,18 @@ const Transition = forwardRef(function Transition(props, ref) {
 
 const HelpDialogBox = () => {
   const [open, setOpen] = React.useState(false);
+  const [grow, setGrow] = React.useState(false);
+
+  const doGrow = () => {
+    setGrow(true);
+    setTimeout(() => {
+      setGrow(false);
+    }, 1000);
+  };
 
   const handleClose = () => {
     setOpen(false);
+    doGrow();
   };
   const handleOpen = () => {
     setOpen(true);
@@ -24,7 +33,11 @@ const HelpDialogBox = () => {
 
   return (
     <div>
-      <IconButton size="large" onClick={handleOpen}>
+      <IconButton
+        size="large"
+        onClick={handleOpen}
+        className={`${grow && "grow"}`}
+      >
         <HelpOutlineIcon />
       </IconButton>
 
