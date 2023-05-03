@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
+import MobileDrag from "../../Assets/MobileDrag.gif";
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -40,8 +41,7 @@ const HelpDialogBox = ({ currentPage }) => {
       description: `Trait Ranker helps you discover and prioritize your most important personality traits. ${
         isMobile ? "Drag" : "Swipe "
       } right to mark a trait as valuable or left to skip it. Press the help button anytime for guidance.`,
-      media:
-        "https://github.com/NMaass/trait-ranker/blob/master/src/Assets/MobileDrag.gif",
+      media: MobileDrag,
     },
   };
 
@@ -69,19 +69,23 @@ const HelpDialogBox = ({ currentPage }) => {
           style: { borderTopLeftRadius: 6, borderTopRightRadius: 6 },
         }}
       >
-        <DialogTitle>{helpData[currentPage].title}</DialogTitle>
+        <DialogTitle>{helpData["Selection"].title}</DialogTitle>
         <IconButton
-          style={{ position: "absolute", right: "0", top: "0" }}
+          style={{ position: "absolute", right: "0" }}
           color="inherit"
           onClick={handleClose}
           aria-label="close"
         >
           <CloseIcon />
         </IconButton>
-        <DialogContentText
-          paragraph={false}
-          style={{ margin: 10 }}
-        ></DialogContentText>
+        <DialogContentText paragraph={false} style={{ margin: 10 }}>
+          {helpData["Selection"].description}
+        </DialogContentText>
+        <img
+          src={helpData["Selection"].media}
+          style={{ width: "100%" }}
+          alt="GIF of swiping on mobile"
+        />
       </Dialog>
     </div>
   );
