@@ -32,6 +32,7 @@ const SelectionPage = ({
   const [activeStepState, setActiveStepState] = activeStep;
   const numberOfTraits = useRef(columnData.columns.column2.traitIds.length);
   useEffect(() => {
+    if (columnData.columns.column2.traitIds.length === 0) return;
     setProgressState(progressState + 100 / numberOfTraits.current);
   }, [columnData]);
   return (
