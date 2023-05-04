@@ -1,22 +1,15 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { AppBar, Box, Toolbar } from "@mui/material";
 
 import HelpDialogBox from "./HelpDialogBox";
 import HomeButton from "./HomeButton";
 import CustomStepper from "./CustomStepper";
+import { ProgressContext } from "../App";
 const steps = ["Label 1", "Label 2", "Label 3"];
 const NavBar = ({ history }) => {
-  const [activeStep, setActiveStep] = useState(0);
-  const [progress, setProgress] = useState(0);
-
-  const handleNext = () => {
-    progress < 90 ? setProgress((prev) => prev + 10) : nextStep();
-  };
-
-  const nextStep = () => {
-    setProgress(0);
-    setActiveStep((prev) => prev + 1);
-  };
+  const { progress, activeStep } = useContext(ProgressContext);
+  const [progressState, setProgressState] = progress;
+  const [activeStepState, setActiveStepState] = activeStep;
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -25,8 +18,8 @@ const NavBar = ({ history }) => {
           <HomeButton history={history} />
           <CustomStepper
             steps={steps}
-            current={activeStep}
-            progress={progress}
+            current={activeStepState}
+            progress={progressState}
           />
           <div style={{ marginLeft: "auto" }}>
             <HelpDialogBox />

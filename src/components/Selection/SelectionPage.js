@@ -1,7 +1,8 @@
 // @flow
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useContext, useRef } from "react";
 import SelectionDroppable from "./SelectionDroppable";
 import { Box, Grid, useMediaQuery } from "@mui/material";
+import { ProgressContext } from "../App";
 import FadeTextSeries from "../../utils/FadeTextSeries";
 
 const SelectionPage = ({
@@ -19,16 +20,20 @@ const SelectionPage = ({
     if (columnData.columns.column2.traitIds.length === 0) {
       console.log(columnData.columns.column3.traitIds);
       setTopTraits(columnData.columns.column3.traitIds);
+      setActiveStepState(1);
+      setProgressState(0);
       console.log("setting traits from selection");
       history.push("/Rank");
     }
   }, [columnData, history, setTopTraits, topTraits]);
 
-  const selectionIntro = [
-    `${isMobile ? "Drag" : "Swipe "} right to like, left to pass.`,
-    "Press the ? button at any time to see an example.",
-  ];
-
+  const { progress, activeStep } = useContext(ProgressContext);
+  const [progressState, setProgressState] = progress;
+  const [activeStepState, setActiveStepState] = activeStep;
+  const numberOfTraits = useRef(columnData.columns.column2.traitIds.length);
+  useEffect(() => {
+    setProgressState(progressState + 100 / numberOfTraits.current);
+  }, [columnData]);
   return (
     <Box>
       <div {...swipeHandlers}>
