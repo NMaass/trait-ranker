@@ -13,13 +13,17 @@ import type { SensorAPI } from "react-beautiful-dnd/src/types";
 import { useSwipeable } from "react-swipeable";
 import tweenFunctions from "tween-functions";
 import { makeAndTrackId } from "../utils/mixpanel";
+import appTheme from "../style/appTheme";
+import { ThemeProvider } from "@mui/material/styles";
 
 export const ProgressContext = createContext();
 
 const App = () => {
   const history = useHistory();
   const [columnData, setColumnData] = useState(initialTraits);
-  const [topTraits, setTopTraits] = useState([]);
+  const [topTraits, setTopTraits] = useState(
+    initialTraits.columns.column2.traitIds.slice()
+  );
   const [userId, setUserId] = useState(makeAndTrackId(8));
   const [activeStep, setActiveStep] = useState(0);
   const [progress, setProgress] = useState(0);
@@ -170,41 +174,43 @@ const App = () => {
             activeStep: [activeStep, setActiveStep],
           }}
         >
-          <NavBar history={history} />
-          <Route exact path="/">
-            <SelectionPage
-              columnData={columnData}
-              topTraits={topTraits}
-              setTopTraits={setTopTraits}
-              setColumnData={setColumnData}
-              history={history}
-              swipeHandlers={swipeHandlers}
-            />
-          </Route>
-          <Route path="/Rank">
-            <RankingPage
-              topTraits={topTraits}
-              setTopTraits={setTopTraits}
-              history={history}
-            />
-          </Route>
-          <Route path="/Results">
-            <ResultsPage
-              topTraits={topTraits}
-              setTopTraits={setTopTraits}
-              userID={userId}
-            />
-          </Route>
-          <Route
-            path="/Share/:id"
-            children={
-              <SharedPage
+          <ThemeProvider theme={appTheme}>
+            <NavBar history={history} />
+            <Route exact path="/">
+              <SelectionPage
                 columnData={columnData}
+                topTraits={topTraits}
+                setTopTraits={setTopTraits}
                 setColumnData={setColumnData}
                 history={history}
+                swipeHandlers={swipeHandlers}
               />
-            }
-          />
+            </Route>
+            <Route path="/Rank">
+              <RankingPage
+                topTraits={topTraits}
+                setTopTraits={setTopTraits}
+                history={history}
+              />
+            </Route>
+            <Route path="/Results">
+              <ResultsPage
+                topTraits={topTraits}
+                setTopTraits={setTopTraits}
+                userID={userId}
+              />
+            </Route>
+            <Route
+              path="/Share/:id"
+              children={
+                <SharedPage
+                  columnData={columnData}
+                  setColumnData={setColumnData}
+                  history={history}
+                />
+              }
+            />
+          </ThemeProvider>
         </ProgressContext.Provider>
       </DragDropContext>
     </div>

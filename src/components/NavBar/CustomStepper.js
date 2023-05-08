@@ -4,46 +4,48 @@ import PropTypes from "prop-types";
 import LinearProgress from "@mui/material/LinearProgress";
 import styled from "@emotion/styled";
 import CompareArrowsOutlinedIcon from "@mui/icons-material/CompareArrowsOutlined";
-import Icon from "@mui/material/Icon";
 import SortOutlinedIcon from "@mui/icons-material/SortOutlined";
 import WorkspacePremiumOutlinedIcon from "@mui/icons-material/WorkspacePremiumOutlined";
-const StyledStepper = styled("ul")({
-  display: "flex",
-  flexFlow: "row nowrap",
-  justifyContent: "space-around",
-  padding: 0,
-  width: "100%",
-});
-const StyledStepperStep = styled("li")({
-  position: "relative",
-  display: "flex",
-  flexFlow: "row nowrap",
-  justifyContent: "space-around",
-  alignItems: "center",
-  width: "100%",
-});
-const StyledStepperStepIndex = styled("div")(({ currentStep, done }) => ({
-  width: "30px",
-  height: "30px",
-  lineHeight: "30px",
-  borderRadius: "50%",
-  background: currentStep || done ? "LightSkyBlue" : "#dedede",
-  color: currentStep || done ? "#000" : "#999",
-  textAlign: "center",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-}));
-
-const StyledLabelContainer = styled("div")({
-  display: "flex",
-  flexFlow: "column nowrap",
-  alignItems: "center",
-});
+import { useTheme } from "@mui/material/styles";
 
 function CustomStepper(props) {
+  const StyledStepper = styled("ul")({
+    display: "flex",
+    flexFlow: "row nowrap",
+    justifyContent: "space-around",
+    padding: 0,
+    width: "100%",
+  });
+  const StyledStepperStep = styled("li")({
+    position: "relative",
+    display: "flex",
+    flexFlow: "row nowrap",
+    justifyContent: "space-around",
+    alignItems: "center",
+    width: "100%",
+  });
+  const StyledStepperStepIndex = styled("div")(({ currentStep, done }) => ({
+    width: "30px",
+    height: "30px",
+    lineHeight: "30px",
+    borderRadius: "50%",
+    background: currentStep || done ? theme.palette.secondary : "#dedede",
+    color: currentStep || done ? "#000" : "#999",
+    textAlign: "center",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  }));
+
+  const StyledLabelContainer = styled("div")({
+    display: "flex",
+    flexFlow: "column nowrap",
+    alignItems: "center",
+  });
+
   const { steps, current, progress } = props;
 
+  const theme = useTheme();
   function StepContent({ done, index }) {
     return done ? "✓" : index + 1;
   }
@@ -71,7 +73,7 @@ function CustomStepper(props) {
             backgroundColor: "#ffd8ba61",
           },
           "& .MuiLinearProgress-bar": {
-            backgroundColor: "LightSkyBlue",
+            backgroundColor: theme.palette.secondary,
           },
         }}
       />
