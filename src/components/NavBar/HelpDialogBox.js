@@ -9,14 +9,13 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
-import MobileDrag from "../../Assets/MobileDrag.gif";
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
 const HelpDialogBox = ({ currentPage }) => {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(true);
   const [grow, setGrow] = React.useState(false);
 
   const doGrow = () => {
@@ -41,7 +40,7 @@ const HelpDialogBox = ({ currentPage }) => {
       description: `Trait Ranker helps you discover and prioritize your most important personality traits. ${
         isMobile ? "Drag" : "Swipe "
       } right to mark a trait as valuable or left to skip it. Press the help button anytime for guidance.`,
-      media: MobileDrag,
+      Media: "https://i.imgur.com/7G5Jwbk.gif",
     },
   };
 
@@ -82,7 +81,7 @@ const HelpDialogBox = ({ currentPage }) => {
           {helpData["Selection"].description}
         </DialogContentText>
         <img
-          src={helpData["Selection"].media}
+          src={helpData["Selection"].Media}
           style={{ width: "100%" }}
           alt="GIF of swiping on mobile"
         />

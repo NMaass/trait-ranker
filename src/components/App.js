@@ -22,9 +22,9 @@ const App = () => {
   const history = useHistory();
   const [columnData, setColumnData] = useState(initialTraits);
   const [topTraits, setTopTraits] = useState(
-    initialTraits.columns.column2.traitIds.slice()
+    initialTraits.columns.column2.traitIds.slice(0, 18)
   );
-  const [userId, setUserId] = useState(makeAndTrackId(8));
+  const [userId, setUserId] = useState(makeAndTrackId(6));
   const [activeStep, setActiveStep] = useState(0);
   const [progress, setProgress] = useState(0);
 

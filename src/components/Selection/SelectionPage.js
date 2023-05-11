@@ -48,6 +48,7 @@ const SelectionPage = ({
             key={columnData.columns.column2.id}
             column={columnData.columns.column2}
             isStarter={true}
+            hoverColor={""}
           />
           <SelectionDroppable
             key={columnData.columns.column3.id}

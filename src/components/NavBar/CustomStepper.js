@@ -7,6 +7,7 @@ import CompareArrowsOutlinedIcon from "@mui/icons-material/CompareArrowsOutlined
 import SortOutlinedIcon from "@mui/icons-material/SortOutlined";
 import WorkspacePremiumOutlinedIcon from "@mui/icons-material/WorkspacePremiumOutlined";
 import { useTheme } from "@mui/material/styles";
+import appTheme from "../../style/appTheme";
 
 function CustomStepper(props) {
   const StyledStepper = styled("ul")({
@@ -29,7 +30,8 @@ function CustomStepper(props) {
     height: "30px",
     lineHeight: "30px",
     borderRadius: "50%",
-    background: currentStep || done ? theme.palette.secondary : "#dedede",
+    background:
+      currentStep || done ? appTheme.palette.secondary.main : "#dedede",
     color: currentStep || done ? "#000" : "#999",
     textAlign: "center",
     display: "flex",
@@ -73,7 +75,7 @@ function CustomStepper(props) {
             backgroundColor: "#ffd8ba61",
           },
           "& .MuiLinearProgress-bar": {
-            backgroundColor: theme.palette.secondary,
+            backgroundColor: appTheme.palette.secondary.main,
           },
         }}
       />
