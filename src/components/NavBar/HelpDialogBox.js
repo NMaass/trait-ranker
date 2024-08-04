@@ -15,7 +15,7 @@ const Transition = forwardRef(function Transition(props, ref) {
 });
 
 const HelpDialogBox = ({ currentPage }) => {
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
   const [grow, setGrow] = React.useState(false);
 
   const doGrow = () => {
