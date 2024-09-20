@@ -4,7 +4,7 @@ import SelectionDroppable from "./SelectionDroppable";
 import { Box, Grid, useMediaQuery } from "@mui/material";
 import { ProgressContext } from "../App";
 import FadeTextSeries from "../../utils/FadeTextSeries";
-
+import { SkipSelectionButton } from "../../utils/devTools";
 const SelectionPage = ({
   columnData,
   setTopTraits,
@@ -37,6 +37,7 @@ const SelectionPage = ({
   }, [columnData]);
   return (
     <Box>
+      <SkipSelectionButton setTopTraits={setTopTraits} history={history} />
       <div {...swipeHandlers}>
         <Grid container spacing={0} wrap="nowrap">
           <SelectionDroppable
