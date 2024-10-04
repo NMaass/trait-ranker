@@ -1,13 +1,19 @@
 import React from "react";
 import allTraits from "../utils/listOfAllTraits";
 
-const skipSelection = (setTopTraits, allTraits, history) => {
+const skipSelection = (
+  setTopTraits,
+  allTraits,
+  history,
+  setActiveStepState
+) => {
   // Select half of the topTraits
   const halfLength = Math.ceil(allTraits.length / 2);
   const selectedTraits = allTraits.slice(0, halfLength);
 
   // Set the selected traits
   setTopTraits(selectedTraits);
+  setActiveStepState(1);
 
   console.log("Skipping to ranking with traits:", selectedTraits);
 
@@ -15,9 +21,13 @@ const skipSelection = (setTopTraits, allTraits, history) => {
   history.push("/Rank");
 };
 
-export const SkipSelectionButton = ({ setTopTraits, history }) => {
+export const SkipSelectionButton = ({
+  setTopTraits,
+  history,
+  setActiveStepState,
+}) => {
   const handleSkipSelection = () => {
-    skipSelection(setTopTraits, allTraits, history);
+    skipSelection(setTopTraits, allTraits, history, setActiveStepState);
   };
 
   if (process.env.NODE_ENV !== "development") {

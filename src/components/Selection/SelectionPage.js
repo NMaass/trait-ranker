@@ -37,7 +37,11 @@ const SelectionPage = ({
   }, [columnData]);
   return (
     <Box>
-      <SkipSelectionButton setTopTraits={setTopTraits} history={history} />
+      <SkipSelectionButton
+        setTopTraits={setTopTraits}
+        history={history}
+        setActiveStepState={setActiveStepState}
+      />
       <div {...swipeHandlers}>
         <Grid container spacing={0} wrap="nowrap">
           <SelectionDroppable
