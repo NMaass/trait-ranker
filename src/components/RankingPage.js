@@ -26,31 +26,22 @@ const RankingPage = ({ topTraits, history, finalList }) => {
   const [progressState, setProgressState] = progress;
   const [activeStepState, setActiveStepState] = activeStep;
 
-  useEffect(() => {
-    console.log("progressPercent:", progressPercent);
-    console.log("currentStanding:", currentStanding);
-    console.log("currentMatch:", currentMatch);
-    console.log("isComplete:", isComplete);
-    console.log("topTraits:", topTraits);
-  }, [
-    progressPercent,
-    currentStanding,
-    currentMatch,
-    matchWin,
-    revertMatch,
-    history,
-    isComplete,
-    topTraits,
-  ]);
-
   const handleRoundWin = (trait) => {
-    console.log("trait:", trait);
     matchWin(trait);
     setProgressState(progressPercent);
-    console.log(currentMatch);
+  };
+
+  useEffect(() => {
+    console.log("isComplete:", isComplete);
     if (isComplete) {
       setActiveStepState(3);
+      history.push("/Results");
     }
+  }, [isComplete]);
+
+  const handleRevertMatch = () => {
+    revertMatch();
+    setProgressState(progressPercent);
   };
 
   // Ensure topTraits is populated before rendering
