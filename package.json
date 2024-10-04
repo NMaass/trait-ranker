@@ -12,7 +12,8 @@
     "@mui/styles": "^5.0.2",
     "@testing-library/dom": "^8.9.1",
     "@testing-library/jest-dom": "^5.11.4",
-    "@testing-library/react": "^13.2.0",
+    "@testing-library/react": "^12.1.5",
+    "@testing-library/react-hooks": "^8.0.1",
     "@testing-library/user-event": "^12.1.10",
     "firebase": "^9.8.1",
     "flow-bin": "^0.182.0",
@@ -42,8 +43,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "flow": "flow",
-    "dev": "cross-env DEV_MODE=true react-scripts start"
+    "flow": "flow"
   },
   "eslintConfig": {
     "extends": [

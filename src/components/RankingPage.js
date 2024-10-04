@@ -1,33 +1,62 @@
-import React, { useEffect, useRef, useContext, useState } from "react";
+import React, { useContext, useEffect, useMemo } from "react";
 import RankingTrait from "./TraitCards/RankingTrait";
 import { Grid, useMediaQuery } from "@mui/material";
-import { trackRankingPage } from "../utils/mixpanel";
 import { ProgressContext } from "./App";
+import useMergeSort from "../utils/useMergeSort";
 
-import generateBracket from "../utils/generateMatches";
-
-const RankingPage = ({ topTraits, setTopTraits, history, finalList }) => {
-  const [displayedPairs, setDisplayedPairs] = useState(topTraits.slice(0, 2));
-  const matches = useRef([]);
-
+const RankingPage = ({ topTraits, history, finalList }) => {
+  // Memoize topTraits to prevent unnecessary re-initialization
+  const memoizedTopTraits = useMemo(() => topTraits.slice(), [topTraits]);
   useEffect(() => {
-    trackRankingPage(topTraits);
-    matches.current = generateBracket(topTraits.length);
-    console.log(matches.current);
-  }, []);
-  const loadPlayers = () => {
-    for (let i = 0; i < topTraits.length; i += 2) {
-      //generate pairs for the user to sort
-      matches.current[i][0] = topTraits[i];
-      matches.current[i][1] = topTraits[i + 1];
-    }
-  };
+    console.log("Memoized topTraits:", memoizedTopTraits);
+  }, [memoizedTopTraits]);
+
+  const {
+    progressPercent,
+    currentStanding,
+    currentMatch,
+    matchWin,
+    revertMatch,
+    isComplete,
+  } = useMergeSort(memoizedTopTraits);
 
   const isMobile = useMediaQuery("(min-width:1024px)");
 
   const { progress, activeStep } = useContext(ProgressContext);
   const [progressState, setProgressState] = progress;
   const [activeStepState, setActiveStepState] = activeStep;
+
+  useEffect(() => {
+    console.log("progressPercent:", progressPercent);
+    console.log("currentStanding:", currentStanding);
+    console.log("currentMatch:", currentMatch);
+    console.log("isComplete:", isComplete);
+    console.log("topTraits:", topTraits);
+  }, [
+    progressPercent,
+    currentStanding,
+    currentMatch,
+    matchWin,
+    revertMatch,
+    history,
+    isComplete,
+    topTraits,
+  ]);
+
+  const handleRoundWin = (trait) => {
+    console.log("trait:", trait);
+    matchWin(trait);
+    setProgressState(progressPercent);
+    console.log(currentMatch);
+    if (isComplete) {
+      setActiveStepState(3);
+    }
+  };
+
+  // Ensure topTraits is populated before rendering
+  if (!topTraits || topTraits.length === 0) {
+    return <div>Loading traits...</div>;
+  }
 
   return (
     <div>
@@ -38,12 +67,22 @@ const RankingPage = ({ topTraits, setTopTraits, history, finalList }) => {
         justifyContent="center"
         direction={isMobile ? "row" : "column"}
       >
-        <Grid item>
-          <RankingTrait trait={displayedPairs[0]} />
-        </Grid>
-        <Grid item>
-          <RankingTrait trait={displayedPairs[1]} />
-        </Grid>
+        {currentMatch && currentMatch.left && (
+          <Grid item>
+            <RankingTrait
+              trait={currentMatch.left}
+              onClick={() => handleRoundWin(currentMatch.left)}
+            />
+          </Grid>
+        )}
+        {currentMatch && currentMatch.right && (
+          <Grid item>
+            <RankingTrait
+              trait={currentMatch.right}
+              onClick={() => handleRoundWin(currentMatch.right)}
+            />
+          </Grid>
+        )}
       </Grid>
     </div>
   );

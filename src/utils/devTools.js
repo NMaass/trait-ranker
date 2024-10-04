@@ -20,7 +20,7 @@ export const SkipSelectionButton = ({ setTopTraits, history }) => {
     skipSelection(setTopTraits, allTraits, history);
   };
 
-  if (process.env.DEV_MODE) {
+  if (process.env.NODE_ENV !== "development") {
     return null;
   }
 
