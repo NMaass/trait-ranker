@@ -15,15 +15,8 @@ const SelectionPage = ({
   const isMobile = useMediaQuery("(min-width:1024px");
 
   useEffect(() => {
-    console.log("currentTraits: ", columnData.columns.column2.traitIds);
-    console.log("top traits: ", columnData.columns.column3.traitIds);
     if (columnData.columns.column2.traitIds.length === 0) {
-      console.log(columnData.columns.column3.traitIds);
-      setTopTraits(columnData.columns.column3.traitIds);
-      setActiveStepState(1);
-      setProgressState(0);
-      console.log("setting traits from selection");
-      history.push("/Rank");
+      handleClearStack(columnData.columns.column3.traitIds);
     }
   }, [columnData, history, setTopTraits, topTraits]);
 
@@ -35,6 +28,24 @@ const SelectionPage = ({
     if (columnData.columns.column2.traitIds.length === 0) return;
     setProgressState(progressState + 100 / numberOfTraits.current);
   }, [columnData]);
+
+  function handleClearStack(topTraits) {
+    if (topTraits.length < 7) {
+      //encouge user to add more traits
+      columnData.columns.column2.traitIds = columnData.columns.column1.traitIds;
+    } else if (topTraits.length > 24) {
+      //encouge user to remove traits
+      columnData.columns.column2.traitIds = columnData.columns.column3.traitIds;
+    } else {
+      //progress to ranking page
+      console.log(columnData.columns.column3.traitIds);
+      setTopTraits(columnData.columns.column3.traitIds);
+      setActiveStepState(1);
+      setProgressState(0);
+      history.push("/Rank");
+    }
+  }
+
   return (
     <Box>
       <SkipSelectionButton

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useMemo } from "react";
 import RankingTrait from "./TraitCards/RankingTrait";
-import { Grid, useMediaQuery } from "@mui/material";
+import { Grid, useMediaQuery, Button } from "@mui/material";
 import { ProgressContext } from "./App";
 import useMergeSort from "../utils/useMergeSort";
 
