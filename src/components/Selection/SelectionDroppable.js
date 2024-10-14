@@ -16,6 +16,11 @@ const TraitList = styled.div`
   min-width: ${(props) => (props.isStarter ? "1px" : "49.9vw")};
   min-height: 100vh;
   max-width: ${(props) => props.isStarter && "1px"};
+  ${(props) =>
+    props.showHoverColor &&
+    `
+    background-color: ${props.hoverColor};
+  `}
 `;
 
 const SelectionDroppable = ({
@@ -24,16 +29,23 @@ const SelectionDroppable = ({
   hoverColor = "lightBlue",
 }) => {
   const [shouldWiggle, setShouldWiggle] = useState(isStarter);
+  const [showHoverColor, setShowHoverColor] = useState(false);
 
   React.useEffect(() => {
     if (isStarter) {
       const timer = setTimeout(() => {
         setShouldWiggle(false);
       }, 1000);
-
+      return () => clearTimeout(timer);
+    } else {
+      setShowHoverColor(true);
+      const timer = setTimeout(() => {
+        setShowHoverColor(false);
+      }, 1000);
       return () => clearTimeout(timer);
     }
   }, [isStarter]);
+
   return (
     <Droppable key={column.id} droppableId={column.id} direction="horizontal">
       {(provided, snapshot) => (
@@ -43,6 +55,8 @@ const SelectionDroppable = ({
           isStarter={isStarter}
           hoverColor={hoverColor}
           isDraggingOver={snapshot.isDraggingOver}
+          showHoverColor={showHoverColor}
+          S
           {...provided.droppableProps}
         >
           <Grid
