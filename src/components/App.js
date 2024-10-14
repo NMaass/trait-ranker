@@ -4,7 +4,7 @@ import initialTraits from "./Selection/initialTraits";
 import ResultsPage from "./ResultsPage";
 import RankingPage from "./RankingPage";
 import NavBar from "./NavBar/NavBar";
-import { HashRouter, Route, useHistory } from "react-router-dom";
+import { HashRouter, Route, useHistory, Redirect } from "react-router-dom";
 import SelectionPage from "./Selection/SelectionPage";
 import ReactGA from "react-ga";
 import SharedPage from "./Share/SharedPage";
@@ -15,9 +15,11 @@ import tweenFunctions from "tween-functions";
 import { makeAndTrackId } from "../utils/mixpanel";
 import appTheme from "../style/appTheme";
 import { ThemeProvider } from "@mui/material/styles";
-
+import FadeTextSeries from "../utils/FadeTextSeries";
+import { Grid, Typography } from "@mui/material";
+import CssBaseline from "@mui/material/CssBaseline";
 export const ProgressContext = createContext();
-
+export const TutorialContext = createContext();
 const App = () => {
   const history = useHistory();
   const [columnData, setColumnData] = useState(initialTraits);
@@ -27,6 +29,7 @@ const App = () => {
   const [userId, setUserId] = useState(makeAndTrackId(6));
   const [activeStep, setActiveStep] = useState(0);
   const [progress, setProgress] = useState(0);
+  const [tutorialStrings, setTutorialStrings] = useState([]);
 
   const sensorAPIRef = useRef<?SensorAPI>(null);
   const TRACKING_ID = "G-4RLGL8ENZC";
@@ -174,43 +177,55 @@ const App = () => {
             activeStep: [activeStep, setActiveStep],
           }}
         >
-          <ThemeProvider theme={appTheme}>
-            <NavBar history={history} />
-            <Route exact path="/">
-              <SelectionPage
-                columnData={columnData}
-                topTraits={topTraits}
-                setTopTraits={setTopTraits}
-                setColumnData={setColumnData}
-                history={history}
-                swipeHandlers={swipeHandlers}
+          <TutorialContext.Provider
+            value={{ tutorialStrings: [tutorialStrings, setTutorialStrings] }}
+          >
+            <ThemeProvider theme={appTheme}>
+              <NavBar history={history} />
+              <Route exact path="/">
+                <Redirect to="/Selection" />
+              </Route>
+              <Route
+                exact
+                path="/Selection/:id?"
+                children={
+                  <SelectionPage
+                    columnData={columnData}
+                    topTraits={topTraits}
+                    setTopTraits={setTopTraits}
+                    setColumnData={setColumnData}
+                    history={history}
+                    swipeHandlers={swipeHandlers}
+                  />
+                }
               />
-            </Route>
-            <Route path="/Rank">
-              <RankingPage
-                topTraits={topTraits}
-                setTopTraits={setTopTraits}
-                history={history}
-              />
-            </Route>
-            <Route path="/Results">
-              <ResultsPage
-                topTraits={topTraits}
-                setTopTraits={setTopTraits}
-                userID={userId}
-              />
-            </Route>
-            <Route
-              path="/Share/:id"
-              children={
-                <SharedPage
-                  columnData={columnData}
-                  setColumnData={setColumnData}
+              <Route path="/Rank">
+                <RankingPage
+                  topTraits={topTraits}
+                  setTopTraits={setTopTraits}
                   history={history}
+                  initalProgress={progress}
                 />
-              }
-            />
-          </ThemeProvider>
+              </Route>
+              <Route path="/Results">
+                <ResultsPage
+                  topTraits={topTraits}
+                  setTopTraits={setTopTraits}
+                  userID={userId}
+                />
+              </Route>
+              <Route
+                path="/Share/:id"
+                children={
+                  <SharedPage
+                    columnData={columnData}
+                    setColumnData={setColumnData}
+                    history={history}
+                  />
+                }
+              />
+            </ThemeProvider>
+          </TutorialContext.Provider>
         </ProgressContext.Provider>
       </DragDropContext>
     </div>
