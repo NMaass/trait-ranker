@@ -4,10 +4,10 @@ import React, { useState } from "react";
 import "../../style/CardStyle.scss";
 import { traitIcons, traitDefinitions } from "../../utils/listOfAllTraits";
 import { IconContext } from "react-icons";
-import { useMediaQuery, Grid } from "@mui/material";
+import { useMediaQuery, Grid, Typography } from "@mui/material";
 import CardHelp from "./CardHelp";
 
-const SelectionTrait = ({ trait, provided }) => {
+const SelectionTrait = ({ trait, isStarter, provided }) => {
   const isMobile = useMediaQuery("(max-width:1024px)");
   const [flipped, setFlipped] = useState(false);
 
@@ -25,7 +25,11 @@ const SelectionTrait = ({ trait, provided }) => {
       <div className=" card-inner">
         {/* Front Side */}
         <div className="card-front">
-          <CardHelp toggleFlipped={toggleFlipped} flipped={flipped} />
+          <CardHelp
+            toggleFlipped={toggleFlipped}
+            flipped={flipped}
+            isStarter={isStarter}
+          />
           <Grid
             container
             alignItems="center"
@@ -57,7 +61,7 @@ const SelectionTrait = ({ trait, provided }) => {
               <h1>{trait}</h1>
             </Grid>
             <Grid item>
-              <p>{traitDefinitions[trait]}</p>
+              <Typography variant="h5">{traitDefinitions[trait]}</Typography>
             </Grid>
           </Grid>
         </div>

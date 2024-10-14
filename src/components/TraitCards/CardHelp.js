@@ -2,14 +2,20 @@ import React from "react";
 import { IconButton } from "@mui/material";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import FlipIcon from "@mui/icons-material/Flip";
+import "../../style/CardStyle.scss";
 
-const CardHelp = ({ toggleFlipped, flipped }) => {
+const CardHelp = ({ toggleFlipped, flipped, isStarter }) => {
   return (
     <IconButton
       onClick={toggleFlipped}
-      style={{ position: "absolute", top: 10, right: 10 }}
+      style={{ position: "absolute", top: 5, right: 5 }}
+      className={isStarter ? "icon-grow" : ""}
     >
-      {flipped ? <FlipIcon /> : <HelpOutlineIcon />}
+      {flipped ? (
+        <FlipIcon fontSize="large" />
+      ) : (
+        <HelpOutlineIcon fontSize="large" />
+      )}
     </IconButton>
   );
 };

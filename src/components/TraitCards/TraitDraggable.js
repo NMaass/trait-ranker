@@ -43,7 +43,7 @@ function getStyle(style, snapshot) {
   };
 }
 
-const TraitDraggable = ({ trait, index, wiggle }) => {
+const TraitDraggable = ({ trait, index, wiggle, isStarter }) => {
   return (
     <Draggable draggableId={trait} key={trait} index={index}>
       {(provided, snapshot) => (
@@ -54,7 +54,11 @@ const TraitDraggable = ({ trait, index, wiggle }) => {
           style={getStyle(provided.draggableProps.style, snapshot)}
           className={wiggle ? "wiggle-animation" : ""}
         >
-          <SelectionTrait trait={trait} provided={provided} />
+          <SelectionTrait
+            trait={trait}
+            provided={provided}
+            isStarter={isStarter}
+          />
         </Container>
       )}
     </Draggable>

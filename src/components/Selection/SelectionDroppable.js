@@ -72,6 +72,7 @@ const SelectionDroppable = ({
                   trait={column?.traitIds[0]}
                   index={column?.traitIds.indexOf(column?.traitIds[0])}
                   wiggle={shouldWiggle}
+                  isStarter={isStarter}
                 />
               )}
               {provided.placeholder}

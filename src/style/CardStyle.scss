@@ -186,3 +186,20 @@ p {
 .card-back {
   transform: rotateY(180deg);
 }
+
+@keyframes growIcon {
+  0% {
+    transform: scale(1); /* Start at normal size */
+  }
+  50% {
+    transform: scale(1.25); /* Grow to 1.5x */
+  }
+  100% {
+    transform: scale(1); /* Revert to original size */
+  }
+}
+
+.icon-grow {
+  animation: growIcon 1s ease; /* Animate over 0.5s */
+  animation-delay: 2s; /* Delay the start by 1 second */
+}
