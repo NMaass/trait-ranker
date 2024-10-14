@@ -1,10 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { Droppable } from "react-beautiful-dnd";
 import styled from "styled-components";
 import TraitDraggable from "../TraitCards/TraitDraggable";
 import "../../style/CardStyle.scss";
 import { Grid } from "@mui/material";
-
 const Container = styled.div`
   display: flex;
 `;
@@ -24,6 +23,17 @@ const SelectionDroppable = ({
   isStarter = false,
   hoverColor = "lightBlue",
 }) => {
+  const [shouldWiggle, setShouldWiggle] = useState(isStarter);
+
+  React.useEffect(() => {
+    if (isStarter) {
+      const timer = setTimeout(() => {
+        setShouldWiggle(false);
+      }, 1000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [isStarter]);
   return (
     <Droppable key={column.id} droppableId={column.id} direction="horizontal">
       {(provided, snapshot) => (
@@ -47,6 +57,7 @@ const SelectionDroppable = ({
                   key={column?.traitIds[0]}
                   trait={column?.traitIds[0]}
                   index={column?.traitIds.indexOf(column?.traitIds[0])}
+                  wiggle={shouldWiggle}
                 />
               )}
               {provided.placeholder}
@@ -58,4 +69,4 @@ const SelectionDroppable = ({
   );
 };
 
-export default SelectionDroppable
+export default SelectionDroppable;

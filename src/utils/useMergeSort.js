@@ -1,23 +1,37 @@
 import { useState, useEffect } from "react";
 
-function useMergeSort(initialTraits) {
+function useMergeSort(initialTraits, initialState = null) {
   // Constants
   const TOP_K = 7;
 
   // State Variables
-  const [currentMatch, setCurrentMatch] = useState(null);
-  const [currentStanding, setCurrentStanding] = useState([]);
-  const [isComplete, setIsComplete] = useState(false);
-  const [progressPercent, setProgressPercent] = useState(0);
-
-  // Use `useState` for `comparisonStack` and `mergeStack`
-  const [comparisonStack, setComparisonStack] = useState([]);
-  const [mergeStack, setMergeStack] = useState([]);
-  const [totalComparisons, setTotalComparisons] = useState(0);
-  const [comparisonsMade, setComparisonsMade] = useState(0);
+  const [currentMatch, setCurrentMatch] = useState(
+    initialState?.currentMatch || null
+  );
+  const [currentStanding, setCurrentStanding] = useState(
+    initialState?.currentStanding || []
+  );
+  const [isComplete, setIsComplete] = useState(
+    initialState?.isComplete || false
+  );
+  const [progressPercent, setProgressPercent] = useState(
+    initialState?.progressPercent || 0
+  );
+  const [comparisonStack, setComparisonStack] = useState(
+    initialState?.comparisonStack || []
+  );
+  const [mergeStack, setMergeStack] = useState(initialState?.mergeStack || []);
+  const [totalComparisons, setTotalComparisons] = useState(
+    initialState?.totalComparisons || 0
+  );
+  const [comparisonsMade, setComparisonsMade] = useState(
+    initialState?.comparisonsMade || 0
+  );
 
   useEffect(() => {
-    initializeSort(initialTraits);
+    if (!initialState) {
+      initializeSort(initialTraits);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialTraits]);
 
@@ -290,6 +304,16 @@ function useMergeSort(initialTraits) {
       prepareNextComparison(mergeStack, currentComparisonStack);
     }
   }
+  const rankingState = {
+    currentMatch,
+    currentStanding,
+    isComplete,
+    progressPercent,
+    comparisonStack,
+    mergeStack,
+    totalComparisons,
+    comparisonsMade,
+  };
 
   return {
     progressPercent,
@@ -298,6 +322,7 @@ function useMergeSort(initialTraits) {
     matchWin,
     revertMatch,
     isComplete,
+    rankingState,
   };
 }
 

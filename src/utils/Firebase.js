@@ -40,7 +40,7 @@ export async function setDBTraits(hash, traitArray) {
   }).catch((e) => {
     console.log(e);
   });
-  console.log(doc(db, "Traits", hash),traitArray);
+  console.log(doc(db, "Traits", hash), traitArray);
 }
 
 export async function getDBTraits(hash) {
@@ -52,5 +52,22 @@ export async function getDBTraits(hash) {
     return traits;
   } else {
     console.log("no doc");
+  }
+}
+
+export async function setDBProgress(hash, progress) {
+  await setDoc(doc(db, "Progress", hash), progress).catch((e) => {
+    console.log(e);
+  });
+}
+
+export async function getDBProgress(hash) {
+  const docRef = doc(db, "Progress", hash);
+  const docSnap = await getDoc(docRef);
+  if (docSnap.exists()) {
+    return docSnap.data();
+  } else {
+    console.log("No stored progress found");
+    return null;
   }
 }

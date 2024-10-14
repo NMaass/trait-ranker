@@ -1,3 +1,5 @@
+// SelectionTrait.jsx
+
 import React, { useState } from "react";
 import "../../style/CardStyle.scss";
 import { traitIcons } from "../../utils/listOfAllTraits";
@@ -6,7 +8,7 @@ import { useMediaQuery, Grid } from "@mui/material";
 import CardHelp from "./CardHelp";
 
 const SelectionTrait = ({ trait, provided }) => {
-  const isMobile = useMediaQuery("(min-width:1024px)");
+  const isMobile = useMediaQuery("(max-width:1024px)");
   const [flipped, setFlipped] = useState(false);
 
   const toggleFlipped = () => {
@@ -20,32 +22,49 @@ const SelectionTrait = ({ trait, provided }) => {
       draggable={true}
       id={trait}
     >
-      <CardHelp toggleFlipped={toggleFlipped} flipped={flipped} />
-      <Grid
-        container
-        alignItems="center"
-        justifyContent="center"
-        direction="column"
-      >
-        <Grid item>
-          <h1>{trait}</h1>
-        </Grid>
-        <Grid item>
-          {flipped ? (
-            <>
+      <div className=" card-inner">
+        {/* Front Side */}
+        <div className="card-front">
+          <CardHelp toggleFlipped={toggleFlipped} flipped={flipped} />
+          <Grid
+            container
+            alignItems="center"
+            justifyContent="center"
+            direction="column"
+          >
+            <Grid item>
+              <h1>{trait}</h1>
+            </Grid>
+            <Grid item>
+              <IconContext.Provider
+                value={isMobile ? { size: "60vw" } : { size: "6vw" }}
+              >
+                {traitIcons[trait]}
+              </IconContext.Provider>
+            </Grid>
+          </Grid>
+        </div>
+        {/* Back Side */}
+        <div className="card-back">
+          <CardHelp toggleFlipped={toggleFlipped} flipped={flipped} />
+          <Grid
+            container
+            alignItems="center"
+            justifyContent="center"
+            direction="column"
+          >
+            <Grid item>
+              <h1>{trait}</h1>
+            </Grid>
+            <Grid item>
               <p>Lorem ipsum dolor sit amet.</p>
               <p>Consectetur adipiscing elit sed.</p>
-            </>
-          ) : (
-            <IconContext.Provider
-              value={isMobile ? { size: "6vw" } : { size: "60vw" }}
-            >
-              {traitIcons[trait]}
-            </IconContext.Provider>
-          )}
-        </Grid>
-      </Grid>
+            </Grid>
+          </Grid>
+        </div>
+      </div>
     </div>
   );
 };
+
 export default SelectionTrait;
