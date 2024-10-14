@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import "../../style/CardStyle.scss";
-import { traitIcons } from "../../utils/listOfAllTraits";
+import { traitIcons, traitDefinitions } from "../../utils/listOfAllTraits";
 import { IconContext } from "react-icons";
 import { useMediaQuery, Grid } from "@mui/material";
 import CardHelp from "./CardHelp";
@@ -57,8 +57,7 @@ const SelectionTrait = ({ trait, provided }) => {
               <h1>{trait}</h1>
             </Grid>
             <Grid item>
-              <p>Lorem ipsum dolor sit amet.</p>
-              <p>Consectetur adipiscing elit sed.</p>
+              <p>{traitDefinitions[trait]}</p>
             </Grid>
           </Grid>
         </div>
