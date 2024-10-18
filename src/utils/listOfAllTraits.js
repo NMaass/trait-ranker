@@ -53,6 +53,7 @@ import {
   RiErrorWarningFill,
   FaGrinStars,
   FaThumbsDown,
+  FaScroll,
   GiSittingDog,
   FaUserGraduate,
   GiMeditation,
@@ -67,17 +68,17 @@ import {
   FaDoorOpen,
   GiPencilBrush,
   GiButterfly,
+  AiOutlineMessage,
 } from "react-icons/all";
 
 const allTraits = [
-  "Adventure",
   "Ambition",
   "Athleticism",
   "Artistry",
   "Boldness",
   "Caution",
   "Charisma",
-  "Confrontation",
+  "Directness",
   "Contentment",
   "Craftsmanship",
   "Creativity",
@@ -88,23 +89,22 @@ const allTraits = [
   "Enthusiasm",
   "Flexibility",
   "Frugality",
+  "Generosity",
   "Independence",
   "Ingenuity",
-  "Musical Skill",
-  "Loyality",
+  "Musicality",
+  "Loyalty",
   "Open-mindedness",
   "Optimism",
   "Patience",
-  "Perseverance",
-  "Personal Space",
-  "Physical Appearance",
-  "Realism",
+  "Presentation",
   "Romance",
   "Self-care",
   "Spirituality",
   "Simplicity",
+  "Spontaneity",
   "Teachability",
-  "Vision",
+  "Tradition",
   "Vulnerability",
 ];
 
@@ -112,11 +112,11 @@ export const traitIcons = {
   "Guess the traits": <BsQuestionCircle />,
   "Show the traits": <AiOutlineOrderedList />,
   Artistry: <GiPalette />,
-  "Musical Skill": <BsMusicNoteBeamed />,
+  Musicality: <BsMusicNoteBeamed />,
   Leadership: <GiFlyingFlag />,
   Excellence: <MdLeaderboard />,
   "Self Control": <MdPsychology />,
-  "Physical Appearance": <GiClothes />,
+  Presentation: <GiClothes />,
   Independence: <GiBreakingChain />,
   Flexibility: <GiSplitArrows />,
   "Personal Space": <MdSocialDistance />,
@@ -163,23 +163,24 @@ export const traitIcons = {
   Family: <MdFamilyRestroom />,
   Boldness: <GiLion />,
   Caution: <RiErrorWarningFill />,
-  Confrontation: <GiCrossedSwords />,
+  Directness: <AiOutlineMessage />,
   Charisma: <FaGrinStars />,
   Ingenuity: <HiPuzzle />,
   Teachability: <FaUserGraduate />,
   Pessimism: <FaThumbsDown />,
-  Loyality: <GiSittingDog />,
+  Loyalty: <GiSittingDog />,
   "Self-Improvement": <GiMeditation />,
   Creativity: <GiPencilBrush />,
   Realism: <BiGlasses />,
   Enthusiasm: <GiFireworkRocket />,
   "Self-care": <MdBathtub />,
   Spirituality: <GiMeditation />,
-  Detachment: <GiButterfly />,
+  Objectivity: <GiButterfly />,
   Vision: <GiBinoculars />,
   Simplicity: <FaShapes />,
   "Open-mindedness": <FaDoorOpen />,
   Contentment: <FaRegSmileBeam />,
+  Tradition: <FaScroll />,
 };
 
 export const traitDefinitions = {
@@ -197,7 +198,7 @@ export const traitDefinitions = {
     "Exercising thoughtful care and consideration before making decisions, showing responsibility and foresight.",
   Charisma:
     "A magnetic charm or appeal that inspires and attracts others, creating positive and influential relationships.",
-  Confrontation:
+  Directness:
     "The ability to address difficult situations directly and assertively, while maintaining respect and fairness.",
   Contentment:
     "A deep sense of satisfaction and peace with one's life, fostering gratitude and happiness.",
@@ -207,7 +208,7 @@ export const traitDefinitions = {
     "The ability to think outside the box and come up with innovative solutions or ideas.",
   Decisiveness:
     "The quality of making clear and confident decisions, especially in challenging or uncertain situations.",
-  Detachment:
+  Objectivity:
     "The ability to remain objective and composed in emotionally charged situations, fostering clear thinking and balance.",
   Discipline:
     "A commitment to maintaining self-control and focus in pursuit of long-term goals, even in the face of distractions or challenges.",
@@ -223,7 +224,7 @@ export const traitDefinitions = {
     "The strength to think and act freely, demonstrating self-reliance and confidence in one's own abilities.",
   Ingenuity:
     "The ability to be resourceful and inventive, finding creative solutions to challenges and making the most of available resources.",
-  "Musical Skill":
+  Musicality:
     "A natural talent or learned proficiency in music, showcasing creativity and emotional expression through sound.",
   Loyalty:
     "A strong sense of commitment and devotion to others, characterized by reliability and trustworthiness.",
@@ -237,7 +238,7 @@ export const traitDefinitions = {
     "The determination to keep going and overcome obstacles, showing resilience and strength of character.",
   "Personal Space":
     "A healthy respect for one's own boundaries and those of others, promoting self-care and mutual respect.",
-  "Physical Appearance":
+  Presentation:
     "An appreciation for taking care of one's physical health and presentation, reflecting confidence and self-respect.",
   Realism:
     "A balanced and practical approach to life, seeing things as they are while working constructively toward improvement.",
@@ -249,6 +250,8 @@ export const traitDefinitions = {
     "A commitment to personal growth and connection with a higher purpose, fostering inner peace and moral integrity.",
   Simplicity:
     "An appreciation for living a life free from unnecessary complexity, focusing on what truly matters.",
+  Tradition:
+    "A deep respect for long-established customs and cultural practices, valuing continuity and heritage.",
   Teachability:
     "A willingness and openness to learn from others and experiences, demonstrating humility and a growth mindset.",
   Vision:
