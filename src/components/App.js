@@ -184,7 +184,6 @@ const App = () => {
             <UndoContext.Provider value={{ undoFunction, setUndoFunction }}>
               <ThemeProvider theme={appTheme}>
                 <NavBar history={history} />
-                <CssBaseline />
                 <Route exact path="/">
                   <Redirect to="/Selection" />
                 </Route>

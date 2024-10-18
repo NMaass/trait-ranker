@@ -13,7 +13,6 @@ const TraitList = styled.div`
   background-color: ${(props) =>
     props.isDraggingOver ? props.hoverColor : "white"};
   display: flex;
-  justify-content: center;
   align-items: center;
   min-width: ${(props) => (props.isStarter ? "1px" : "49.9vw")};
   min-height: 100vh;
@@ -32,11 +31,13 @@ const SelectionDroppable = ({
 }) => {
   const [shouldWiggle, setShouldWiggle] = useState(isStarter);
   const [showHoverColor, setShowHoverColor] = useState(false);
+  const [firstCard, setFirstCard] = useState(true);
 
   React.useEffect(() => {
     if (isStarter) {
       const timer = setTimeout(() => {
         setShouldWiggle(false);
+        setFirstCard(false);
       }, 1000);
       return () => clearTimeout(timer);
     } else {
@@ -66,7 +67,7 @@ const SelectionDroppable = ({
               trait={column?.traitIds[0]}
               index={column?.traitIds.indexOf(column?.traitIds[0])}
               wiggle={shouldWiggle}
-              isStarter={isStarter}
+              firstCard={firstCard}
             />
           )}
           {provided.placeholder}
