@@ -8,6 +8,9 @@ const appTheme = createTheme({
     secondary: {
       main: "#90e0ef",
     },
+    warning: {
+      main: "#fa4d4d",
+    },
   },
 });
 export default appTheme;
