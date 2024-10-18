@@ -45,7 +45,7 @@ const RankingTrait = ({ trait, onClick, className }) => {
             </Grid>
             <Grid item>
               <IconContext.Provider
-                value={isMobile ? { size: "30vw" } : { size: "6vw" }}
+                value={isMobile ? { size: "14vh" } : { size: "6vw" }}
               >
                 {traitIcons[trait]}
               </IconContext.Provider>

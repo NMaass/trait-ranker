@@ -60,7 +60,7 @@ const HomeButton = ({ history }) => {
       <IconButton
         color="inherit"
         onClick={handleHome}
-        style={{ maxWidth: "8vh", maxHeight: "8vh" }}
+        style={{ maxWidth: "7vh", maxHeight: "7vh" }}
       >
         <img
           src={logo512}
