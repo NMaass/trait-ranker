@@ -56,9 +56,10 @@ body {
     width: 80vw;
   }
   .rankCard {
-    height: 27vh;
-    width: 60vw;
+    height: 30vh;
+    width: 75vw;
     margin-left: 1.7vw;
+    transition: transform 0.6s ease-in-out;
   }
   .rankingFade {
     margin-top: -10vh;
@@ -202,4 +203,45 @@ p {
 .icon-grow {
   animation: growIcon 1s ease; /* Animate over 0.5s */
   animation-delay: 2s; /* Delay the start by 1 second */
+}
+
+.slide-out {
+  transform: translateX(-100vw);
+  animation: slide-out 0.6s ease-in-out forwards;
+}
+
+/* Slide In from the Right */
+.slide-in {
+  transform: translateX(100vw);
+  animation: slide-in 0.6s ease-in-out forwards;
+}
+
+.fade-out {
+  animation: fade-out 0.6s ease-in-out forwards;
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateX(100vw);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-out {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100vw);
+  }
+}
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
 }
