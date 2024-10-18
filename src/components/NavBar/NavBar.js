@@ -30,7 +30,7 @@ const NavBar = ({ history }) => {
               />
             </Grid>
             <Grid item>
-              <Grid container justifyContent="flex-end" alignItems="center" row>
+              <Grid container justifyContent="flex-end" alignItems="center">
                 <Grid item>
                   <HelpDialogBox />
                 </Grid>

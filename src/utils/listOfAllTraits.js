@@ -83,7 +83,6 @@ const allTraits = [
   "Craftsmanship",
   "Creativity",
   "Decisiveness",
-  "Detachment",
   "Discipline",
   "Empathy",
   "Enthusiasm",
@@ -210,6 +209,8 @@ export const traitDefinitions = {
     "The quality of making clear and confident decisions, especially in challenging or uncertain situations.",
   Objectivity:
     "The ability to remain objective and composed in emotionally charged situations, fostering clear thinking and balance.",
+  Generosity:
+    "The willingness to share one's resources, time, or skills with others, fostering a sense of community and mutual support.",
   Discipline:
     "A commitment to maintaining self-control and focus in pursuit of long-term goals, even in the face of distractions or challenges.",
   Empathy:

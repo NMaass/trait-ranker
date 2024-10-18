@@ -8,7 +8,7 @@ const CardHelp = ({ toggleFlipped, flipped, firstCard }) => {
   return (
     <IconButton
       onClick={toggleFlipped}
-      style={{ position: "absolute", top: 5, right: 5 }}
+      style={{ position: "absolute", top: -5, right: -5 }}
       className={firstCard ? "icon-grow" : ""}
     >
       {flipped ? (
