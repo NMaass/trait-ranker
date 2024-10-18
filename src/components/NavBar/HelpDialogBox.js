@@ -46,12 +46,8 @@ const HelpDialogBox = ({ currentPage }) => {
 
   return (
     <div>
-      <IconButton
-        size="large"
-        onClick={handleOpen}
-        className={`${grow && "grow"}`}
-      >
-        <HelpOutlineIcon />
+      <IconButton onClick={handleOpen} className={`${grow && "grow"}`}>
+        <HelpOutlineIcon fontSize="large" />
       </IconButton>
 
       <Dialog

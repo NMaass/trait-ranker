@@ -175,7 +175,7 @@ export const traitIcons = {
   Enthusiasm: <GiFireworkRocket />,
   "Self-care": <MdBathtub />,
   Spirituality: <GiMeditation />,
-  Objectivity: <GiButterfly />,
+  Detachment: <GiButterfly />,
   Vision: <GiBinoculars />,
   Simplicity: <FaShapes />,
   "Open-mindedness": <FaDoorOpen />,

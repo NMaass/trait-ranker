@@ -13,6 +13,8 @@ const TraitList = styled.div`
   background-color: ${(props) =>
     props.isDraggingOver ? props.hoverColor : "white"};
   display: flex;
+  justify-content: center;
+  align-items: center;
   min-width: ${(props) => (props.isStarter ? "1px" : "49.9vw")};
   min-height: 100vh;
   max-width: ${(props) => props.isStarter && "1px"};
@@ -56,28 +58,18 @@ const SelectionDroppable = ({
           hoverColor={hoverColor}
           isDraggingOver={snapshot.isDraggingOver}
           showHoverColor={showHoverColor}
-          S
           {...provided.droppableProps}
         >
-          <Grid
-            container
-            direction="column"
-            alignItems="center"
-            justifyContent="center"
-          >
-            <Grid item margin="auto">
-              {isStarter && (
-                <TraitDraggable
-                  key={column?.traitIds[0]}
-                  trait={column?.traitIds[0]}
-                  index={column?.traitIds.indexOf(column?.traitIds[0])}
-                  wiggle={shouldWiggle}
-                  isStarter={isStarter}
-                />
-              )}
-              {provided.placeholder}
-            </Grid>
-          </Grid>
+          {isStarter && (
+            <TraitDraggable
+              key={column?.traitIds[0]}
+              trait={column?.traitIds[0]}
+              index={column?.traitIds.indexOf(column?.traitIds[0])}
+              wiggle={shouldWiggle}
+              isStarter={isStarter}
+            />
+          )}
+          {provided.placeholder}
         </TraitList>
       )}
     </Droppable>

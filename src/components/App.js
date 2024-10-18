@@ -20,6 +20,7 @@ import { Grid, Typography } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 export const ProgressContext = createContext();
 export const TutorialContext = createContext();
+export const UndoContext = createContext();
 const App = () => {
   const history = useHistory();
   const [columnData, setColumnData] = useState(initialTraits);
@@ -30,7 +31,7 @@ const App = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [progress, setProgress] = useState(0);
   const [tutorialStrings, setTutorialStrings] = useState([]);
-
+  const [undoFunction, setUndoFunction] = useState(null);
   const sensorAPIRef = useRef<?SensorAPI>(null);
   const TRACKING_ID = "G-4RLGL8ENZC";
   ReactGA.initialize(TRACKING_ID);
@@ -180,51 +181,54 @@ const App = () => {
           <TutorialContext.Provider
             value={{ tutorialStrings: [tutorialStrings, setTutorialStrings] }}
           >
-            <ThemeProvider theme={appTheme}>
-              <NavBar history={history} />
-              <Route exact path="/">
-                <Redirect to="/Selection" />
-              </Route>
-              <Route
-                exact
-                path="/Selection/:id?"
-                children={
-                  <SelectionPage
-                    columnData={columnData}
+            <UndoContext.Provider value={{ undoFunction, setUndoFunction }}>
+              <ThemeProvider theme={appTheme}>
+                <NavBar history={history} />
+                <CssBaseline />
+                <Route exact path="/">
+                  <Redirect to="/Selection" />
+                </Route>
+                <Route
+                  exact
+                  path="/Selection/:id?"
+                  children={
+                    <SelectionPage
+                      columnData={columnData}
+                      setColumnData={setColumnData}
+                      topTraits={topTraits}
+                      setTopTraits={setTopTraits}
+                      history={history}
+                      swipeHandlers={swipeHandlers}
+                    />
+                  }
+                />
+                <Route path="/Rank">
+                  <RankingPage
                     topTraits={topTraits}
                     setTopTraits={setTopTraits}
-                    setColumnData={setColumnData}
                     history={history}
-                    swipeHandlers={swipeHandlers}
+                    initalProgress={progress}
                   />
-                }
-              />
-              <Route path="/Rank">
-                <RankingPage
-                  topTraits={topTraits}
-                  setTopTraits={setTopTraits}
-                  history={history}
-                  initalProgress={progress}
-                />
-              </Route>
-              <Route path="/Results">
-                <ResultsPage
-                  topTraits={topTraits}
-                  setTopTraits={setTopTraits}
-                  userID={userId}
-                />
-              </Route>
-              <Route
-                path="/Share/:id"
-                children={
-                  <SharedPage
-                    columnData={columnData}
-                    setColumnData={setColumnData}
-                    history={history}
+                </Route>
+                <Route path="/Results">
+                  <ResultsPage
+                    topTraits={topTraits}
+                    setTopTraits={setTopTraits}
+                    userID={userId}
                   />
-                }
-              />
-            </ThemeProvider>
+                </Route>
+                <Route
+                  path="/Share/:id"
+                  children={
+                    <SharedPage
+                      columnData={columnData}
+                      setColumnData={setColumnData}
+                      history={history}
+                    />
+                  }
+                />
+              </ThemeProvider>
+            </UndoContext.Provider>
           </TutorialContext.Provider>
         </ProgressContext.Provider>
       </DragDropContext>
