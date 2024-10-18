@@ -11,9 +11,7 @@
     "@mui/styled-engine-sc": "^5.0.3",
     "@mui/styles": "^5.0.2",
     "@testing-library/dom": "^8.9.1",
-    "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^12.1.5",
-    "@testing-library/react-hooks": "^8.0.1",
     "@testing-library/user-event": "^12.1.10",
     "firebase": "^9.8.1",
     "flow-bin": "^0.182.0",
@@ -68,6 +66,8 @@
     "@babel/core": "^7.18.0",
     "@babel/preset-flow": "^7.17.12",
     "@mui/core": "^5.0.0-alpha.51",
+    "@testing-library/jest-dom": "^6.6.1",
+    "@testing-library/react-hooks": "^8.0.1",
     "react-beautiful-dnd-test-utils": "^3.2.1"
   }
 }

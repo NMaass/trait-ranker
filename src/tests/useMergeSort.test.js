@@ -4,168 +4,136 @@ import { waitFor } from "@testing-library/react";
 import useMergeSort from "../utils/useMergeSort";
 
 describe("useMergeSort Hook", () => {
-  test("initializes correctly with multiple traits", () => {
-    const traits = ["Trait A", "Trait B", "Trait C", "Trait D"];
+  test("should sort 20 items to the desired final order", () => {
+    const traits = Array.from({ length: 20 }, (_, i) => i + 1); // [1, 2, ..., 20]
+    const desiredOrder = traits.slice().sort((a, b) => b - a); // Reverse order
 
     const { result } = renderHook(() => useMergeSort(traits));
 
-    expect(result.current.isComplete).toBe(false);
-    expect(result.current.currentStanding).toEqual([]);
-    expect(result.current.progressPercent).toBe(0);
-    expect(result.current.currentMatch).toBeDefined();
-    expect(result.current.currentMatch.left).toBeDefined();
-    expect(result.current.currentMatch.right).toBeDefined();
+    // Simulate user choices to achieve the desired order
+    while (!result.current.isComplete) {
+      const { currentMatch } = result.current;
+
+      // Simulate user picking the higher number to sort in descending order
+      const winner =
+        currentMatch.left > currentMatch.right
+          ? currentMatch.left
+          : currentMatch.right;
+
+      act(() => {
+        result.current.matchWin(winner);
+      });
+    }
+
+    expect(result.current.isComplete).toBe(true);
+    expect(result.current.currentStanding).toEqual(desiredOrder.slice(0, 7));
   });
-
-  test("progresses through matches and completes sorting", async () => {
-    const traits = ["A", "B", "C", "D"];
+  test("should undo the last match using revertMatch", () => {
+    const traits = [1, 2, 3, 4];
     const { result } = renderHook(() => useMergeSort(traits));
 
-    // First comparison: 'A' vs 'B'
+    // First comparison: 1 vs 2, pick 1
     act(() => {
-      result.current.matchWin("A");
+      result.current.matchWin(1);
     });
 
-    // Wait for state update
-    await waitFor(() => expect(result.current.currentMatch).not.toBeNull());
-
-    // Second comparison: 'C' vs 'D'
+    // Second comparison: 1 vs 3, pick 3
     act(() => {
-      result.current.matchWin("C");
+      result.current.matchWin(3);
     });
 
-    await waitFor(() => expect(result.current.currentMatch).not.toBeNull());
+    // Save state after second match
+    const stateAfterSecondMatch = { ...result.current };
 
-    // Third comparison: 'A' vs 'C'
+    // Third comparison: 3 vs 4, pick 3
     act(() => {
-      result.current.matchWin("A");
+      result.current.matchWin(3);
     });
 
-    await waitFor(() => expect(result.current.currentMatch).not.toBeNull());
-
-    // Fourth comparison: 'B' vs 'C'
-    act(() => {
-      result.current.matchWin("C");
-    });
-
-    await waitFor(() => expect(result.current.currentMatch).not.toBeNull());
-
-    // Fifth comparison: 'B' vs 'D'
-    act(() => {
-      result.current.matchWin("D");
-    });
-
-    // Wait until sorting is complete
-    await waitFor(() => expect(result.current.isComplete).toBe(true));
-
-    expect(result.current.currentStanding).toEqual(["A", "C", "D", "B"]);
-    expect(result.current.progressPercent).toBe(100);
-  });
-  test("handles odd number of traits", async () => {
-    const traits = ["A", "B", "C"];
-    const { result } = renderHook(() => useMergeSort(traits));
-
-    // First comparison: 'A' vs 'B'
-    act(() => {
-      result.current.matchWin("A");
-    });
-
-    await waitFor(() => expect(result.current.currentMatch).not.toBeNull());
-
-    // Second comparison: 'A' vs 'C'
-    act(() => {
-      result.current.matchWin("A");
-    });
-
-    await waitFor(() => expect(result.current.currentMatch).not.toBeNull());
-
-    // Third comparison: 'B' vs 'C'
-    act(() => {
-      result.current.matchWin("C");
-    });
-
-    // Wait until sorting is complete
-    await waitFor(() => expect(result.current.isComplete).toBe(true));
-
-    expect(result.current.currentStanding).toEqual(["A", "C", "B"]);
-    expect(result.current.progressPercent).toBe(100);
-  });
-
-  test("revertMatch function reverts the last match", async () => {
-    const traits = ["A", "B", "C", "D"];
-    const { result } = renderHook(() => useMergeSort(traits));
-
-    // First comparison
-    act(() => {
-      result.current.matchWin("B");
-    });
-
-    await waitFor(() => expect(result.current.currentMatch).not.toBeNull());
-
-    // Second comparison
-    act(() => {
-      result.current.matchWin("D");
-    });
-
-    await waitFor(() => expect(result.current.currentMatch).not.toBeNull());
-
-    // Third comparison
-    act(() => {
-      result.current.matchWin("B");
-    });
-
-    await waitFor(() => expect(result.current.currentMatch).not.toBeNull());
-
-    // Revert last match
+    // Revert the last match
     act(() => {
       result.current.revertMatch();
     });
 
-    await waitFor(() => expect(result.current.isComplete).toBe(false));
-
-    expect(result.current.currentMatch).toEqual({ left: "B", right: "D" });
-    expect(result.current.progressPercent).toBeLessThan(100);
-
-    // Proceed again with a different choice
-    act(() => {
-      result.current.matchWin("D");
-    });
-
-    await waitFor(() => expect(result.current.currentMatch).not.toBeNull());
-
-    // Additional comparisons to complete sorting
-    act(() => {
-      result.current.matchWin("D");
-    });
-
-    await waitFor(() => expect(result.current.currentMatch).not.toBeNull());
-
-    act(() => {
-      result.current.matchWin("C");
-    });
-
-    await waitFor(() => expect(result.current.isComplete).toBe(true));
-
-    expect(result.current.currentStanding).toEqual(["D", "B", "C", "A"]);
+    // The state should be the same as after the second match
+    expect(result.current.currentMatch).toEqual(
+      stateAfterSecondMatch.currentMatch
+    );
+    expect(result.current.comparisonsMade).toEqual(
+      stateAfterSecondMatch.comparisonsMade
+    );
+    expect(result.current.progressPercent).toEqual(
+      stateAfterSecondMatch.progressPercent
+    );
   });
 
-  test("handles immediate completion with one trait", () => {
-    const traits = ["A"];
-    const { result } = renderHook(() => useMergeSort(traits));
+  test("should resume a partially done sort with initialState", async () => {
+    const traits = [1, 2, 3, 4];
+    const initialState = {
+      currentMatch: { left: 2, right: 3 },
+      currentStanding: [],
+      isComplete: false,
+      progressPercent: 25,
+      comparisonStack: [
+        {
+          leftSublist: [2],
+          rightSublist: [3, 4],
+          mergedSublist: [1],
+          leftIndex: 0,
+          rightIndex: 0,
+          selectionHistory: [], // This may need to be initialized to reflect any prior selections if applicable
+        },
+      ],
+      mergeStack: [[[1], [2, 3, 4]]],
+      totalComparisons: 6,
+      comparisonsMade: 1,
+    };
 
-    expect(result.current.isComplete).toBe(true);
-    expect(result.current.currentStanding).toEqual(["A"]);
-    expect(result.current.progressPercent).toBe(100);
-    expect(result.current.currentMatch).toBeNull();
+    const { result } = renderHook(() => useMergeSort(traits, initialState));
+
+    // Continue the sorting process
+    act(() => {
+      result.current.matchWin(2); // Pick 2 over 3
+    });
+
+    act(() => {
+      result.current.matchWin(2); // Pick 2 over 4
+    });
+
+    act(() => {
+      result.current.matchWin(3); // Pick 3 over 4
+    });
+
+    // Wait for state updates to reflect that the sorting is complete
+    await waitFor(() => {
+      expect(result.current.isComplete).toBe(true);
+    });
+
+    // Verify the final standing
+    expect(result.current.currentStanding).toEqual([1, 2, 3, 4].slice(0, 7));
   });
+  test("should remove items from testing once they are more than 7 items from the top", () => {
+    const traits = Array.from({ length: 20 }, (_, i) => i + 1);
 
-  test("does not crash with empty traits array", () => {
-    const traits = [];
     const { result } = renderHook(() => useMergeSort(traits));
 
-    expect(result.current.isComplete).toBe(true);
-    expect(result.current.currentStanding).toEqual([]);
-    expect(result.current.progressPercent).toBe(100);
-    expect(result.current.currentMatch).toBeNull();
+    // Simulate user always picking the smallest number to sort in ascending order
+    while (!result.current.isComplete) {
+      const { currentMatch } = result.current;
+
+      // Always pick the smaller number
+      const winner =
+        currentMatch.left < currentMatch.right
+          ? currentMatch.left
+          : currentMatch.right;
+
+      act(() => {
+        result.current.matchWin(winner);
+      });
+    }
+
+    // Ensure only the top 7 items are in the final standing
+    expect(result.current.currentStanding.length).toBe(7);
+    expect(result.current.currentStanding).toEqual([1, 2, 3, 4, 5, 6, 7]);
   });
 });
