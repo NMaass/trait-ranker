@@ -7,7 +7,7 @@ import { IconContext } from "react-icons";
 import { useMediaQuery, Grid, Typography } from "@mui/material";
 import CardHelp from "./CardHelp";
 
-const SelectionTrait = ({ trait, firstCard, provided }) => {
+const SelectionTrait = ({ trait, isStarter, provided }) => {
   const isMobile = useMediaQuery("(max-width:1024px)");
   const [flipped, setFlipped] = useState(false);
 
@@ -28,7 +28,7 @@ const SelectionTrait = ({ trait, firstCard, provided }) => {
           <CardHelp
             toggleFlipped={toggleFlipped}
             flipped={flipped}
-            firstCard={firstCard}
+            isStarter={isStarter}
           />
           <Grid
             container

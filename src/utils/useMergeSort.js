@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 function useMergeSort(initialTraits, initialState = null) {
   // Constants
@@ -57,155 +57,180 @@ function useMergeSort(initialTraits, initialState = null) {
     prepareNextComparison([initialSublists], []);
   }
 
-  function prepareNextComparison(currentMergeStack, currentComparisonStack) {
-    if (
-      currentMergeStack.length === 1 &&
-      currentMergeStack[0].length === 1 &&
-      currentComparisonStack.length === 0
-    ) {
-      // Only one sublist remains and no pending comparisons
-      finalizeSort(currentMergeStack);
-      return;
-    }
+  const getNextComparison = useCallback(
+    (currentComparisonStack) => {
+      const currentMerge =
+        currentComparisonStack[currentComparisonStack.length - 1];
 
-    const currentLevel = currentMergeStack[currentMergeStack.length - 1];
-
-    // If the current level has no sublists, pop it and move to the next level
-    if (currentLevel.length === 0) {
-      currentMergeStack.pop();
-      setMergeStack([...currentMergeStack]);
-      prepareNextComparison(currentMergeStack, currentComparisonStack);
-      return;
-    }
-
-    // If the current level has only one sublist, move it up to the next level
-    if (currentLevel.length === 1) {
-      const mergedSublist = currentLevel.shift();
-
-      currentMergeStack.pop();
-
-      if (currentMergeStack.length === 0) {
-        // Sorting complete
-        setCurrentStanding(mergedSublist.slice(0, TOP_K));
-        setIsComplete(true);
-        setProgressPercent(100);
-        setCurrentMatch(null);
+      if (!currentMerge) {
+        // No more comparisons
+        prepareNextComparison(mergeStack, currentComparisonStack);
         return;
+      }
+
+      const { leftSublist, rightSublist, leftIndex, rightIndex } = currentMerge;
+
+      const leftTrait =
+        leftSublist && leftIndex < leftSublist.length
+          ? leftSublist[leftIndex]
+          : null;
+      const rightTrait =
+        rightSublist && rightIndex < rightSublist.length
+          ? rightSublist[rightIndex]
+          : null;
+
+      if (leftTrait && rightTrait) {
+        setCurrentMatch({ left: leftTrait, right: rightTrait });
       } else {
-        // Add merged sublist to the next level
-        if (!currentMergeStack[currentMergeStack.length - 1]) {
-          currentMergeStack.push([]);
+        // Add any remaining traits to merged sublist
+        if (leftIndex < leftSublist.length) {
+          currentMerge.mergedSublist.push(...leftSublist.slice(leftIndex));
         }
-        const nextLevel = currentMergeStack[currentMergeStack.length - 1];
-        nextLevel.push(mergedSublist);
+        if (rightIndex < rightSublist.length) {
+          currentMerge.mergedSublist.push(...rightSublist.slice(rightIndex));
+        }
+
+        // Remove current merge from stack
+        currentComparisonStack.pop();
+        setComparisonStack([...currentComparisonStack]);
+
+        // Add merged sublist to the next level
+        addMergedSublistToNextLevel(currentMerge.mergedSublist, mergeStack);
+
+        // Continue with next comparison
+        prepareNextComparison(mergeStack, currentComparisonStack);
+      }
+    },
+    [mergeStack, setCurrentMatch, setComparisonStack]
+  );
+
+  const prepareNextComparison = useCallback(
+    (currentMergeStack, currentComparisonStack) => {
+      if (
+        currentMergeStack.length === 1 &&
+        currentMergeStack[0].length === 1 &&
+        currentComparisonStack.length === 0
+      ) {
+        // Only one sublist remains and no pending comparisons
+        finalizeSort(currentMergeStack);
+        return;
+      }
+
+      const currentLevel = currentMergeStack[currentMergeStack.length - 1];
+
+      // If the current level has no sublists, pop it and move to the next level
+      if (currentLevel.length === 0) {
+        currentMergeStack.pop();
         setMergeStack([...currentMergeStack]);
         prepareNextComparison(currentMergeStack, currentComparisonStack);
         return;
       }
-    }
 
-    // Get the first two sublists to merge
-    const leftSublist = currentLevel.shift();
-    const rightSublist = currentLevel.shift();
+      // If the current level has only one sublist, move it up to the next level
+      if (currentLevel.length === 1) {
+        const mergedSublist = currentLevel.shift();
 
-    // Initialize the merged sublist
-    const mergedSublist = [];
+        currentMergeStack.pop();
 
-    // Push the current merge context onto the comparison stack
-    currentComparisonStack.push({
-      leftSublist,
-      rightSublist,
-      mergedSublist,
-      leftIndex: 0,
-      rightIndex: 0,
-    });
-
-    setMergeStack([...currentMergeStack]);
-    setComparisonStack([...currentComparisonStack]);
-
-    // Start the first comparison
-    getNextComparison(currentComparisonStack);
-  }
-
-  function getNextComparison(currentComparisonStack) {
-    const currentMerge =
-      currentComparisonStack[currentComparisonStack.length - 1];
-
-    if (!currentMerge) {
-      // No more comparisons
-      prepareNextComparison(mergeStack, currentComparisonStack);
-      return;
-    }
-
-    const { leftSublist, rightSublist, leftIndex, rightIndex } = currentMerge;
-
-    const leftTrait =
-      leftSublist && leftIndex < leftSublist.length
-        ? leftSublist[leftIndex]
-        : null;
-    const rightTrait =
-      rightSublist && rightIndex < rightSublist.length
-        ? rightSublist[rightIndex]
-        : null;
-
-    if (leftTrait && rightTrait) {
-      setCurrentMatch({ left: leftTrait, right: rightTrait });
-    } else {
-      // Add any remaining traits to merged sublist
-      if (leftIndex < leftSublist.length) {
-        currentMerge.mergedSublist.push(...leftSublist.slice(leftIndex));
-      }
-      if (rightIndex < rightSublist.length) {
-        currentMerge.mergedSublist.push(...rightSublist.slice(rightIndex));
+        if (currentMergeStack.length === 0) {
+          // Sorting complete
+          setCurrentStanding(mergedSublist.slice(0, TOP_K));
+          setIsComplete(true);
+          setProgressPercent(100);
+          setCurrentMatch(null);
+          return;
+        } else {
+          // Add merged sublist to the next level
+          if (!currentMergeStack[currentMergeStack.length - 1]) {
+            currentMergeStack.push([]);
+          }
+          const nextLevel = currentMergeStack[currentMergeStack.length - 1];
+          nextLevel.push(mergedSublist);
+          setMergeStack([...currentMergeStack]);
+          prepareNextComparison(currentMergeStack, currentComparisonStack);
+          return;
+        }
       }
 
-      // Remove current merge from stack
-      currentComparisonStack.pop();
+      // Get the first two sublists to merge
+      const leftSublist = currentLevel.shift();
+      const rightSublist = currentLevel.shift();
+
+      // Initialize the merged sublist
+      const mergedSublist = [];
+
+      // Push the current merge context onto the comparison stack
+      currentComparisonStack.push({
+        leftSublist,
+        rightSublist,
+        mergedSublist,
+        leftIndex: 0,
+        rightIndex: 0,
+      });
+
+      setMergeStack([...currentMergeStack]);
       setComparisonStack([...currentComparisonStack]);
 
-      // Add merged sublist to the next level
-      addMergedSublistToNextLevel(currentMerge.mergedSublist, mergeStack);
+      // Start the first comparison
+      getNextComparison(currentComparisonStack);
+    },
+    [setCurrentMatch, setComparisonStack, getNextComparison]
+  );
 
-      // Continue with next comparison
-      prepareNextComparison(mergeStack, currentComparisonStack);
-    }
-  }
   function matchWin(winner) {
     const currentComparisonStack = [...comparisonStack];
-    const currentMerge =
-      currentComparisonStack[currentComparisonStack.length - 1];
+    const currentMergeIndex = currentComparisonStack.length - 1;
+    const currentMerge = { ...currentComparisonStack[currentMergeIndex] };
 
     if (!currentMerge) {
       console.warn("matchWin called after sorting is complete");
       return;
     }
 
-    const { leftSublist, rightSublist, mergedSublist, leftIndex, rightIndex } =
-      currentMerge;
+    const {
+      leftSublist,
+      rightSublist,
+      mergedSublist,
+      leftIndex,
+      rightIndex,
+      selectionHistory = [],
+    } = currentMerge;
 
     const leftTrait = leftSublist && leftSublist[leftIndex];
     const rightTrait = rightSublist && rightSublist[rightIndex];
 
-    // Add the winner to the merged sublist
-    mergedSublist.push(winner);
+    // Determine new indices and update selection history
+    let newLeftIndex = leftIndex;
+    let newRightIndex = rightIndex;
+    const newMergedSublist = [...mergedSublist, winner];
+    const newSelectionHistory = [...selectionHistory];
 
-    // Initialize selectionHistory if it doesn't exist
-    if (!currentMerge.selectionHistory) {
-      currentMerge.selectionHistory = [];
-    }
-
-    // Record the winner's side ('left' or 'right')
     if (winner === leftTrait) {
-      currentMerge.leftIndex += 1;
-      currentMerge.selectionHistory.push("left");
+      newLeftIndex += 1;
+      newSelectionHistory.push("left");
     } else if (winner === rightTrait) {
-      currentMerge.rightIndex += 1;
-      currentMerge.selectionHistory.push("right");
+      newRightIndex += 1;
+      newSelectionHistory.push("right");
+    } else {
+      console.warn("Winner does not match any current traits");
+      return;
     }
 
+    // Create a new currentMerge object
+    const newCurrentMerge = {
+      leftSublist,
+      rightSublist,
+      mergedSublist: newMergedSublist,
+      leftIndex: newLeftIndex,
+      rightIndex: newRightIndex,
+      selectionHistory: newSelectionHistory,
+    };
+
+    // Update the current comparison stack
+    currentComparisonStack[currentMergeIndex] = newCurrentMerge;
     setComparisonStack(currentComparisonStack);
 
-    // Update comparisons made
+    // Update comparisons made and progress
     setComparisonsMade((prev) => {
       const newComparisonsMade = prev + 1;
       updateProgress(newComparisonsMade);
@@ -248,13 +273,16 @@ function useMergeSort(initialTraits, initialState = null) {
     setCurrentMatch(null);
   }
 
-  function updateProgress(newComparisonsMade) {
-    const progress = Math.min(
-      (newComparisonsMade / totalComparisons) * 100,
-      100
-    );
-    setProgressPercent(progress);
-  }
+  const updateProgress = useCallback(
+    (newComparisonsMade) => {
+      const progress = Math.min(
+        (newComparisonsMade / totalComparisons) * 100,
+        100
+      );
+      setProgressPercent(progress);
+    },
+    [totalComparisons]
+  );
 
   function calculateTotalComparisons(n) {
     let totalComparisons = 0;
@@ -268,19 +296,26 @@ function useMergeSort(initialTraits, initialState = null) {
     return totalComparisons;
   }
 
-  function revertMatch() {
+  const revertMatch = useCallback(() => {
     if (comparisonStack.length === 0) {
       console.warn("No moves to revert");
       return;
     }
 
     const currentComparisonStack = [...comparisonStack];
-    const currentMerge =
-      currentComparisonStack[currentComparisonStack.length - 1];
+    const currentMergeIndex = currentComparisonStack.length - 1;
+    const currentMerge = { ...currentComparisonStack[currentMergeIndex] };
 
-    const { mergedSublist, selectionHistory } = currentMerge;
+    const {
+      leftSublist,
+      rightSublist,
+      mergedSublist,
+      leftIndex,
+      rightIndex,
+      selectionHistory = [],
+    } = currentMerge;
 
-    if (!selectionHistory || selectionHistory.length === 0) {
+    if (selectionHistory.length === 0) {
       // No moves to revert in the current merge; pop back to previous merge
       currentComparisonStack.pop();
       setComparisonStack(currentComparisonStack);
@@ -302,27 +337,43 @@ function useMergeSort(initialTraits, initialState = null) {
       return;
     }
 
-    // Remove the last selected trait
-    mergedSublist.pop();
+    // Remove the last selected trait and update selection history
+    const newMergedSublist = mergedSublist.slice(0, -1);
+    const newSelectionHistory = selectionHistory.slice(0, -1);
+    const lastWinnerSide = selectionHistory[selectionHistory.length - 1];
 
-    // Remove the last selection from selectionHistory
-    const lastWinnerSide = selectionHistory.pop();
+    // Decrement indices based on lastWinnerSide
+    let newLeftIndex = leftIndex;
+    let newRightIndex = rightIndex;
 
-    // Decrement comparisons made
+    if (lastWinnerSide === "left") {
+      newLeftIndex -= 1;
+    } else if (lastWinnerSide === "right") {
+      newRightIndex -= 1;
+    } else {
+      console.warn("Invalid last winner side");
+      return;
+    }
+
+    // Create new currentMerge object
+    const newCurrentMerge = {
+      ...currentMerge,
+      mergedSublist: newMergedSublist,
+      selectionHistory: newSelectionHistory,
+      leftIndex: newLeftIndex,
+      rightIndex: newRightIndex,
+    };
+
+    // Update the current comparison stack
+    currentComparisonStack[currentMergeIndex] = newCurrentMerge;
+    setComparisonStack(currentComparisonStack);
+
+    // Decrement comparisons made and update progress
     setComparisonsMade((prev) => {
       const newComparisonsMade = prev > 0 ? prev - 1 : 0;
       updateProgress(newComparisonsMade);
       return newComparisonsMade;
     });
-
-    // Decrement index of the last move based on lastWinnerSide
-    if (lastWinnerSide === "left") {
-      currentMerge.leftIndex -= 1;
-    } else if (lastWinnerSide === "right") {
-      currentMerge.rightIndex -= 1;
-    }
-
-    setComparisonStack(currentComparisonStack);
 
     // Set isComplete to false if it was true
     if (isComplete) {
@@ -331,9 +382,8 @@ function useMergeSort(initialTraits, initialState = null) {
     }
 
     // Restore currentMatch
-    const leftTrait = currentMerge.leftSublist[currentMerge.leftIndex] || null;
-    const rightTrait =
-      currentMerge.rightSublist[currentMerge.rightIndex] || null;
+    const leftTrait = leftSublist[newLeftIndex] || null;
+    const rightTrait = rightSublist[newRightIndex] || null;
 
     if (leftTrait && rightTrait) {
       setCurrentMatch({ left: leftTrait, right: rightTrait });
@@ -348,7 +398,14 @@ function useMergeSort(initialTraits, initialState = null) {
         setCurrentMatch(null);
       }
     }
-  }
+  }, [
+    comparisonStack,
+    isComplete,
+    totalComparisons,
+    comparisonsMade,
+    updateProgress,
+    getNextComparison,
+  ]);
 
   const rankingState = {
     currentMatch,

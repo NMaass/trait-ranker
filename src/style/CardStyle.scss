@@ -216,6 +216,10 @@ p {
   animation: slide-in 0.6s ease-in-out forwards;
 }
 
+.slide-up {
+  animation: slide-up 0.6s ease-in-out forwards;
+}
+
 .fade-out {
   animation: fade-out 0.6s ease-in-out forwards;
 }
@@ -235,6 +239,15 @@ p {
   }
   to {
     transform: translateX(-100vw);
+  }
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(100vh);
+  }
+  to {
+    transform: translateY(0vh);
   }
 }
 @keyframes fade-out {

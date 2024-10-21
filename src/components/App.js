@@ -15,7 +15,7 @@ import tweenFunctions from "tween-functions";
 import { makeAndTrackId } from "../utils/mixpanel";
 import appTheme from "../style/appTheme";
 import { ThemeProvider } from "@mui/material/styles";
-import FadeTextSeries from "../utils/FadeTextSeries";
+
 import { Grid, Typography } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 export const ProgressContext = createContext();
@@ -31,7 +31,7 @@ const App = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [progress, setProgress] = useState(0);
   const [tutorialStrings, setTutorialStrings] = useState([]);
-  const [undoFunction, setUndoFunction] = useState(null);
+  const undoFunction = useRef(null);
   const sensorAPIRef = useRef<?SensorAPI>(null);
   const TRACKING_ID = "G-4RLGL8ENZC";
   ReactGA.initialize(TRACKING_ID);
@@ -181,7 +181,7 @@ const App = () => {
           <TutorialContext.Provider
             value={{ tutorialStrings: [tutorialStrings, setTutorialStrings] }}
           >
-            <UndoContext.Provider value={{ undoFunction, setUndoFunction }}>
+            <UndoContext.Provider value={{ undoFunction }}>
               <ThemeProvider theme={appTheme}>
                 <NavBar history={history} />
                 <Route exact path="/">

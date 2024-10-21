@@ -247,6 +247,8 @@ export const traitDefinitions = {
     "A deep appreciation for emotional connection and expressing love, fostering warmth and intimacy in relationships.",
   "Self-care":
     "The practice of tending to one’s mental, emotional, and physical health, prioritizing well-being and balance.",
+  Spontaneity:
+    "The ability to act on impulse and embrace the moment, making decisions without excessive planning, and finding joy in unexpected experiences",
   Spirituality:
     "A commitment to personal growth and connection with a higher purpose, fostering inner peace and moral integrity.",
   Simplicity:

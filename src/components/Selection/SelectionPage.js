@@ -1,12 +1,17 @@
 // @flow
-import React, { useEffect, useContext, useRef, useState } from "react";
+import React, {
+  useEffect,
+  useContext,
+  useRef,
+  useState,
+  useCallback,
+} from "react";
 import SelectionDroppable from "./SelectionDroppable";
-import { Box, Grid, useMediaQuery } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import { ProgressContext } from "../App";
 import { TutorialContext } from "../App";
 import { SkipSelectionButton } from "../../utils/devTools";
 import { UndoContext } from "../App";
-import FadeTextSeries from "../../utils/FadeTextSeries";
 const SelectionPage = ({
   columnData,
   setColumnData,
@@ -15,8 +20,6 @@ const SelectionPage = ({
   swipeHandlers,
   topTraits,
 }) => {
-  const isMobile = useMediaQuery("(min-width:1024px");
-
   useEffect(() => {
     if (columnData.columns.column2.traitIds.length === 0) {
       handleClearStack(columnData.columns.column3.traitIds);
@@ -29,7 +32,9 @@ const SelectionPage = ({
   const { tutorialStrings } = useContext(TutorialContext);
   const [tutorialStringsState, setTutorialStringsState] = tutorialStrings;
   const numberOfTraits = useRef(columnData.columns.column2.traitIds.length);
-  const { setUndoFunction } = useContext(UndoContext); // Use UndoContext
+  const { undoFunction } = useContext(UndoContext);
+  const isUndoing = useRef(false);
+  const [shouldSlideUp, setShouldSlideUp] = useState(false);
 
   const [selectionHistory, setSelectionHistory] = useState([]);
 
@@ -39,17 +44,23 @@ const SelectionPage = ({
   }, [columnData]);
 
   useEffect(() => {
-    setUndoFunction(() => undoLastSelection);
-  }, []);
-  useEffect(() => {
     // Store the current columnData in history when it changes
-    setSelectionHistory((prevHistory) => [
-      ...prevHistory,
-      { ...columnData }, // Create a copy to avoid mutation
-    ]);
+    console.log("selection history: ", selectionHistory);
+    if (!isUndoing.current) {
+      setSelectionHistory((prevHistory) => [
+        ...prevHistory,
+        { ...columnData }, // Create a copy to avoid mutation
+      ]);
+    }
   }, [columnData]);
 
-  function undoLastSelection() {
+  const undoLastSelection = useCallback(() => {
+    setShouldSlideUp(true);
+    isUndoing.current = true;
+    setTimeout(() => {
+      setShouldSlideUp(false);
+      isUndoing.current = false;
+    }, 600);
     setSelectionHistory((prevHistory) => {
       if (prevHistory.length <= 1) return prevHistory; // Prevent undo when no history exists
 
@@ -61,31 +72,48 @@ const SelectionPage = ({
 
       // Update the columnData to the previous state
       setColumnData(lastSelection);
-
       return newHistory; // Return updated history
     });
-  }
+  }, [setColumnData]);
 
-  console.log(selectionHistory);
   // Set the undo function in the context whenever selection history changes
   useEffect(() => {
-    setUndoFunction(() => undoLastSelection);
-  }, [selectionHistory, setUndoFunction]);
+    undoFunction.current = undoLastSelection;
+  }, [undoLastSelection, undoFunction]);
 
   function handleClearStack(topTraits) {
     if (topTraits.length < 7) {
-      //encouge user to add more traits
-      columnData.columns.column2.traitIds = columnData.columns.column1.traitIds;
+      // Encourage user to add more traits
+      const newColumnData = {
+        ...columnData,
+        columns: {
+          ...columnData.columns,
+          column2: {
+            ...columnData.columns.column2,
+            traitIds: [...columnData.columns.column1.traitIds],
+          },
+        },
+      };
+      setColumnData(newColumnData);
       setTutorialStringsState("Let's try adding a few more traits.");
     } else if (topTraits.length > 24) {
-      //encouge user to remove traits
-      columnData.columns.column2.traitIds = columnData.columns.column3.traitIds;
+      // Encourage user to remove traits
+      const newColumnData = {
+        ...columnData,
+        columns: {
+          ...columnData.columns,
+          column2: {
+            ...columnData.columns.column2,
+            traitIds: [...columnData.columns.column3.traitIds],
+          },
+        },
+      };
+      setColumnData(newColumnData);
       setTutorialStringsState(
         "Let's try removing a few traits to narrow it down."
       );
     } else {
-      //progress to ranking page
-      console.log(columnData.columns.column3.traitIds);
+      // Progress to ranking page
       setTopTraits(columnData.columns.column3.traitIds);
       setActiveStepState(1);
       setProgressState(0);
@@ -100,7 +128,6 @@ const SelectionPage = ({
         history={history}
         setActiveStepState={setActiveStepState}
       />
-      <FadeTextSeries stringArray={tutorialStrings} />
       <div {...swipeHandlers}>
         <Grid container spacing={0} wrap="nowrap">
           <SelectionDroppable
@@ -112,6 +139,7 @@ const SelectionPage = ({
             key={columnData.columns.column2.id}
             column={columnData.columns.column2}
             isStarter={true}
+            slideUp={shouldSlideUp}
             hoverColor={""}
           />
           <SelectionDroppable

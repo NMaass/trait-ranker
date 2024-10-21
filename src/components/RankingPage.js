@@ -35,6 +35,12 @@ const RankingPage = ({ topTraits, setTopTraits, history, initalProgress }) => {
   const [activeStepState, setActiveStepState] = activeStep;
   const [leftCardClass, setLeftCardClass] = useState("");
   const [rightCardClass, setRightCardClass] = useState("");
+  const { undoFunction } = useContext(UndoContext);
+
+  useEffect(() => {
+    undoFunction.current = revertMatch;
+  }, [revertMatch, undoFunction]);
+
   const handleRoundWin = useCallback(
     (trait) => {
       // Trigger slide-out animation
@@ -57,7 +63,7 @@ const RankingPage = ({ topTraits, setTopTraits, history, initalProgress }) => {
         setTimeout(() => {
           setLeftCardClass("");
           setRightCardClass("");
-        }, 600); // Timeout matches the slide-in animation duration
+        }, 600);
       }, 600); // Timeout matches the slide-out animation duration
     },
     [currentMatch, matchWin, progressPercent, setProgressState]

@@ -34,11 +34,13 @@ const NavBar = ({ history }) => {
                 <Grid item>
                   <HelpDialogBox />
                 </Grid>
-                <Grid item>
-                  <IconButton onClick={undoFunction}>
-                    <FaUndo />
-                  </IconButton>
-                </Grid>
+                {undoFunction.current && (
+                  <Grid item>
+                    <IconButton onClick={undoFunction.current}>
+                      <FaUndo />
+                    </IconButton>
+                  </Grid>
+                )}
               </Grid>
             </Grid>
           </Grid>

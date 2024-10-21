@@ -1,14 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import { Droppable } from "react-beautiful-dnd";
 import { Grid } from "@mui/material";
 import FreeDragTrait from "../TraitCards/FreeDragTrait";
 import styled from "styled-components";
-import FadeTextSeries from "../../utils/FadeTextSeries";
 
 const DragColumn = styled.div``;
 
 const ReorderableColumn = ({ column, colors, isDraggable }) => {
-  const tutorialStrings = ["Rearrange to the guess list order"];
   return (
     <div>
       <Droppable key={column.id} droppableId={column.id}>

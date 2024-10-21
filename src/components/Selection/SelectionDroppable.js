@@ -27,6 +27,7 @@ const TraitList = styled.div`
 const SelectionDroppable = ({
   column,
   isStarter = false,
+  slideUp = false,
   hoverColor = "lightBlue",
 }) => {
   const [shouldWiggle, setShouldWiggle] = useState(isStarter);
@@ -68,6 +69,7 @@ const SelectionDroppable = ({
               index={column?.traitIds.indexOf(column?.traitIds[0])}
               wiggle={shouldWiggle}
               firstCard={firstCard}
+              slideUp={slideUp}
             />
           )}
           {provided.placeholder}
