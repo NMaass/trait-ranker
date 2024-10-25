@@ -1,21 +1,21 @@
 {
   "files": {
-    "main.css": "/trait-ranker/static/css/main.74b315fc.chunk.css",
-    "main.js": "/trait-ranker/static/js/main.93532a23.chunk.js",
-    "main.js.map": "/trait-ranker/static/js/main.93532a23.chunk.js.map",
+    "main.css": "/trait-ranker/static/css/main.8cbf40a6.chunk.css",
+    "main.js": "/trait-ranker/static/js/main.7ce5f673.chunk.js",
+    "main.js.map": "/trait-ranker/static/js/main.7ce5f673.chunk.js.map",
     "runtime-main.js": "/trait-ranker/static/js/runtime-main.97bba98e.js",
     "runtime-main.js.map": "/trait-ranker/static/js/runtime-main.97bba98e.js.map",
-    "static/js/2.281049bd.chunk.js": "/trait-ranker/static/js/2.281049bd.chunk.js",
-    "static/js/2.281049bd.chunk.js.map": "/trait-ranker/static/js/2.281049bd.chunk.js.map",
+    "static/js/2.c90efe9b.chunk.js": "/trait-ranker/static/js/2.c90efe9b.chunk.js",
+    "static/js/2.c90efe9b.chunk.js.map": "/trait-ranker/static/js/2.c90efe9b.chunk.js.map",
     "index.html": "/trait-ranker/index.html",
-    "static/css/main.74b315fc.chunk.css.map": "/trait-ranker/static/css/main.74b315fc.chunk.css.map",
-    "static/js/2.281049bd.chunk.js.LICENSE.txt": "/trait-ranker/static/js/2.281049bd.chunk.js.LICENSE.txt",
+    "static/css/main.8cbf40a6.chunk.css.map": "/trait-ranker/static/css/main.8cbf40a6.chunk.css.map",
+    "static/js/2.c90efe9b.chunk.js.LICENSE.txt": "/trait-ranker/static/js/2.c90efe9b.chunk.js.LICENSE.txt",
     "static/media/logo512.3b8a96fd.png": "/trait-ranker/static/media/logo512.3b8a96fd.png"
   },
   "entrypoints": [
     "static/js/runtime-main.97bba98e.js",
-    "static/js/2.281049bd.chunk.js",
-    "static/css/main.74b315fc.chunk.css",
-    "static/js/main.93532a23.chunk.js"
+    "static/js/2.c90efe9b.chunk.js",
+    "static/css/main.8cbf40a6.chunk.css",
+    "static/js/main.7ce5f673.chunk.js"
   ]
 }
