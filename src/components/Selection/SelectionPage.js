@@ -40,12 +40,14 @@ const SelectionPage = ({
 
   useEffect(() => {
     if (columnData.columns.column2.traitIds.length === 0) return;
-    setProgressState(progressState + 100 / numberOfTraits.current);
-  }, [columnData]);
+    const remainingTraits = columnData.columns.column2.traitIds.length;
+    const completedTraits = numberOfTraits.current - remainingTraits;
+    const percentComplete = (completedTraits / numberOfTraits.current) * 100;
+    setProgressState(percentComplete);
+  }, [columnData, progressState, setProgressState, numberOfTraits]);
 
   useEffect(() => {
     // Store the current columnData in history when it changes
-    console.log("selection history: ", selectionHistory);
     if (!isUndoing.current) {
       setSelectionHistory((prevHistory) => [
         ...prevHistory,

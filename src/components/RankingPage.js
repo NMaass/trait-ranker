@@ -38,8 +38,10 @@ const RankingPage = ({ topTraits, setTopTraits, history, initalProgress }) => {
   const { undoFunction } = useContext(UndoContext);
 
   useEffect(() => {
-    undoFunction.current = revertMatch;
-  }, [revertMatch, undoFunction]);
+    if (progressPercent) {
+      setProgressState(progressPercent);
+    }
+  }, [progressPercent, setProgressState]);
 
   const handleRoundWin = useCallback(
     (trait) => {
@@ -55,7 +57,6 @@ const RankingPage = ({ topTraits, setTopTraits, history, initalProgress }) => {
       // Set timeout to update the match and reset animations after slide-out is complete
       setTimeout(() => {
         matchWin(trait);
-        setProgressState(progressPercent);
         setLeftCardClass("slide-in");
         setRightCardClass("slide-in");
 
@@ -66,8 +67,22 @@ const RankingPage = ({ topTraits, setTopTraits, history, initalProgress }) => {
         }, 600);
       }, 600); // Timeout matches the slide-out animation duration
     },
-    [currentMatch, matchWin, progressPercent, setProgressState]
+    [currentMatch, matchWin]
   );
+
+  const handleRevertMatch = useCallback(() => {
+    revertMatch();
+    setLeftCardClass("slide-in");
+    setRightCardClass("slide-in");
+    setTimeout(() => {
+      setLeftCardClass("");
+      setRightCardClass("");
+    }, 600);
+  }, [revertMatch]);
+
+  useEffect(() => {
+    undoFunction.current = handleRevertMatch;
+  }, [handleRevertMatch, undoFunction]);
 
   useEffect(() => {
     console.log("isComplete:", isComplete);
@@ -77,11 +92,6 @@ const RankingPage = ({ topTraits, setTopTraits, history, initalProgress }) => {
       history.push("/Results");
     }
   }, [isComplete]);
-
-  const handleRevertMatch = () => {
-    revertMatch();
-    setProgressState(progressPercent);
-  };
 
   // Ensure topTraits is populated before rendering
   if (!topTraits || topTraits.length === 0) {
