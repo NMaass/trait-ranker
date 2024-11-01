@@ -65,7 +65,7 @@ const RankingTrait = ({ trait, onClick, className }) => {
               <h1>{trait}</h1>
             </Grid>
             <Grid item>
-              <Typography variant="h5">{traitDefinitions[trait]}</Typography>
+              <Typography variant="h6">{traitDefinitions[trait]}</Typography>
             </Grid>
           </Grid>
         </div>

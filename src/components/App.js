@@ -16,8 +16,6 @@ import { makeAndTrackId } from "../utils/mixpanel";
 import appTheme from "../style/appTheme";
 import { ThemeProvider } from "@mui/material/styles";
 
-import { Grid, Typography } from "@mui/material";
-import CssBaseline from "@mui/material/CssBaseline";
 export const ProgressContext = createContext();
 export const TutorialContext = createContext();
 export const UndoContext = createContext();
@@ -237,7 +235,7 @@ const App = () => {
 
 const AppWrapper = () => {
   return (
-    <HashRouter basename={"/trait-ranker"}>
+    <HashRouter>
       <App />
     </HashRouter>
   );
