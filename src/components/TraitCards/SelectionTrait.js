@@ -19,7 +19,6 @@ const SelectionTrait = ({ trait, isStarter, provided }) => {
     <div
       className={`card selection ${flipped ? "flipped" : ""}`}
       {...provided.dragHandleProps}
-      draggable={true}
       id={trait}
     >
       <div className=" card-inner">
