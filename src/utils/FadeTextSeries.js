@@ -5,7 +5,7 @@ const FadeTextSeries = ({ stringArray = [] }) => {
   const [currentText, setCurrentText] = useState("");
   const [checked, setChecked] = useState(true);
   const [count, setCount] = useState(0);
-  const fadeTime = 3000;
+  const fadeTime = 2000;
   const isMobile = useMediaQuery("(min-width:1024px)");
 
   useEffect(() => {
@@ -36,8 +36,8 @@ const FadeTextSeries = ({ stringArray = [] }) => {
     <Fade
       in={checked}
       timeout={{
-        enter: fadeTime * 0.9,
-        exit: fadeTime * 0.9,
+        enter: fadeTime * 0.35,
+        exit: fadeTime * 0.7,
       }}
       onExited={handleExited}
       onEntered={handleEntered}
