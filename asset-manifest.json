@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/trait-ranker/static/css/main.8cbf40a6.chunk.css",
-    "main.js": "/trait-ranker/static/js/main.69d74677.chunk.js",
-    "main.js.map": "/trait-ranker/static/js/main.69d74677.chunk.js.map",
+    "main.js": "/trait-ranker/static/js/main.27327751.chunk.js",
+    "main.js.map": "/trait-ranker/static/js/main.27327751.chunk.js.map",
     "runtime-main.js": "/trait-ranker/static/js/runtime-main.97bba98e.js",
     "runtime-main.js.map": "/trait-ranker/static/js/runtime-main.97bba98e.js.map",
     "static/js/2.d55f9d16.chunk.js": "/trait-ranker/static/js/2.d55f9d16.chunk.js",
@@ -16,6 +16,6 @@
     "static/js/runtime-main.97bba98e.js",
     "static/js/2.d55f9d16.chunk.js",
     "static/css/main.8cbf40a6.chunk.css",
-    "static/js/main.69d74677.chunk.js"
+    "static/js/main.27327751.chunk.js"
   ]
 }
