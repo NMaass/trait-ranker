@@ -12,6 +12,7 @@ import { ProgressContext } from "../App";
 import { TutorialContext } from "../App";
 import { SkipSelectionButton } from "../../utils/devTools";
 import { UndoContext } from "../App";
+import FadeTextSeries from "../../utils/FadeTextSeries";
 const SelectionPage = ({
   columnData,
   setColumnData,
@@ -37,6 +38,11 @@ const SelectionPage = ({
   const [shouldSlideUp, setShouldSlideUp] = useState(false);
 
   const [selectionHistory, setSelectionHistory] = useState([]);
+
+  const [leftDroppableColor, setLeftDroppableColor] = useState("LightPink");
+  const [rightDroppableColor, setRightDroppableColor] = useState("LightGreen");
+
+  const [hasRestarted, setHasRestarted] = useState(false);
 
   useEffect(() => {
     if (columnData.columns.column2.traitIds.length === 0) return;
@@ -84,45 +90,61 @@ const SelectionPage = ({
   }, [undoLastSelection, undoFunction]);
 
   function handleClearStack(topTraits) {
-    if (topTraits.length < 7) {
-      // Encourage user to add more traits
-      const newColumnData = {
-        ...columnData,
-        columns: {
-          ...columnData.columns,
-          column2: {
-            ...columnData.columns.column2,
-            traitIds: [...columnData.columns.column1.traitIds],
-          },
-        },
-      };
-      setColumnData(newColumnData);
-      setTutorialStringsState("Let's try adding a few more traits.");
-    } else if (topTraits.length > 24) {
-      // Encourage user to remove traits
-      const newColumnData = {
-        ...columnData,
-        columns: {
-          ...columnData.columns,
-          column2: {
-            ...columnData.columns.column2,
-            traitIds: [...columnData.columns.column3.traitIds],
-          },
-        },
-      };
-      setColumnData(newColumnData);
-      setTutorialStringsState(
-        "Let's try removing a few traits to narrow it down."
-      );
+    if (!hasRestarted) {
+      if (topTraits.length < 7) {
+        getMoreTraits();
+      } else if (topTraits.length > 24) {
+        getLessTraits();
+      } else {
+        endSelection();
+      }
     } else {
-      // Progress to ranking page
-      setTopTraits(columnData.columns.column3.traitIds);
-      setActiveStepState(1);
-      setProgressState(0);
-      history.push("/Rank");
+      endSelection();
     }
   }
+  function endSelection(currentTraits) {
+    // Progress to ranking page
+    setTopTraits(currentTraits);
+    setActiveStepState(1);
+    setProgressState(0);
+    history.push("/Rank");
+  }
+  function getMoreTraits() {
+    // Encourage user to add more traits
+    const newColumnData = {
+      ...columnData,
+      columns: {
+        ...columnData.columns,
+        column2: {
+          ...columnData.columns.column2,
+          traitIds: [...columnData.columns.column1.traitIds],
+        },
+      },
+    };
 
+    setColumnData(newColumnData);
+    setTutorialStringsState(["Let's try adding a few more traits."]);
+  }
+  function getLessTraits() {
+    // Encourage user to remove traits
+    const newColumnData = {
+      ...columnData,
+      columns: {
+        ...columnData.columns,
+        column2: {
+          ...columnData.columns.column2,
+          traitIds: [...columnData.columns.column3.traitIds],
+        },
+      },
+    };
+    setColumnData(newColumnData);
+    setTutorialStringsState([
+      "Let's try separating these into liked and loved traits",
+    ]);
+    setLeftDroppableColor("LightGreen");
+    setRightDroppableColor("Gold");
+    setHasRestarted(true);
+  }
   return (
     <Box>
       <SkipSelectionButton
@@ -130,12 +152,13 @@ const SelectionPage = ({
         history={history}
         setActiveStepState={setActiveStepState}
       />
+      <FadeTextSeries stringArray={tutorialStringsState} />
       <div {...swipeHandlers}>
         <Grid container spacing={0} wrap="nowrap">
           <SelectionDroppable
             key={columnData.columns.column1.id}
             column={columnData.columns.column1}
-            hoverColor={"LightPink"}
+            hoverColor={leftDroppableColor}
           />
           <SelectionDroppable
             key={columnData.columns.column2.id}
@@ -147,7 +170,7 @@ const SelectionPage = ({
           <SelectionDroppable
             key={columnData.columns.column3.id}
             column={columnData.columns.column3}
-            hoverColor={"LightGreen"}
+            hoverColor={rightDroppableColor}
           />
         </Grid>
       </div>
