@@ -15,6 +15,11 @@ import tweenFunctions from "tween-functions";
 import { makeAndTrackId } from "../utils/mixpanel";
 import appTheme from "../style/appTheme";
 import { ThemeProvider } from "@mui/material/styles";
+import {
+  loadProgress,
+  createProgress,
+  saveProgress,
+} from "../utils/progressManagement";
 
 export const ProgressContext = createContext();
 export const TutorialContext = createContext();
@@ -28,11 +33,53 @@ const App = () => {
   const [userId, setUserId] = useState(makeAndTrackId(6));
   const [activeStep, setActiveStep] = useState(0);
   const [progress, setProgress] = useState(0);
+  const [progressData, setProgressData] = useState(() => loadProgress() || createProgress());
   const [tutorialStrings, setTutorialStrings] = useState([]);
   const undoFunction = useRef(null);
   const sensorAPIRef = useRef<?SensorAPI>(null);
   const TRACKING_ID = "G-4RLGL8ENZC";
   ReactGA.initialize(TRACKING_ID);
+
+  // Load any stored progress on first mount
+  useEffect(() => {
+    const stored = loadProgress();
+    if (stored) {
+      setProgressData(stored);
+      setProgress(stored.data?.ranking?.progressPercent || 0);
+      const stepMap = { selection: 0, ranking: 1, results: 3 };
+      setActiveStep(stepMap[stored.stage] || 0);
+
+      if (stored.data?.selection) {
+        setColumnData((prev) => ({
+          ...prev,
+          columns: {
+            ...prev.columns,
+            column1: {
+              ...prev.columns.column1,
+              traitIds: stored.data.selection.column1 || [],
+            },
+            column2: {
+              ...prev.columns.column2,
+              traitIds: stored.data.selection.column2 || [],
+            },
+            column3: {
+              ...prev.columns.column3,
+              traitIds: stored.data.selection.column3 || [],
+            },
+          },
+        }));
+        if (stored.data.selection.selectedTraits?.length) {
+          setTopTraits(stored.data.selection.selectedTraits);
+        }
+      }
+
+      if (stored.stage === "ranking") {
+        history.push("/Rank");
+      } else if (stored.stage === "results") {
+        history.push("/Results");
+      }
+    }
+  }, []);
 
   const onDragEnd = ({ destination, source, draggableId }) => {
     if (!destination) {
@@ -160,6 +207,11 @@ const App = () => {
     });
   }, []);
 
+  // Persist progress data whenever it changes
+  useEffect(() => {
+    saveProgress(progressData);
+  }, [progressData]);
+
   return (
     <div>
       <DragDropContext
@@ -196,6 +248,8 @@ const App = () => {
                       setTopTraits={setTopTraits}
                       history={history}
                       swipeHandlers={swipeHandlers}
+                      progressData={progressData}
+                      setProgressData={setProgressData}
                     />
                   }
                 />
@@ -204,7 +258,8 @@ const App = () => {
                     topTraits={topTraits}
                     setTopTraits={setTopTraits}
                     history={history}
-                    initalProgress={progress}
+                    initalProgress={progressData}
+                    setProgressData={setProgressData}
                   />
                 </Route>
                 <Route path="/Results">
@@ -212,6 +267,8 @@ const App = () => {
                     topTraits={topTraits}
                     setTopTraits={setTopTraits}
                     userID={userId}
+                    progressData={progressData}
+                    setProgressData={setProgressData}
                   />
                 </Route>
                 <Route

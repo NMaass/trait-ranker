@@ -13,6 +13,7 @@ import { TutorialContext } from "../App";
 import { SkipSelectionButton } from "../../utils/devTools";
 import { UndoContext } from "../App";
 import FadeTextSeries from "../../utils/FadeTextSeries";
+import { updateSelectionProgress } from "../../utils/progressManagement";
 const SelectionPage = ({
   columnData,
   setColumnData,
@@ -20,6 +21,8 @@ const SelectionPage = ({
   history,
   swipeHandlers,
   topTraits,
+  progressData,
+  setProgressData,
 }) => {
   useEffect(() => {
     if (columnData.columns.column2.traitIds.length === 0) {
@@ -44,6 +47,33 @@ const SelectionPage = ({
 
   const [hasRestarted, setHasRestarted] = useState(false);
 
+  // Load saved selection progress on mount
+  useEffect(() => {
+    if (progressData?.data?.selection) {
+      setColumnData((prev) => ({
+        ...prev,
+        columns: {
+          ...prev.columns,
+          column1: {
+            ...prev.columns.column1,
+            traitIds: progressData.data.selection.column1 || [],
+          },
+          column2: {
+            ...prev.columns.column2,
+            traitIds: progressData.data.selection.column2 || [],
+          },
+          column3: {
+            ...prev.columns.column3,
+            traitIds: progressData.data.selection.column3 || [],
+          },
+        },
+      }));
+      if (progressData.data.selection.selectedTraits?.length) {
+        setTopTraits(progressData.data.selection.selectedTraits);
+      }
+    }
+  }, []);
+
   useEffect(() => {
     if (columnData.columns.column2.traitIds.length === 0) return;
     const remainingTraits = columnData.columns.column2.traitIds.length;
@@ -61,6 +91,17 @@ const SelectionPage = ({
       ]);
     }
   }, [columnData]);
+
+  // Persist progress whenever column data or selected traits change
+  useEffect(() => {
+    const updated = updateSelectionProgress(progressData, {
+      column1: columnData.columns.column1.traitIds,
+      column2: columnData.columns.column2.traitIds,
+      column3: columnData.columns.column3.traitIds,
+      selectedTraits: topTraits,
+    });
+    setProgressData(updated);
+  }, [columnData, topTraits]);
 
   const undoLastSelection = useCallback(() => {
     setShouldSlideUp(true);

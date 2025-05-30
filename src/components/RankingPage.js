@@ -11,13 +11,28 @@ import { ProgressContext } from "./App";
 import useMergeSort from "../utils/useMergeSort";
 import { UndoContext } from "./App";
 import "../style/CardStyle.scss";
+import { updateRankingProgress } from "../utils/progressManagement";
 
-const RankingPage = ({ topTraits, setTopTraits, history, initalProgress }) => {
+const RankingPage = ({
+  topTraits,
+  setTopTraits,
+  history,
+  initalProgress,
+  setProgressData,
+  progressData,
+}) => {
   // Memoize topTraits to prevent unnecessary re-initialization
   const memoizedTopTraits = useMemo(() => topTraits.slice(), [topTraits]);
   useEffect(() => {
     console.log("Memoized topTraits:", memoizedTopTraits);
   }, [memoizedTopTraits]);
+
+  // Initialize traits from stored progress
+  useEffect(() => {
+    if (initalProgress?.data?.selection?.selectedTraits?.length) {
+      setTopTraits(initalProgress.data.selection.selectedTraits);
+    }
+  }, []);
 
   const {
     progressPercent,
@@ -26,6 +41,7 @@ const RankingPage = ({ topTraits, setTopTraits, history, initalProgress }) => {
     matchWin,
     revertMatch,
     isComplete,
+    rankingState,
   } = useMergeSort(memoizedTopTraits, initalProgress?.data?.ranking);
 
   const isMobile = useMediaQuery("(min-width:1024px)");
@@ -42,6 +58,12 @@ const RankingPage = ({ topTraits, setTopTraits, history, initalProgress }) => {
       setProgressState(progressPercent);
     }
   }, [progressPercent, setProgressState]);
+
+  // Persist ranking progress
+  useEffect(() => {
+    const updated = updateRankingProgress(progressData, rankingState);
+    setProgressData(updated);
+  }, [rankingState]);
 
   const handleRoundWin = useCallback(
     (trait) => {
@@ -89,6 +111,7 @@ const RankingPage = ({ topTraits, setTopTraits, history, initalProgress }) => {
     if (isComplete) {
       setTopTraits(currentStanding);
       setActiveStepState(3);
+      setProgressData(updateRankingProgress(progressData, rankingState));
       history.push("/Results");
     }
   }, [isComplete]);
