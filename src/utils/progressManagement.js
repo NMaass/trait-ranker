@@ -1,3 +1,4 @@
+// Create an empty progress object that tracks each stage of the app
 function createProgress() {
   return {
     stage: "selection",
@@ -67,3 +68,33 @@ function updateResultsProgress(progress, resultsData) {
     },
   };
 }
+
+// Save progress object to browser localStorage
+function saveProgress(progress) {
+  try {
+    const serialized = JSON.stringify(progress);
+    localStorage.setItem("progress", serialized);
+  } catch (e) {
+    console.error("Failed to save progress", e);
+  }
+}
+
+// Load progress object from localStorage
+function loadProgress() {
+  try {
+    const serialized = localStorage.getItem("progress");
+    return serialized ? JSON.parse(serialized) : null;
+  } catch (e) {
+    console.error("Failed to load progress", e);
+    return null;
+  }
+}
+
+export {
+  createProgress,
+  updateSelectionProgress,
+  updateRankingProgress,
+  updateResultsProgress,
+  saveProgress,
+  loadProgress,
+};
