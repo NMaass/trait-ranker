@@ -1,4 +1,4 @@
-// SelectionTrait.jsx
+// SelectionTrait.js
 
 import React, { useState } from "react";
 import "../../style/CardStyle.scss";
