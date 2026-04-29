@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   IconButton,
   Dialog,
@@ -9,9 +9,11 @@ import {
   Button,
 } from "@mui/material";
 import logo512 from "../../Assets/logo512.png";
+import { ResetContext } from "../App";
 
 const HomeButton = ({ history }) => {
   const [openDialog, setOpenDialog] = React.useState(false);
+  const reset = useContext(ResetContext);
 
   const handleHome = () => {
     setOpenDialog(true);
@@ -48,6 +50,9 @@ const HomeButton = ({ history }) => {
 
   const handleConfirm = () => {
     setOpenDialog(false);
+    // Match the dialog's promise to the user: reset clears localStorage and
+    // resets in-memory state, then we navigate to the start.
+    if (typeof reset === "function") reset();
     history.push("/");
   };
 
@@ -60,6 +65,7 @@ const HomeButton = ({ history }) => {
       <IconButton
         color="inherit"
         onClick={handleHome}
+        aria-label="Return to home"
         style={{ maxWidth: "7vh", maxHeight: "7vh" }}
       >
         <img

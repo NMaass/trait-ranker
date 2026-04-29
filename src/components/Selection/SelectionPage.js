@@ -26,9 +26,12 @@ const SelectionPage = ({
 }) => {
   useEffect(() => {
     if (columnData.columns.column2.traitIds.length === 0) {
-      handleClearStack(columnData.columns.column3.traitIds);
+      handleClearStack();
     }
-  }, [columnData, history, setTopTraits, topTraits]);
+    // We only react to columnData here; the inner handler reads the latest
+    // column1 length itself, so other deps would just over-fire.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [columnData]);
 
   const { progress, activeStep } = useContext(ProgressContext);
   const [progressState, setProgressState] = progress;
@@ -42,10 +45,16 @@ const SelectionPage = ({
 
   const [selectionHistory, setSelectionHistory] = useState([]);
 
-  const [leftDroppableColor, setLeftDroppableColor] = useState("LightPink");
-  const [rightDroppableColor, setRightDroppableColor] = useState("LightGreen");
+  const [leftDroppableColor, setLeftDroppableColor] = useState(
+    progressData?.data?.selection?.leftDroppableColor || "LightPink"
+  );
+  const [rightDroppableColor, setRightDroppableColor] = useState(
+    progressData?.data?.selection?.rightDroppableColor || "LightGreen"
+  );
 
-  const [hasRestarted, setHasRestarted] = useState(false);
+  const [hasRestarted, setHasRestarted] = useState(
+    !!progressData?.data?.selection?.hasRestarted
+  );
 
   // Load saved selection progress on mount
   useEffect(() => {
@@ -72,6 +81,7 @@ const SelectionPage = ({
         setTopTraits(progressData.data.selection.selectedTraits);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -92,16 +102,27 @@ const SelectionPage = ({
     }
   }, [columnData]);
 
-  // Persist progress whenever column data or selected traits change
+  // Persist progress whenever column data, selected traits, or the restart
+  // context (color/flag) change.
   useEffect(() => {
     const updated = updateSelectionProgress(progressData, {
       column1: columnData.columns.column1.traitIds,
       column2: columnData.columns.column2.traitIds,
       column3: columnData.columns.column3.traitIds,
       selectedTraits: topTraits,
+      hasRestarted,
+      leftDroppableColor,
+      rightDroppableColor,
     });
     setProgressData(updated);
-  }, [columnData, topTraits]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    columnData,
+    topTraits,
+    hasRestarted,
+    leftDroppableColor,
+    rightDroppableColor,
+  ]);
 
   const undoLastSelection = useCallback(() => {
     setShouldSlideUp(true);
@@ -130,17 +151,22 @@ const SelectionPage = ({
     undoFunction.current = undoLastSelection;
   }, [undoLastSelection, undoFunction]);
 
-  function handleClearStack(topTraits) {
+  function handleClearStack() {
+    // Decide based on the LIKED pile (column1), which is what the thresholds
+    // (`<7`, `>24`) actually mean. The original code branched on column3
+    // (disliked), which only happened to work because the trait pool was
+    // fixed-size and exclusive.
+    const likedCount = columnData.columns.column1.traitIds.length;
     if (!hasRestarted) {
-      if (topTraits.length < 7) {
+      if (likedCount < 7) {
         getMoreTraits();
-      } else if (topTraits.length > 24) {
+      } else if (likedCount > 24) {
         getLessTraits();
       } else {
-        endSelection();
+        endSelection(columnData.columns.column1.traitIds);
       }
     } else {
-      endSelection();
+      endSelection(columnData.columns.column1.traitIds);
     }
   }
   function endSelection(currentTraits) {

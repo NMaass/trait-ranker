@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Grid, useMediaQuery } from "@mui/material";
+import { Grid } from "@mui/material";
 import RankingTrait from "../TraitCards/RankingTrait";
 import initialTraits from "../Selection/initialTraits";
 import shuffle from "../../utils/ShuffleUtil";
 import ReorderableColumn from "./ReorderableColumn";
 import ReorderGuess from "./ReorderGuess";
+import useBreakpoint from "../../utils/useBreakpoint";
 import { trackGuessed } from "../../utils/mixpanel";
 import FadeTextSeries from "../../utils/FadeTextSeries";
 
@@ -85,7 +86,7 @@ const GuessPage = ({ traits, columnData, setColumnData, history }) => {
     setIsDraggable(false);
   };
 
-  const isMobile = useMediaQuery("(min-width:1024px)");
+  const { isDesktop } = useBreakpoint();
 
   const guessTutorial = [
     "Select the traits actually in the list.",
@@ -96,10 +97,10 @@ const GuessPage = ({ traits, columnData, setColumnData, history }) => {
       {showPicks && (
         <Grid
           container
-          spacing={isMobile ? 60 : 3}
+          spacing={isDesktop ? 60 : 3}
           alignItems="center"
           justifyContent="center"
-          direction={isMobile ? "row" : "column"}
+          direction={isDesktop ? "row" : "column"}
         >
           <Grid item>
             <RankingTrait

@@ -19,67 +19,124 @@ import {
   loadProgress,
   createProgress,
   saveProgress,
+  clearProgress,
+  hasResumableProgress,
 } from "../utils/progressManagement";
+import ResumePrompt from "./ResumePrompt";
 
 export const ProgressContext = createContext();
 export const TutorialContext = createContext();
 export const UndoContext = createContext();
+// Exposed by App so any descendant ("Home", "Start Over") can fully reset
+// in-memory state in addition to wiping localStorage.
+export const ResetContext = createContext(() => {});
+
+const TRACKING_ID = "G-4RLGL8ENZC";
+
+const buildInitialColumnData = () => initialTraits;
+const buildInitialTopTraits = () =>
+  initialTraits.columns.column2.traitIds.slice(0, 18);
+
 const App = () => {
   const history = useHistory();
-  const [columnData, setColumnData] = useState(initialTraits);
-  const [topTraits, setTopTraits] = useState(
-    initialTraits.columns.column2.traitIds.slice(0, 18)
-  );
+  const [columnData, setColumnData] = useState(buildInitialColumnData);
+  const [topTraits, setTopTraits] = useState(buildInitialTopTraits);
   const [userId, setUserId] = useState(makeAndTrackId(6));
   const [activeStep, setActiveStep] = useState(0);
   const [progress, setProgress] = useState(0);
-  const [progressData, setProgressData] = useState(() => loadProgress() || createProgress());
+  // Lazy-init from storage; if there's nothing saved, start with a fresh
+  // progress blob so consumers can rely on `progressData.data.*` shape.
+  const [progressData, setProgressData] = useState(
+    () => loadProgress() || createProgress()
+  );
   const [tutorialStrings, setTutorialStrings] = useState([]);
+  const [resumePromptOpen, setResumePromptOpen] = useState(false);
+  const [resumeStage, setResumeStage] = useState("selection");
   const undoFunction = useRef(null);
   const sensorAPIRef = useRef<?SensorAPI>(null);
-  const TRACKING_ID = "G-4RLGL8ENZC";
-  ReactGA.initialize(TRACKING_ID);
 
-  // Load any stored progress on first mount
+  // Initialize analytics once on mount, not on every render.
   useEffect(() => {
-    const stored = loadProgress();
-    if (stored) {
-      setProgressData(stored);
-      setProgress(stored.data?.ranking?.progressPercent || 0);
-      const stepMap = { selection: 0, ranking: 1, results: 3 };
-      setActiveStep(stepMap[stored.stage] || 0);
-
-      if (stored.data?.selection) {
-        setColumnData((prev) => ({
-          ...prev,
-          columns: {
-            ...prev.columns,
-            column1: {
-              ...prev.columns.column1,
-              traitIds: stored.data.selection.column1 || [],
-            },
-            column2: {
-              ...prev.columns.column2,
-              traitIds: stored.data.selection.column2 || [],
-            },
-            column3: {
-              ...prev.columns.column3,
-              traitIds: stored.data.selection.column3 || [],
-            },
-          },
-        }));
-        if (stored.data.selection.selectedTraits?.length) {
-          setTopTraits(stored.data.selection.selectedTraits);
-        }
-      }
-
-      if (stored.stage === "ranking") {
-        history.push("/Rank");
-      } else if (stored.stage === "results") {
-        history.push("/Results");
-      }
+    try {
+      ReactGA.initialize(TRACKING_ID);
+    } catch (e) {
+      // Analytics failure shouldn't break the app.
+      console.warn("ReactGA failed to initialize", e);
     }
   }, []);
+
+  // Decide on mount whether to ask the user about resuming a saved session.
+  // We do NOT auto-route into Rank/Results anymore; the user opts in.
+  useEffect(() => {
+    const stored = loadProgress();
+    if (!stored) return;
+    if (hasResumableProgress(stored)) {
+      setResumeStage(stored.stage || "selection");
+      setResumePromptOpen(true);
+    } else {
+      // Nothing meaningful to resume — wipe to keep storage tidy.
+      clearProgress();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const applyStoredProgress = (stored) => {
+    setProgressData(stored);
+    setProgress(stored.data?.ranking?.progressPercent || 0);
+    const stepMap = { selection: 0, ranking: 1, results: 3 };
+    setActiveStep(stepMap[stored.stage] || 0);
+
+    if (stored.data?.selection) {
+      setColumnData((prev) => ({
+        ...prev,
+        columns: {
+          ...prev.columns,
+          column1: {
+            ...prev.columns.column1,
+            traitIds: stored.data.selection.column1 || [],
+          },
+          column2: {
+            ...prev.columns.column2,
+            traitIds: stored.data.selection.column2 || [],
+          },
+          column3: {
+            ...prev.columns.column3,
+            traitIds: stored.data.selection.column3 || [],
+          },
+        },
+      }));
+      if (stored.data.selection.selectedTraits?.length) {
+        setTopTraits(stored.data.selection.selectedTraits);
+      }
+    }
+
+    if (stored.stage === "ranking") {
+      history.push("/Rank");
+    } else if (stored.stage === "results") {
+      history.push("/Results");
+    }
+  };
+
+  const handleResume = () => {
+    setResumePromptOpen(false);
+    const stored = loadProgress();
+    if (stored) applyStoredProgress(stored);
+  };
+
+  const reset = () => {
+    clearProgress();
+    setColumnData(buildInitialColumnData());
+    setTopTraits(buildInitialTopTraits());
+    setActiveStep(0);
+    setProgress(0);
+    setProgressData(createProgress());
+    setTutorialStrings([]);
+    setResumePromptOpen(false);
+  };
+
+  const handleStartOver = () => {
+    reset();
+  };
 
   const onDragEnd = ({ destination, source, draggableId }) => {
     if (!destination) {
@@ -201,10 +258,15 @@ const App = () => {
     });
   }
 
+  // Block native overscroll/scroll on touch so drag gestures stay clean. Must
+  // be `passive: false` to call preventDefault, and we cleanup so re-mounts
+  // (Strict Mode, HMR) don't pile up listeners.
   useEffect(() => {
-    window.addEventListener("touchmove", (e) => {
+    const onTouchMove = (e) => {
       e.preventDefault();
-    });
+    };
+    window.addEventListener("touchmove", onTouchMove, { passive: false });
+    return () => window.removeEventListener("touchmove", onTouchMove);
   }, []);
 
   // Persist progress data whenever it changes
@@ -232,56 +294,65 @@ const App = () => {
             value={{ tutorialStrings: [tutorialStrings, setTutorialStrings] }}
           >
             <UndoContext.Provider value={{ undoFunction }}>
-              <ThemeProvider theme={appTheme}>
-                <NavBar history={history} />
-                <Route exact path="/">
-                  <Redirect to="/Selection" />
-                </Route>
-                <Route
-                  exact
-                  path="/Selection/:id?"
-                  children={
-                    <SelectionPage
-                      columnData={columnData}
-                      setColumnData={setColumnData}
+              <ResetContext.Provider value={reset}>
+                <ThemeProvider theme={appTheme}>
+                  <NavBar history={history} />
+                  <ResumePrompt
+                    open={resumePromptOpen}
+                    stage={resumeStage}
+                    onResume={handleResume}
+                    onStartOver={handleStartOver}
+                  />
+                  <Route exact path="/">
+                    <Redirect to="/Selection" />
+                  </Route>
+                  <Route
+                    exact
+                    path="/Selection/:id?"
+                    children={
+                      <SelectionPage
+                        columnData={columnData}
+                        setColumnData={setColumnData}
+                        topTraits={topTraits}
+                        setTopTraits={setTopTraits}
+                        history={history}
+                        swipeHandlers={swipeHandlers}
+                        progressData={progressData}
+                        setProgressData={setProgressData}
+                      />
+                    }
+                  />
+                  <Route path="/Rank">
+                    <RankingPage
                       topTraits={topTraits}
                       setTopTraits={setTopTraits}
                       history={history}
-                      swipeHandlers={swipeHandlers}
+                      initalProgress={progressData}
+                      setProgressData={setProgressData}
+                      progressData={progressData}
+                    />
+                  </Route>
+                  <Route path="/Results">
+                    <ResultsPage
+                      topTraits={topTraits}
+                      setTopTraits={setTopTraits}
+                      userID={userId}
                       progressData={progressData}
                       setProgressData={setProgressData}
                     />
-                  }
-                />
-                <Route path="/Rank">
-                  <RankingPage
-                    topTraits={topTraits}
-                    setTopTraits={setTopTraits}
-                    history={history}
-                    initalProgress={progressData}
-                    setProgressData={setProgressData}
+                  </Route>
+                  <Route
+                    path="/Share/:id"
+                    children={
+                      <SharedPage
+                        columnData={columnData}
+                        setColumnData={setColumnData}
+                        history={history}
+                      />
+                    }
                   />
-                </Route>
-                <Route path="/Results">
-                  <ResultsPage
-                    topTraits={topTraits}
-                    setTopTraits={setTopTraits}
-                    userID={userId}
-                    progressData={progressData}
-                    setProgressData={setProgressData}
-                  />
-                </Route>
-                <Route
-                  path="/Share/:id"
-                  children={
-                    <SharedPage
-                      columnData={columnData}
-                      setColumnData={setColumnData}
-                      history={history}
-                    />
-                  }
-                />
-              </ThemeProvider>
+                </ThemeProvider>
+              </ResetContext.Provider>
             </UndoContext.Provider>
           </TutorialContext.Provider>
         </ProgressContext.Provider>

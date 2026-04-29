@@ -2,13 +2,15 @@ import React, {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
   useCallback,
 } from "react";
 import RankingTrait from "./TraitCards/RankingTrait";
-import { Grid, useMediaQuery } from "@mui/material";
+import { Grid } from "@mui/material";
 import { ProgressContext } from "./App";
 import useMergeSort from "../utils/useMergeSort";
+import useBreakpoint from "../utils/useBreakpoint";
 import { UndoContext } from "./App";
 import "../style/CardStyle.scss";
 import { updateRankingProgress } from "../utils/progressManagement";
@@ -44,7 +46,7 @@ const RankingPage = ({
     rankingState,
   } = useMergeSort(memoizedTopTraits, initalProgress?.data?.ranking);
 
-  const isMobile = useMediaQuery("(min-width:1024px)");
+  const { isDesktop } = useBreakpoint();
 
   const { progress, activeStep } = useContext(ProgressContext);
   const [progressState, setProgressState] = progress;
@@ -52,6 +54,15 @@ const RankingPage = ({
   const [leftCardClass, setLeftCardClass] = useState("");
   const [rightCardClass, setRightCardClass] = useState("");
   const { undoFunction } = useContext(UndoContext);
+  const isAnimatingRef = useRef(false);
+
+  // If a user lands on /Rank with no traits (deep link, post-clear), bounce
+  // back to /Selection rather than showing an indefinite loading state.
+  useEffect(() => {
+    if (!topTraits || topTraits.length === 0) {
+      history.replace("/Selection");
+    }
+  }, [topTraits, history]);
 
   useEffect(() => {
     if (progressPercent) {
@@ -67,6 +78,11 @@ const RankingPage = ({
 
   const handleRoundWin = useCallback(
     (trait) => {
+      // Drop rapid-fire clicks while a slide animation is in flight; otherwise
+      // a second click reads the stale `currentMatch` and corrupts the merge.
+      if (isAnimatingRef.current) return;
+      isAnimatingRef.current = true;
+
       // Trigger slide-out animation
       if (trait === currentMatch.left) {
         setLeftCardClass("slide-out");
@@ -86,6 +102,7 @@ const RankingPage = ({
         setTimeout(() => {
           setLeftCardClass("");
           setRightCardClass("");
+          isAnimatingRef.current = false;
         }, 600);
       }, 600); // Timeout matches the slide-out animation duration
     },
@@ -93,12 +110,15 @@ const RankingPage = ({
   );
 
   const handleRevertMatch = useCallback(() => {
+    if (isAnimatingRef.current) return;
+    isAnimatingRef.current = true;
     revertMatch();
     setLeftCardClass("slide-in");
     setRightCardClass("slide-in");
     setTimeout(() => {
       setLeftCardClass("");
       setRightCardClass("");
+      isAnimatingRef.current = false;
     }, 600);
   }, [revertMatch]);
 
@@ -116,19 +136,24 @@ const RankingPage = ({
     }
   }, [isComplete]);
 
-  // Ensure topTraits is populated before rendering
+  // Ensure topTraits is populated before rendering. The redirect-to-/Selection
+  // effect above handles the deep-link case; this is just a one-frame loader.
   if (!topTraits || topTraits.length === 0) {
     return <div>Loading traits...</div>;
   }
 
+  // The original code mistakenly named the desktop media query `isMobile` and
+  // the layout was flipped on every screen. Apparent intent: bigger spacing on
+  // desktop (60), tighter on mobile (3); row layout on desktop, stacked on
+  // mobile.
   return (
     <div>
       <Grid
         container
-        spacing={isMobile ? 60 : 3}
+        spacing={isDesktop ? 60 : 3}
         alignItems="center"
         justifyContent="center"
-        direction={isMobile ? "row" : "column"}
+        direction={isDesktop ? "row" : "column"}
       >
         {currentMatch && currentMatch.left && (
           <Grid item>

@@ -2,12 +2,13 @@ import React, { useState, useEffect } from "react";
 import "../../style/CardStyle.scss";
 import { traitIcons, traitDefinitions } from "../../utils/listOfAllTraits";
 import { IconContext } from "react-icons";
-import { useMediaQuery, Grid, Typography } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import TouchRipple from "@mui/material/ButtonBase/TouchRipple";
 import CardHelp from "./CardHelp";
+import useBreakpoint from "../../utils/useBreakpoint";
 
 const RankingTrait = ({ trait, onClick, className }) => {
-  const isMobile = useMediaQuery("(max-width:1024px)");
+  const { isMobile } = useBreakpoint();
   const [flipped, setFlipped] = useState(false);
 
   const rippleRef = React.useRef(null);

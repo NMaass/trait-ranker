@@ -258,3 +258,24 @@ p {
     opacity: 0;
   }
 }
+
+/* Honor system-level "reduce motion" preference. We zero out durations rather
+   than removing animations entirely so completion callbacks (animation-end /
+   transitionend) still fire and any state machines tied to them keep ticking. */
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .flip,
+  .bounce,
+  .grow,
+  .slide-in,
+  .slide-out,
+  .slide-up,
+  .fade-out,
+  .icon-grow,
+  .wiggle-animation,
+  .rankCard {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
