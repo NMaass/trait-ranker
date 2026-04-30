@@ -24,17 +24,11 @@ function getStyle(style, snapshot) {
   }
   const { moveTo, duration } = snapshot.dropAnimation;
   const draggingOver = snapshot.draggingOver;
-  // Original used ±100vw which on phones flings the card so far off-screen the
-  // animation is invisible. Cap the throw distance to half the viewport on
-  // narrow screens so the slide stays legible.
-  const isNarrow =
-    typeof window !== "undefined" && window.innerWidth < 1024;
-  const throwDistance = isNarrow ? 50 : 100;
   let offset = 0;
   if (draggingOver === "column1") {
-    offset = -throwDistance;
+    offset = -100;
   } else if (draggingOver === "column3") {
-    offset = throwDistance;
+    offset = 100;
   }
   // move to the right spot
   const translate = `translate(${offset}vw, ${moveTo.y}px)`;

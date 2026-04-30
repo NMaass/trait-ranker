@@ -51,6 +51,14 @@ function CustomStepper(props) {
     flexFlow: "column nowrap",
     alignItems: "center",
   });
+  const StyledStepLabel = styled("span")(({ currentStep, done }) => ({
+    fontSize: "0.7rem",
+    marginTop: "2px",
+    color: currentStep || done ? "#000" : "#5a5a5a",
+    "@media (max-width: 374.98px)": {
+      display: "none",
+    },
+  }));
 
   const { steps, current, progress } = props;
 
@@ -112,6 +120,9 @@ function CustomStepper(props) {
           <StyledStepperStepIndex currentStep={currentStep} done={done}>
             {getStepIcon(key)}
           </StyledStepperStepIndex>
+          <StyledStepLabel currentStep={currentStep} done={done}>
+            {label}
+          </StyledStepLabel>
         </StyledLabelContainer>
         {!!key && (
           <ProgressBar current={current} step={key} progress={progress} />

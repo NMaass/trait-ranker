@@ -56,30 +56,39 @@ const SelectionPage = ({
     !!progressData?.data?.selection?.hasRestarted
   );
 
-  // Load saved selection progress on mount
+  // Load saved selection progress on mount — but only when the saved blob
+  // actually has content. createProgress() seeds empty arrays for column1/2/3,
+  // and unconditionally hydrating from that wipes the freshly shuffled starter
+  // pile, leaving the front of the card blank.
   useEffect(() => {
-    if (progressData?.data?.selection) {
-      setColumnData((prev) => ({
-        ...prev,
-        columns: {
-          ...prev.columns,
-          column1: {
-            ...prev.columns.column1,
-            traitIds: progressData.data.selection.column1 || [],
-          },
-          column2: {
-            ...prev.columns.column2,
-            traitIds: progressData.data.selection.column2 || [],
-          },
-          column3: {
-            ...prev.columns.column3,
-            traitIds: progressData.data.selection.column3 || [],
-          },
+    const sel = progressData?.data?.selection;
+    if (!sel) return;
+    const hasContent =
+      (sel.column1?.length || 0) > 0 ||
+      (sel.column2?.length || 0) > 0 ||
+      (sel.column3?.length || 0) > 0;
+    if (!hasContent) return;
+
+    setColumnData((prev) => ({
+      ...prev,
+      columns: {
+        ...prev.columns,
+        column1: {
+          ...prev.columns.column1,
+          traitIds: sel.column1 || [],
         },
-      }));
-      if (progressData.data.selection.selectedTraits?.length) {
-        setTopTraits(progressData.data.selection.selectedTraits);
-      }
+        column2: {
+          ...prev.columns.column2,
+          traitIds: sel.column2 || [],
+        },
+        column3: {
+          ...prev.columns.column3,
+          traitIds: sel.column3 || [],
+        },
+      },
+    }));
+    if (sel.selectedTraits?.length) {
+      setTopTraits(sel.selectedTraits);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -152,21 +161,20 @@ const SelectionPage = ({
   }, [undoLastSelection, undoFunction]);
 
   function handleClearStack() {
-    // Decide based on the LIKED pile (column1), which is what the thresholds
-    // (`<7`, `>24`) actually mean. The original code branched on column3
-    // (disliked), which only happened to work because the trait pool was
-    // fixed-size and exclusive.
-    const likedCount = columnData.columns.column1.traitIds.length;
+    // column3 ("Valued") is the LIKED pile; column1 ("Not Valued") is disliked.
+    // Thresholds gate based on how many traits the user *kept*, and we hand
+    // the kept pile off to the ranking phase.
+    const likedCount = columnData.columns.column3.traitIds.length;
     if (!hasRestarted) {
       if (likedCount < 7) {
         getMoreTraits();
       } else if (likedCount > 24) {
         getLessTraits();
       } else {
-        endSelection(columnData.columns.column1.traitIds);
+        endSelection(columnData.columns.column3.traitIds);
       }
     } else {
-      endSelection(columnData.columns.column1.traitIds);
+      endSelection(columnData.columns.column3.traitIds);
     }
   }
   function endSelection(currentTraits) {

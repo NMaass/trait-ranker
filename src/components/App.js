@@ -44,11 +44,11 @@ const App = () => {
   const [userId, setUserId] = useState(makeAndTrackId(6));
   const [activeStep, setActiveStep] = useState(0);
   const [progress, setProgress] = useState(0);
-  // Lazy-init from storage; if there's nothing saved, start with a fresh
-  // progress blob so consumers can rely on `progressData.data.*` shape.
-  const [progressData, setProgressData] = useState(
-    () => loadProgress() || createProgress()
-  );
+  // Always start from a fresh blob so the first paint shows the initial
+  // shuffled traits. If there's something resumable in storage, the mount
+  // effect below opens the prompt and `applyStoredProgress` swaps state in
+  // only after the user picks "Resume".
+  const [progressData, setProgressData] = useState(createProgress);
   const [tutorialStrings, setTutorialStrings] = useState([]);
   const [resumePromptOpen, setResumePromptOpen] = useState(false);
   const [resumeStage, setResumeStage] = useState("selection");

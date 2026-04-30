@@ -20,7 +20,10 @@ const ResumePrompt = ({ open, stage, onResume, onStartOver }) => {
   return (
     <Dialog
       open={open}
-      onClose={onResume}
+      // Make the user pick explicitly. Backdrop click / Escape used to default
+      // to "resume", which silently committed them to a session they may have
+      // wanted to start fresh on.
+      disableEscapeKeyDown
       aria-labelledby="resume-prompt-title"
       aria-describedby="resume-prompt-body"
     >

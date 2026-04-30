@@ -7,7 +7,7 @@ import HomeButton from "./HomeButton";
 import CustomStepper from "./CustomStepper";
 import { ProgressContext } from "../App";
 import { UndoContext } from "../App";
-const steps = ["Select", "Rank", "Share"];
+const steps = ["Select", "Rank", "Results"];
 const NavBar = ({ history }) => {
   const { progress, activeStep } = useContext(ProgressContext);
   const [progressState, setProgressState] = progress;

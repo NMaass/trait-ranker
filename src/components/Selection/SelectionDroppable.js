@@ -14,12 +14,7 @@ const TraitList = styled.div`
     props.isDraggingOver ? props.hoverColor : "white"};
   display: flex;
   align-items: center;
-  /* On narrow screens the three-column layout doesn't fit at 49.9vw apiece;
-     drop the side columns to ~33vw so the starter card stays centered. */
   min-width: ${(props) => (props.isStarter ? "1px" : "49.9vw")};
-  @media (max-width: 1023.98px) {
-    min-width: ${(props) => (props.isStarter ? "1px" : "33vw")};
-  }
   min-height: 100vh;
   max-width: ${(props) => props.isStarter && "1px"};
   ${(props) =>
