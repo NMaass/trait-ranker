@@ -7,7 +7,7 @@ import HomeButton from "./HomeButton";
 import CustomStepper from "./CustomStepper";
 import { ProgressContext } from "../App";
 import { UndoContext } from "../App";
-const steps = ["Label 1", "Label 2", "Label 3"];
+const steps = ["Select", "Rank", "Results"];
 const NavBar = ({ history }) => {
   const { progress, activeStep } = useContext(ProgressContext);
   const [progressState, setProgressState] = progress;
@@ -36,7 +36,10 @@ const NavBar = ({ history }) => {
                 </Grid>
 
                 <Grid item>
-                  <IconButton onClick={undoFunction.current}>
+                  <IconButton
+                    onClick={undoFunction.current}
+                    aria-label="Undo last action"
+                  >
                     <FaUndo />
                   </IconButton>
                 </Grid>

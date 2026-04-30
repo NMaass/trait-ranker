@@ -1,10 +1,18 @@
 import React, { useState } from "react";
 import { Button, Grid, InputLabel, Tooltip } from "@mui/material";
-import {trackShare} from "../utils/mixpanel"
+import { trackShare } from "../utils/mixpanel";
 
 const CopyableLink = ({ text }) => {
   const [showTooltip, setShowTooltip] = useState(false);
   const [showLink, setShowLink] = useState(false);
+  const [tooltipMsg, setTooltipMsg] = useState("Copied to clipboard!");
+
+  const flashTooltip = (message) => {
+    setTooltipMsg(message);
+    setShowTooltip(true);
+    setShowLink(true);
+  };
+
   const onCopy = () => {
     trackShare();
     if (navigator.share) {
@@ -15,13 +23,15 @@ const CopyableLink = ({ text }) => {
         })
         .then(() => console.log("successful share"))
         .catch((error) => console.log("error sharing", error));
-    } else {
+    } else if (navigator.clipboard?.writeText) {
       navigator.clipboard
         .writeText(text)
-        .then(() => console.log("Copied!"))
-        .catch(() => console.log("Copy failed"));
-      setShowTooltip(true);
-      setShowLink(true);
+        .then(() => flashTooltip("Copied!"))
+        .catch(() => flashTooltip("Copy failed — long-press the link to copy."));
+    } else {
+      // No Clipboard API available — surface the link so the user can
+      // long-press / triple-click to copy manually.
+      flashTooltip("Copy the link below.");
     }
   };
   const onTipClose = () => {
@@ -37,9 +47,9 @@ const CopyableLink = ({ text }) => {
     >
       <Grid item>
         <Tooltip
-          title={"Copied to clipboard!"}
+          title={tooltipMsg}
           open={showTooltip}
-          leaveDelay={1000}
+          leaveDelay={1500}
           onClose={onTipClose}
         >
           <Button variant="contained" onClick={onCopy}>

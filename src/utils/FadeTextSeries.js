@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Fade, Typography, useMediaQuery } from "@mui/material";
+import { Fade, Typography } from "@mui/material";
+import useBreakpoint from "./useBreakpoint";
 
 const FadeTextSeries = ({ stringArray = [] }) => {
   const [currentText, setCurrentText] = useState("");
   const [checked, setChecked] = useState(true);
   const [count, setCount] = useState(0);
   const fadeTime = 2000;
-  const isMobile = useMediaQuery("(min-width:1024px)");
+  const { isDesktop } = useBreakpoint();
 
   useEffect(() => {
     if (stringArray.length > 0) {
@@ -50,7 +51,7 @@ const FadeTextSeries = ({ stringArray = [] }) => {
           width: "100%",
         }}
         align="center"
-        variant={isMobile ? "h3" : "h5"}
+        variant={isDesktop ? "h3" : "h5"}
       >
         {currentText}
       </Typography>

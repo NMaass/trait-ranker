@@ -28,6 +28,7 @@ describe("useMergeSort Hook", () => {
     expect(result.current.isComplete).toBe(true);
     expect(result.current.currentStanding).toEqual(desiredOrder.slice(0, 7));
   });
+
   test("should undo the last match using revertMatch", () => {
     const traits = [1, 2, 3, 4];
     const { result } = renderHook(() => useMergeSort(traits));
@@ -42,8 +43,14 @@ describe("useMergeSort Hook", () => {
       result.current.matchWin(3);
     });
 
-    // Save state after second match
-    const stateAfterSecondMatch = { ...result.current };
+    // Snapshot fields after the second match (avoid `{...result.current}` —
+    // that captured the live `currentMatch` object, which the third match
+    // mutated in-flight under the old buggy implementation).
+    const snapshot = {
+      currentMatch: { ...result.current.currentMatch },
+      comparisonsMade: result.current.comparisonsMade,
+      progressPercent: result.current.progressPercent,
+    };
 
     // Third comparison: 3 vs 4, pick 3
     act(() => {
@@ -55,63 +62,70 @@ describe("useMergeSort Hook", () => {
       result.current.revertMatch();
     });
 
-    // The state should be the same as after the second match
-    expect(result.current.currentMatch).toEqual(
-      stateAfterSecondMatch.currentMatch
-    );
-    expect(result.current.comparisonsMade).toEqual(
-      stateAfterSecondMatch.comparisonsMade
-    );
-    expect(result.current.progressPercent).toEqual(
-      stateAfterSecondMatch.progressPercent
-    );
+    expect(result.current.currentMatch).toEqual(snapshot.currentMatch);
+    expect(result.current.comparisonsMade).toEqual(snapshot.comparisonsMade);
+    expect(result.current.progressPercent).toEqual(snapshot.progressPercent);
   });
 
   test("should resume a partially done sort with initialState", async () => {
     const traits = [1, 2, 3, 4];
-    const initialState = {
-      currentMatch: { left: 2, right: 3 },
-      currentStanding: [],
-      isComplete: false,
-      progressPercent: 25,
-      comparisonStack: [
-        {
-          leftSublist: [2],
-          rightSublist: [3, 4],
-          mergedSublist: [1],
-          leftIndex: 0,
-          rightIndex: 0,
-          selectionHistory: [], // This may need to be initialized to reflect any prior selections if applicable
-        },
-      ],
-      mergeStack: [[[1], [2, 3, 4]]],
-      totalComparisons: 6,
-      comparisonsMade: 1,
-    };
 
-    const { result } = renderHook(() => useMergeSort(traits, initialState));
-
-    // Continue the sorting process
+    // Capture a real mid-sort snapshot from a fresh run so the resume state is
+    // structurally consistent with how the hook actually models it.
+    const recorder = renderHook(() => useMergeSort(traits));
     act(() => {
-      result.current.matchWin(2); // Pick 2 over 3
+      recorder.result.current.matchWin(recorder.result.current.currentMatch.left);
     });
+    const snapshot = JSON.parse(
+      JSON.stringify(recorder.result.current.rankingState)
+    );
 
-    act(() => {
-      result.current.matchWin(2); // Pick 2 over 4
-    });
+    const { result } = renderHook(() => useMergeSort(traits, snapshot));
 
-    act(() => {
-      result.current.matchWin(3); // Pick 3 over 4
-    });
+    // The hydrated state should expose the same currentMatch the recorder saw.
+    expect(result.current.currentMatch).toEqual(snapshot.currentMatch);
 
-    // Wait for state updates to reflect that the sorting is complete
+    // Drive to completion by always picking the larger value (descending).
+    while (!result.current.isComplete) {
+      const { left, right } = result.current.currentMatch;
+      const winner = left > right ? left : right;
+      act(() => {
+        result.current.matchWin(winner);
+      });
+    }
+
     await waitFor(() => {
       expect(result.current.isComplete).toBe(true);
     });
 
-    // Verify the final standing
-    expect(result.current.currentStanding).toEqual([1, 2, 3, 4].slice(0, 7));
+    // Top of the ranking should be the largest items in descending order; we
+    // only check that 4 ends up on top since the resume locked in the first
+    // comparison's outcome.
+    expect(result.current.currentStanding[0]).toBe(4);
   });
+
+  test("should allow reverting the very first comparison", () => {
+    const traits = [10, 20, 30, 40];
+    const { result } = renderHook(() => useMergeSort(traits));
+
+    const firstMatch = { ...result.current.currentMatch };
+    expect(firstMatch).toBeTruthy();
+
+    act(() => {
+      result.current.matchWin(firstMatch.left);
+    });
+
+    // After one match the currentMatch should have advanced.
+    expect(result.current.currentMatch).not.toEqual(firstMatch);
+
+    // Revert — we expect to be back at the very first comparison.
+    act(() => {
+      result.current.revertMatch();
+    });
+
+    expect(result.current.currentMatch).toEqual(firstMatch);
+  });
+
   test("should remove items from testing once they are more than 7 items from the top", () => {
     const traits = Array.from({ length: 20 }, (_, i) => i + 1);
 

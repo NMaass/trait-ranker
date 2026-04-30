@@ -26,9 +26,12 @@ const SelectionPage = ({
 }) => {
   useEffect(() => {
     if (columnData.columns.column2.traitIds.length === 0) {
-      handleClearStack(columnData.columns.column3.traitIds);
+      handleClearStack();
     }
-  }, [columnData, history, setTopTraits, topTraits]);
+    // We only react to columnData here; the inner handler reads the latest
+    // column1 length itself, so other deps would just over-fire.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [columnData]);
 
   const { progress, activeStep } = useContext(ProgressContext);
   const [progressState, setProgressState] = progress;
@@ -42,36 +45,52 @@ const SelectionPage = ({
 
   const [selectionHistory, setSelectionHistory] = useState([]);
 
-  const [leftDroppableColor, setLeftDroppableColor] = useState("LightPink");
-  const [rightDroppableColor, setRightDroppableColor] = useState("LightGreen");
+  const [leftDroppableColor, setLeftDroppableColor] = useState(
+    progressData?.data?.selection?.leftDroppableColor || "LightPink"
+  );
+  const [rightDroppableColor, setRightDroppableColor] = useState(
+    progressData?.data?.selection?.rightDroppableColor || "LightGreen"
+  );
 
-  const [hasRestarted, setHasRestarted] = useState(false);
+  const [hasRestarted, setHasRestarted] = useState(
+    !!progressData?.data?.selection?.hasRestarted
+  );
 
-  // Load saved selection progress on mount
+  // Load saved selection progress on mount — but only when the saved blob
+  // actually has content. createProgress() seeds empty arrays for column1/2/3,
+  // and unconditionally hydrating from that wipes the freshly shuffled starter
+  // pile, leaving the front of the card blank.
   useEffect(() => {
-    if (progressData?.data?.selection) {
-      setColumnData((prev) => ({
-        ...prev,
-        columns: {
-          ...prev.columns,
-          column1: {
-            ...prev.columns.column1,
-            traitIds: progressData.data.selection.column1 || [],
-          },
-          column2: {
-            ...prev.columns.column2,
-            traitIds: progressData.data.selection.column2 || [],
-          },
-          column3: {
-            ...prev.columns.column3,
-            traitIds: progressData.data.selection.column3 || [],
-          },
+    const sel = progressData?.data?.selection;
+    if (!sel) return;
+    const hasContent =
+      (sel.column1?.length || 0) > 0 ||
+      (sel.column2?.length || 0) > 0 ||
+      (sel.column3?.length || 0) > 0;
+    if (!hasContent) return;
+
+    setColumnData((prev) => ({
+      ...prev,
+      columns: {
+        ...prev.columns,
+        column1: {
+          ...prev.columns.column1,
+          traitIds: sel.column1 || [],
         },
-      }));
-      if (progressData.data.selection.selectedTraits?.length) {
-        setTopTraits(progressData.data.selection.selectedTraits);
-      }
+        column2: {
+          ...prev.columns.column2,
+          traitIds: sel.column2 || [],
+        },
+        column3: {
+          ...prev.columns.column3,
+          traitIds: sel.column3 || [],
+        },
+      },
+    }));
+    if (sel.selectedTraits?.length) {
+      setTopTraits(sel.selectedTraits);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -92,16 +111,27 @@ const SelectionPage = ({
     }
   }, [columnData]);
 
-  // Persist progress whenever column data or selected traits change
+  // Persist progress whenever column data, selected traits, or the restart
+  // context (color/flag) change.
   useEffect(() => {
     const updated = updateSelectionProgress(progressData, {
       column1: columnData.columns.column1.traitIds,
       column2: columnData.columns.column2.traitIds,
       column3: columnData.columns.column3.traitIds,
       selectedTraits: topTraits,
+      hasRestarted,
+      leftDroppableColor,
+      rightDroppableColor,
     });
     setProgressData(updated);
-  }, [columnData, topTraits]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    columnData,
+    topTraits,
+    hasRestarted,
+    leftDroppableColor,
+    rightDroppableColor,
+  ]);
 
   const undoLastSelection = useCallback(() => {
     setShouldSlideUp(true);
@@ -130,17 +160,21 @@ const SelectionPage = ({
     undoFunction.current = undoLastSelection;
   }, [undoLastSelection, undoFunction]);
 
-  function handleClearStack(topTraits) {
+  function handleClearStack() {
+    // column3 ("Valued") is the LIKED pile; column1 ("Not Valued") is disliked.
+    // Thresholds gate based on how many traits the user *kept*, and we hand
+    // the kept pile off to the ranking phase.
+    const likedCount = columnData.columns.column3.traitIds.length;
     if (!hasRestarted) {
-      if (topTraits.length < 7) {
+      if (likedCount < 7) {
         getMoreTraits();
-      } else if (topTraits.length > 24) {
+      } else if (likedCount > 24) {
         getLessTraits();
       } else {
-        endSelection();
+        endSelection(columnData.columns.column3.traitIds);
       }
     } else {
-      endSelection();
+      endSelection(columnData.columns.column3.traitIds);
     }
   }
   function endSelection(currentTraits) {

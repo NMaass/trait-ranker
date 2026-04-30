@@ -4,11 +4,12 @@ import React, { useState } from "react";
 import "../../style/CardStyle.scss";
 import { traitIcons, traitDefinitions } from "../../utils/listOfAllTraits";
 import { IconContext } from "react-icons";
-import { useMediaQuery, Grid, Typography } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import CardHelp from "./CardHelp";
+import useBreakpoint from "../../utils/useBreakpoint";
 
 const SelectionTrait = ({ trait, isStarter, provided }) => {
-  const isMobile = useMediaQuery("(max-width:1024px)");
+  const { isMobile } = useBreakpoint();
   const [flipped, setFlipped] = useState(false);
 
   const toggleFlipped = () => {

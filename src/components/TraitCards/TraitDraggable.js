@@ -24,7 +24,6 @@ function getStyle(style, snapshot) {
   }
   const { moveTo, duration } = snapshot.dropAnimation;
   const draggingOver = snapshot.draggingOver;
-  console.log(draggingOver);
   let offset = 0;
   if (draggingOver === "column1") {
     offset = -100;

@@ -32,11 +32,18 @@ function CustomStepper(props) {
     borderRadius: "50%",
     background:
       currentStep || done ? appTheme.palette.secondary.main : "#dedede",
-    color: currentStep || done ? "#000" : "#999",
+    // #999 on #dedede was ~2.5:1 — fails WCAG AA. #5a5a5a passes (~6.4:1).
+    color: currentStep || done ? "#000" : "#5a5a5a",
     textAlign: "center",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+    // Shrink slightly on narrow screens so the three circles + bars fit.
+    "@media (max-width: 374.98px)": {
+      width: "24px",
+      height: "24px",
+      lineHeight: "24px",
+    },
   }));
 
   const StyledLabelContainer = styled("div")({
@@ -44,6 +51,14 @@ function CustomStepper(props) {
     flexFlow: "column nowrap",
     alignItems: "center",
   });
+  const StyledStepLabel = styled("span")(({ currentStep, done }) => ({
+    fontSize: "0.7rem",
+    marginTop: "2px",
+    color: currentStep || done ? "#000" : "#5a5a5a",
+    "@media (max-width: 374.98px)": {
+      display: "none",
+    },
+  }));
 
   const { steps, current, progress } = props;
 
@@ -105,6 +120,9 @@ function CustomStepper(props) {
           <StyledStepperStepIndex currentStep={currentStep} done={done}>
             {getStepIcon(key)}
           </StyledStepperStepIndex>
+          <StyledStepLabel currentStep={currentStep} done={done}>
+            {label}
+          </StyledStepLabel>
         </StyledLabelContainer>
         {!!key && (
           <ProgressBar current={current} step={key} progress={progress} />

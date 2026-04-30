@@ -1,2 +1,5 @@
 /build/
 /node_modules/
+# This project uses yarn; keep package-lock.json out so the two managers don't
+# fight over resolved versions.
+package-lock.json
