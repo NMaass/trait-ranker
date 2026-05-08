@@ -84,6 +84,7 @@ const HelpDialogBox = () => {
         onClick={handleOpen}
         className={`${grow && "grow"}`}
         aria-label="Open help"
+        color="inherit"
       >
         <HelpOutlineIcon fontSize="large" />
       </IconButton>

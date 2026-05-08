@@ -39,6 +39,7 @@ const NavBar = ({ history }) => {
                   <IconButton
                     onClick={undoFunction.current}
                     aria-label="Undo last action"
+                    color="inherit"
                   >
                     <FaUndo />
                   </IconButton>

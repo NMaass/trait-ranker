@@ -15,8 +15,11 @@ function createProgress() {
         column3: [],
         selectedTraits: [],
         hasRestarted: false,
-        leftDroppableColor: "LightPink",
-        rightDroppableColor: "LightGreen",
+        // Color defaults intentionally null — SelectionPage falls back to
+        // theme tokens at render time so a future palette change picks up
+        // automatically instead of being frozen here.
+        leftDroppableColor: null,
+        rightDroppableColor: null,
       },
       ranking: {
         currentMatch: null,

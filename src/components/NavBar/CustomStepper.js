@@ -6,10 +6,11 @@ import styled from "@emotion/styled";
 import CompareArrowsOutlinedIcon from "@mui/icons-material/CompareArrowsOutlined";
 import SortOutlinedIcon from "@mui/icons-material/SortOutlined";
 import WorkspacePremiumOutlinedIcon from "@mui/icons-material/WorkspacePremiumOutlined";
-import { useTheme } from "@mui/material/styles";
-import appTheme from "../../style/appTheme";
+import { useTheme, alpha } from "@mui/material/styles";
 
 function CustomStepper(props) {
+  const theme = useTheme();
+
   const StyledStepper = styled("ul")({
     display: "flex",
     flexFlow: "row nowrap",
@@ -31,13 +32,18 @@ function CustomStepper(props) {
     lineHeight: "30px",
     borderRadius: "50%",
     background:
-      currentStep || done ? appTheme.palette.secondary.main : "#dedede",
-    // #999 on #dedede was ~2.5:1 — fails WCAG AA. #5a5a5a passes (~6.4:1).
-    color: currentStep || done ? "#000" : "#5a5a5a",
+      currentStep || done
+        ? theme.palette.secondary.main
+        : alpha(theme.palette.common.white, 0.18),
+    color:
+      currentStep || done
+        ? theme.palette.secondary.contrastText
+        : alpha(theme.palette.common.white, 0.85),
     textAlign: "center",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+    transition: "background 0.2s ease, color 0.2s ease",
     // Shrink slightly on narrow screens so the three circles + bars fit.
     "@media (max-width: 374.98px)": {
       width: "24px",
@@ -54,7 +60,10 @@ function CustomStepper(props) {
   const StyledStepLabel = styled("span")(({ currentStep, done }) => ({
     fontSize: "0.7rem",
     marginTop: "2px",
-    color: currentStep || done ? "#000" : "#5a5a5a",
+    color:
+      currentStep || done
+        ? theme.palette.common.white
+        : alpha(theme.palette.common.white, 0.7),
     "@media (max-width: 374.98px)": {
       display: "none",
     },
@@ -62,13 +71,11 @@ function CustomStepper(props) {
 
   const { steps, current, progress } = props;
 
-  const theme = useTheme();
   function StepContent({ done, index }) {
     return done ? "✓" : index + 1;
   }
 
   const ProgressBar = ({ current, step, progress }) => {
-    console.log(progress);
     let value = 0;
     if (current + 1 === step) {
       value = progress;
@@ -87,10 +94,12 @@ function CustomStepper(props) {
             top: 12,
             left: "calc(-50% + 20px)",
             right: "calc(50% + 20px)",
-            backgroundColor: "#ffd8ba61",
+            // Track derives from secondary at low alpha so the unfilled
+            // portion still reads against the AppBar gradient.
+            backgroundColor: alpha(theme.palette.secondary.main, 0.3),
           },
           "& .MuiLinearProgress-bar": {
-            backgroundColor: appTheme.palette.secondary.main,
+            backgroundColor: theme.palette.secondary.main,
           },
         }}
       />

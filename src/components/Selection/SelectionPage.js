@@ -8,6 +8,7 @@ import React, {
 } from "react";
 import SelectionDroppable from "./SelectionDroppable";
 import { Box, Grid } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 import { ProgressContext } from "../App";
 import { TutorialContext } from "../App";
 import { SkipSelectionButton } from "../../utils/devTools";
@@ -45,11 +46,17 @@ const SelectionPage = ({
 
   const [selectionHistory, setSelectionHistory] = useState([]);
 
+  const theme = useTheme();
+  // Pull droppable hover colors from theme. Default phase: rose (reject) on
+  // the left, mint (accept) on the right. Restart phase shifts the bar:
+  // mint moves left ("liked"), cream moves right ("loved").
   const [leftDroppableColor, setLeftDroppableColor] = useState(
-    progressData?.data?.selection?.leftDroppableColor || "LightPink"
+    progressData?.data?.selection?.leftDroppableColor ||
+      theme.palette.custom.dropReject
   );
   const [rightDroppableColor, setRightDroppableColor] = useState(
-    progressData?.data?.selection?.rightDroppableColor || "LightGreen"
+    progressData?.data?.selection?.rightDroppableColor ||
+      theme.palette.custom.dropAccept
   );
 
   const [hasRestarted, setHasRestarted] = useState(
@@ -216,8 +223,10 @@ const SelectionPage = ({
     setTutorialStringsState([
       "Let's try separating these into liked and loved traits",
     ]);
-    setLeftDroppableColor("LightGreen");
-    setRightDroppableColor("Gold");
+    // Restart phase: the bar got higher. Liked moves to mint (was the accept
+    // tier), loved is the new top tier (cream).
+    setLeftDroppableColor(theme.palette.custom.dropAccept);
+    setRightDroppableColor(theme.palette.custom.dropLove);
     setHasRestarted(true);
   }
   return (
