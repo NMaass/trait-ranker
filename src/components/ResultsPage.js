@@ -27,6 +27,15 @@ const ResultsPage = ({ topTraits, userID, progressData, setProgressData }) => {
   // App-level state, which silently flipped the list on every re-render).
   const displayTraits = [...(topTraits || [])].reverse();
 
+  // Build the share link from the live origin so it stays correct across
+  // domains (custom domain, github.io fallback, localhost dev). HashRouter
+  // means everything after the `#` is the route the recipient lands on.
+  const origin =
+    typeof window !== "undefined" && window.location?.origin
+      ? window.location.origin
+      : "https://trait-ranker.nmaass.dev";
+  const shareUrl = `${origin}/#/Share/${userID}`;
+
   const handleStartOver = () => {
     if (typeof reset === "function") reset();
     history.push("/");
@@ -47,9 +56,7 @@ const ResultsPage = ({ topTraits, userID, progressData, setProgressData }) => {
         <SmallTraitList traits={displayTraits} />
       </Grid>
       <Grid item sx={{ padding: "1rem" }}>
-        <CopyableLink
-          text={"https://nmaass.github.io/trait-ranker/#/Share/" + userID}
-        />
+        <CopyableLink text={shareUrl} />
       </Grid>
       <Grid item sx={{ paddingTop: "0.5rem" }}>
         <Button onClick={handleStartOver} color="warning" variant="outlined">

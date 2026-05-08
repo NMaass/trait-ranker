@@ -1,7 +1,7 @@
 {
   "name": "trait-ranker",
   "version": "0.2.0",
-  "homepage": "https://nmaass.github.io/trait-ranker/",
+  "homepage": "https://trait-ranker.nmaass.dev/",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.5.0",
