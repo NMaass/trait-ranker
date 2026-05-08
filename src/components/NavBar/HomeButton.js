@@ -7,6 +7,7 @@ import {
   DialogContentText,
   DialogActions,
   Button,
+  Box,
 } from "@mui/material";
 import logo512 from "../../Assets/logo512.png";
 import { ResetContext } from "../App";
@@ -68,10 +69,24 @@ const HomeButton = ({ history }) => {
         aria-label="Return to home"
         style={{ maxWidth: "7vh", maxHeight: "7vh" }}
       >
-        <img
-          src={logo512}
-          alt="The trait ranker icon"
-          style={{ maxWidth: "100%", maxHeight: "100%" }}
+        {/* Recolor the PNG logo at render time so its fill matches whatever
+            the theme uses for AppBar contrast (white). The PNG acts as a mask;
+            the visible color comes from `bgcolor`. */}
+        <Box
+          aria-hidden="true"
+          sx={{
+            width: "7vh",
+            height: "7vh",
+            bgcolor: "primary.contrastText",
+            WebkitMaskImage: `url(${logo512})`,
+            WebkitMaskRepeat: "no-repeat",
+            WebkitMaskSize: "contain",
+            WebkitMaskPosition: "center",
+            maskImage: `url(${logo512})`,
+            maskRepeat: "no-repeat",
+            maskSize: "contain",
+            maskPosition: "center",
+          }}
         />
       </IconButton>
     </>

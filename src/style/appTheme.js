@@ -12,7 +12,7 @@ const tokens = {
   secondaryDark: "#003a52", // Icon contrast inside pastel chips
 
   // Neutrals
-  bg: "#ffffff",
+  bg: "#f0f4f8", // Soft cool gray — gives white cards visible elevation
   surface: "#ffffff",
   surfaceMuted: "#f3f4f6",
   textPrimary: "#1f2937",
