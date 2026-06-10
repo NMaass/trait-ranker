@@ -14,12 +14,10 @@ function createProgress() {
         column2: [],
         column3: [],
         selectedTraits: [],
+        // Colors are intentionally NOT persisted — they derive from
+        // `hasRestarted` + the theme at render time, so palette changes
+        // apply to old sessions automatically.
         hasRestarted: false,
-        // Color defaults intentionally null — SelectionPage falls back to
-        // theme tokens at render time so a future palette change picks up
-        // automatically instead of being frozen here.
-        leftDroppableColor: null,
-        rightDroppableColor: null,
       },
       ranking: {
         currentMatch: null,
