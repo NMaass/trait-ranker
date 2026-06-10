@@ -6,10 +6,8 @@ import { traitIcons, traitDefinitions } from "../../utils/listOfAllTraits";
 import { IconContext } from "react-icons";
 import { Grid, Typography } from "@mui/material";
 import CardHelp from "./CardHelp";
-import useBreakpoint from "../../utils/useBreakpoint";
 
-const SelectionTrait = ({ trait, isStarter, provided }) => {
-  const { isMobile } = useBreakpoint();
+const SelectionTrait = ({ trait, firstCard, provided }) => {
   const [flipped, setFlipped] = useState(false);
 
   const toggleFlipped = () => {
@@ -28,20 +26,28 @@ const SelectionTrait = ({ trait, isStarter, provided }) => {
           <CardHelp
             toggleFlipped={toggleFlipped}
             flipped={flipped}
-            isStarter={isStarter}
+            firstCard={firstCard}
           />
           <Grid
             container
             alignItems="center"
             justifyContent="center"
             direction="column"
+            sx={{ height: "100%" }}
           >
             <Grid item>
               <h1>{trait}</h1>
             </Grid>
             <Grid item>
               <IconContext.Provider
-                value={isMobile ? { size: "60vw" } : { size: "6vw" }}
+                // Size relative to the card (via --card-w) so the icon keeps
+                // its proportion at any viewport instead of overflowing.
+                value={{
+                  style: {
+                    width: "calc(var(--card-w) * 0.4)",
+                    height: "calc(var(--card-w) * 0.4)",
+                  },
+                }}
               >
                 {traitIcons[trait]}
               </IconContext.Provider>
@@ -56,6 +62,7 @@ const SelectionTrait = ({ trait, isStarter, provided }) => {
             alignItems="center"
             justifyContent="center"
             direction="column"
+            sx={{ height: "100%" }}
           >
             <Grid item>
               <h1>{trait}</h1>

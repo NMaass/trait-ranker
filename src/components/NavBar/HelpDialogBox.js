@@ -39,6 +39,13 @@ const HelpDialogBox = () => {
     }, 1000);
   };
 
+  // Pulse once shortly after load so first-time visitors notice where help
+  // lives, without interrupting anything.
+  React.useEffect(() => {
+    const timer = setTimeout(doGrow, 2500);
+    return () => clearTimeout(timer);
+  }, []);
+
   const handleClose = () => {
     setOpen(false);
     doGrow();

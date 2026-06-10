@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from "react";
 import CopyableLink from "./CopyableLink";
 import { setDBTraits } from "../utils/Firebase";
 import SmallTraitList from "./SmallTraitList";
-import { Button, Grid } from "@mui/material";
+import { Button, Grid, Typography } from "@mui/material";
 import { trackResultsPage } from "../utils/mixpanel";
 import { updateResultsProgress } from "../utils/progressManagement";
 import { ResetContext } from "./App";
@@ -14,18 +14,13 @@ const ResultsPage = ({ topTraits, userID, progressData, setProgressData }) => {
 
   useEffect(() => {
     trackResultsPage(topTraits);
-    (async () => {
-      console.log("setting traits", topTraits);
-      await setDBTraits(userID, topTraits);
-    })();
+    setDBTraits(userID, topTraits).catch(() => {
+      // Saving for the share link is best-effort; the results screen itself
+      // doesn't depend on it.
+    });
     setProgressData(updateResultsProgress(progressData, { traits: topTraits }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  // Display order is "highest at the bottom" per the original UI; build a copy
-  // rather than mutating in place (the prior `topTraits.reverse()` mutated
-  // App-level state, which silently flipped the list on every re-render).
-  const displayTraits = [...(topTraits || [])].reverse();
 
   // Build the share link from the live origin so it stays correct across
   // domains (custom domain, github.io fallback, localhost dev). HashRouter
@@ -47,13 +42,16 @@ const ResultsPage = ({ topTraits, userID, progressData, setProgressData }) => {
       direction="column"
       alignItems="center"
       justifyContent="center"
-      style={{ height: "100vh" }}
+      // Top padding keeps the headline clear of the fixed app bar.
+      style={{ height: "100vh", paddingTop: 72, boxSizing: "border-box" }}
     >
       <Grid item>
-        <h3>Top Traits</h3>
+        <Typography variant="h5" component="h1" sx={{ fontWeight: 600 }}>
+          Your top traits
+        </Typography>
       </Grid>
       <Grid item>
-        <SmallTraitList traits={displayTraits} />
+        <SmallTraitList traits={topTraits || []} />
       </Grid>
       <Grid item sx={{ padding: "1rem" }}>
         <CopyableLink text={shareUrl} />

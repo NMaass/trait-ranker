@@ -86,7 +86,9 @@ const SharedPage = ({ columnData, setColumnData, history }) => {
         spacing={2}
       >
         <Grid item>
-          <Typography variant="h5">This share link doesn't exist or has expired.</Typography>
+          <Typography variant="h5">
+            This share link doesn't exist or has expired.
+          </Typography>
         </Grid>
         <Grid item>
           <Button
@@ -104,7 +106,7 @@ const SharedPage = ({ columnData, setColumnData, history }) => {
   return (
     <Grid
       container
-      spacing={isDesktop ? 60 : 3}
+      spacing={isDesktop ? 6 : 3}
       alignItems="center"
       justifyContent="center"
       direction={isDesktop ? "row" : "column"}

@@ -28,6 +28,12 @@ const tokens = {
   dropReject: "#fbe2e2", // Rose
   dropAccept: "#dff7e3", // Mint
   dropLove: "#fef3c7", // Cream
+
+  // Icon/ink colors that sit on top of the pastel drop colors above —
+  // darker takes of the same hue so action buttons stay readable.
+  inkReject: "#b04a42",
+  inkAccept: "#2e7d32",
+  inkLove: "#b45309",
 };
 
 const appTheme = createTheme({
@@ -61,6 +67,9 @@ const appTheme = createTheme({
       dropReject: tokens.dropReject,
       dropAccept: tokens.dropAccept,
       dropLove: tokens.dropLove,
+      inkReject: tokens.inkReject,
+      inkAccept: tokens.inkAccept,
+      inkLove: tokens.inkLove,
     },
   },
 });
