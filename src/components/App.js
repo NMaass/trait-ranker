@@ -54,6 +54,11 @@ const App = () => {
   const [resumeStage, setResumeStage] = useState("selection");
   const undoFunction = useRef(null);
   const sensorAPIRef = useRef<?SensorAPI>(null);
+  // While the resume prompt is open we must not write the fresh blob to
+  // storage — doing so would overwrite the very session the user is being
+  // asked to resume. Held via ref so the persist effect (which runs in the
+  // same mount commit) sees it synchronously.
+  const pendingResume = useRef(null);
 
   // Initialize analytics once on mount, not on every render.
   useEffect(() => {
@@ -71,6 +76,7 @@ const App = () => {
     const stored = loadProgress();
     if (!stored) return;
     if (hasResumableProgress(stored)) {
+      pendingResume.current = stored;
       setResumeStage(stored.stage || "selection");
       setResumePromptOpen(true);
     } else {
@@ -119,11 +125,13 @@ const App = () => {
 
   const handleResume = () => {
     setResumePromptOpen(false);
-    const stored = loadProgress();
+    const stored = pendingResume.current || loadProgress();
+    pendingResume.current = null;
     if (stored) applyStoredProgress(stored);
   };
 
   const reset = () => {
+    pendingResume.current = null;
     clearProgress();
     setColumnData(buildInitialColumnData());
     setTopTraits(buildInitialTopTraits());
@@ -236,14 +244,8 @@ const App = () => {
   }
 
   const swipeHandlers = useSwipeable({
-    onSwipedLeft: () => {
-      console.log("left swiped");
-      swipe("left");
-    },
-    onSwipedRight: () => {
-      console.log("right swiped");
-      swipe("right");
-    },
+    onSwipedLeft: () => swipe("left"),
+    onSwipedRight: () => swipe("right"),
   });
 
   function moveStepByStep(drag, values) {
@@ -269,8 +271,10 @@ const App = () => {
     return () => window.removeEventListener("touchmove", onTouchMove);
   }, []);
 
-  // Persist progress data whenever it changes
+  // Persist progress data whenever it changes — unless a resume decision is
+  // still pending, in which case the stored session must stay untouched.
   useEffect(() => {
+    if (pendingResume.current) return;
     saveProgress(progressData);
   }, [progressData]);
 
@@ -317,6 +321,7 @@ const App = () => {
                         setTopTraits={setTopTraits}
                         history={history}
                         swipeHandlers={swipeHandlers}
+                        onSwipe={swipe}
                         progressData={progressData}
                         setProgressData={setProgressData}
                       />

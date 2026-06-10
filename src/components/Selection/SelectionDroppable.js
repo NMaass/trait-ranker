@@ -70,6 +70,7 @@ const SelectionDroppable = ({
               wiggle={shouldWiggle}
               firstCard={firstCard}
               slideUp={slideUp}
+              deckSize={column?.traitIds.length || 0}
             />
           )}
           {provided.placeholder}

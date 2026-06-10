@@ -40,13 +40,25 @@ const RankingTrait = ({ trait, onClick, className }) => {
             alignItems="center"
             justifyContent="center"
             direction="column"
+            sx={{ height: "100%" }}
           >
             <Grid item>
               <h1>{trait}</h1>
             </Grid>
             <Grid item>
               <IconContext.Provider
-                value={isMobile ? { size: "14vh" } : { size: "6vw" }}
+                // Mobile ranking cards are landscape, so size against the
+                // shorter edge; desktop cards scale with --card-w.
+                value={{
+                  style: {
+                    width: isMobile
+                      ? "min(20vw, 13vh)"
+                      : "calc(var(--card-w) * 0.34)",
+                    height: isMobile
+                      ? "min(20vw, 13vh)"
+                      : "calc(var(--card-w) * 0.34)",
+                  },
+                }}
               >
                 {traitIcons[trait]}
               </IconContext.Provider>
@@ -61,6 +73,7 @@ const RankingTrait = ({ trait, onClick, className }) => {
             alignItems="center"
             justifyContent="center"
             direction="column"
+            sx={{ height: "100%" }}
           >
             <Grid item>
               <h1>{trait}</h1>

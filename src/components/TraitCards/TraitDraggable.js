@@ -42,7 +42,14 @@ function getStyle(style, snapshot) {
   };
 }
 
-const TraitDraggable = ({ trait, index, wiggle, firstCard, slideUp }) => {
+const TraitDraggable = ({
+  trait,
+  index,
+  wiggle,
+  firstCard,
+  slideUp,
+  deckSize = 0,
+}) => {
   return (
     <Draggable draggableId={trait} key={trait} index={index}>
       {(provided, snapshot) => (
@@ -51,9 +58,12 @@ const TraitDraggable = ({ trait, index, wiggle, firstCard, slideUp }) => {
           ref={provided.innerRef}
           isDragging={snapshot.isDragging}
           style={getStyle(provided.draggableProps.style, snapshot)}
+          // `deck` shows stacked card edges under the top card while at
+          // least two more traits remain — dropped mid-drag so the pile
+          // reads as staying behind.
           className={`${wiggle ? "wiggle-animation" : ""}${
             slideUp ? " slide-up" : ""
-          }`}
+          }${deckSize > 2 && !snapshot.isDragging ? " deck" : ""}`}
         >
           <SelectionTrait
             trait={trait}

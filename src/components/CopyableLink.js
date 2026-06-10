@@ -21,13 +21,16 @@ const CopyableLink = ({ text }) => {
           text: "Take a look at my most valued traits",
           url: text,
         })
-        .then(() => console.log("successful share"))
-        .catch((error) => console.log("error sharing", error));
+        .catch(() => {
+          // User dismissed the share sheet — nothing to do.
+        });
     } else if (navigator.clipboard?.writeText) {
       navigator.clipboard
         .writeText(text)
         .then(() => flashTooltip("Copied!"))
-        .catch(() => flashTooltip("Copy failed — long-press the link to copy."));
+        .catch(() =>
+          flashTooltip("Copy failed — long-press the link to copy.")
+        );
     } else {
       // No Clipboard API available — surface the link so the user can
       // long-press / triple-click to copy manually.

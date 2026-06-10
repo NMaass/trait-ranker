@@ -6,6 +6,10 @@ html {
   --color-headings: #1f2937;
   --color-text: #6b7280;
   --distance: 4rem;
+  /* Single source of truth for card width. Height always derives from
+     aspect-ratio, so cards can never collapse into a skinny strip no matter
+     the viewport shape. */
+  --card-w: clamp(280px, 24vw, 360px);
 }
 
 body {
@@ -19,6 +23,7 @@ body {
 }
 
 .card {
+  box-sizing: border-box;
   z-index: 1;
   background: var(--bg-panel);
   border-radius: 1rem;
@@ -28,8 +33,9 @@ body {
   box-shadow:
     0 1px 2px rgba(0, 0, 0, 0.05),
     0 8px 24px rgba(0, 0, 0, 0.06);
-  height: 14vw;
-  width: 18vw;
+  width: var(--card-w);
+  /* Portrait playing-card proportions on every screen. */
+  aspect-ratio: 3 / 4;
   position: relative;
 
   /* Add perspective for 3D flip */
@@ -40,13 +46,17 @@ body {
   transition: transform 0.6s ease;
 }
 .wideCard {
-  width: 40vw;
+  width: min(40vw, 480px);
   height: 8vh;
   margin: 1vh;
 }
 
+/* The starter deck sits in a 1px-wide center column; pull the card back by
+   half its own width to center it. Deriving from --card-w keeps the math
+   correct at every breakpoint. (Written as a subtraction because the build's
+   older CSS parser rejects negative factors inside calc().) */
 .selection {
-  margin-left: -9vw;
+  margin-left: calc(0px - var(--card-w) / 2);
 }
 .rankingFade {
   position: absolute;
@@ -55,22 +65,23 @@ body {
 }
 
 @media (max-width: 1024px) {
-  .selection {
-    margin-left: -43.9vw;
-    height: 60vh;
-    width: 80vw;
+  html {
+    /* Fill most of the width on portrait phones; the vh term keeps the same
+       3:4 ratio from overflowing in landscape. */
+    --card-w: min(86vw, 42vh);
   }
   .rankCard {
-    height: 27vh;
-    width: 75vw;
-    margin-left: 1.7vw;
+    /* Two ranking cards stack vertically on small screens, so each one goes
+       landscape to fit both above the fold. */
+    width: min(86vw, 56vh);
+    aspect-ratio: 16 / 10;
     transition: transform 0.6s ease-in-out;
   }
   .rankingFade {
     margin-top: -10vh;
   }
   .wideCard {
-    width: 80vw;
+    width: 86vw;
     margin: 2vw;
   }
 }
@@ -150,24 +161,41 @@ p {
   }
 }
 
+/* "This card swipes" hint: lean left then right with a slight tilt, like a
+   card being nudged off a deck. Tilt sells the physicality better than a
+   straight shake. */
 @keyframes wiggle {
   0%,
   100% {
-    transform: translateX(0);
+    transform: translateX(0) rotate(0deg);
   }
   25% {
-    transform: translateX(-10px);
+    transform: translateX(-9px) rotate(-1.5deg);
   }
   50% {
-    transform: translateX(10px);
+    transform: translateX(9px) rotate(1.5deg);
   }
   75% {
-    transform: translateX(-10px);
+    transform: translateX(-9px) rotate(-1.5deg);
   }
 }
 
 .wiggle-animation {
-  animation: wiggle 1s ease-in-out infinite;
+  animation: wiggle 1.1s ease-in-out infinite;
+}
+
+/* Stacked-deck cue: two card edges peeking out under the top card, telling
+   the user at a glance that more traits wait behind this one. Drawn with
+   box-shadow so it needs no extra DOM; suppressed while dragging so the deck
+   visually stays behind as the top card is pulled away. */
+.deck .card.selection {
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.05),
+    0 8px 24px rgba(0, 0, 0, 0.06),
+    0 7px 0 -3px #ffffff,
+    0 8px 3px -3px rgba(0, 0, 0, 0.08),
+    0 14px 0 -6px #ffffff,
+    0 15px 3px -6px rgba(0, 0, 0, 0.06);
 }
 
 .card.flipped {

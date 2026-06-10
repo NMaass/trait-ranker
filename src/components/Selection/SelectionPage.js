@@ -7,8 +7,12 @@ import React, {
   useCallback,
 } from "react";
 import SelectionDroppable from "./SelectionDroppable";
-import { Box, Grid } from "@mui/material";
+import { Box, Grid, IconButton, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
+import CloseRounded from "@mui/icons-material/CloseRounded";
+import CheckRounded from "@mui/icons-material/CheckRounded";
+import ThumbUpAltRounded from "@mui/icons-material/ThumbUpAltRounded";
+import FavoriteRounded from "@mui/icons-material/FavoriteRounded";
 import { ProgressContext } from "../App";
 import { TutorialContext } from "../App";
 import { SkipSelectionButton } from "../../utils/devTools";
@@ -21,6 +25,7 @@ const SelectionPage = ({
   setTopTraits,
   history,
   swipeHandlers,
+  onSwipe,
   topTraits,
   progressData,
   setProgressData,
@@ -62,6 +67,20 @@ const SelectionPage = ({
   const [hasRestarted, setHasRestarted] = useState(
     !!progressData?.data?.selection?.hasRestarted
   );
+
+  // First-visit guidance: one plain sentence that names the gesture for this
+  // device, then fades away. Skipped if another message is already queued
+  // (e.g. the "add a few more" coaching after a restart). matchMedia is read
+  // directly because the hook-based breakpoint hasn't resolved on first mount.
+  useEffect(() => {
+    if (tutorialStringsState.length === 0) {
+      const desktop = window.matchMedia("(min-width: 1024px)").matches;
+      setTutorialStringsState([
+        `${desktop ? "Drag" : "Swipe"} right to keep a trait, left to pass`,
+      ]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Load saved selection progress on mount — but only when the saved blob
   // actually has content. createProgress() seeds empty arrays for column1/2/3,
@@ -205,7 +224,10 @@ const SelectionPage = ({
     };
 
     setColumnData(newColumnData);
-    setTutorialStringsState(["Let's try adding a few more traits."]);
+    setTutorialStringsState([
+      "Let's take another look",
+      "Keep any trait that might matter to you",
+    ]);
   }
   function getLessTraits() {
     // Encourage user to remove traits
@@ -221,7 +243,8 @@ const SelectionPage = ({
     };
     setColumnData(newColumnData);
     setTutorialStringsState([
-      "Let's try separating these into liked and loved traits",
+      "You kept quite a few!",
+      "Which do you like — and which do you love?",
     ]);
     // Restart phase: the bar got higher. Liked moves to mint (was the accept
     // tier), loved is the new top tier (cream).
@@ -229,6 +252,29 @@ const SelectionPage = ({
     setRightDroppableColor(theme.palette.custom.dropLove);
     setHasRestarted(true);
   }
+  // Tap targets that mirror the swipe gesture — same semantics, same colors
+  // as the drop zones, so clicking and dragging always agree.
+  const remaining = columnData.columns.column2.traitIds.length;
+  const inkFor = {
+    [theme.palette.custom.dropReject]: theme.palette.custom.inkReject,
+    [theme.palette.custom.dropAccept]: theme.palette.custom.inkAccept,
+    [theme.palette.custom.dropLove]: theme.palette.custom.inkLove,
+  };
+  const actions = [
+    {
+      label: hasRestarted ? "Like" : "Pass",
+      Icon: hasRestarted ? ThumbUpAltRounded : CloseRounded,
+      color: leftDroppableColor,
+      direction: "left",
+    },
+    {
+      label: hasRestarted ? "Love" : "Keep",
+      Icon: hasRestarted ? FavoriteRounded : CheckRounded,
+      color: rightDroppableColor,
+      direction: "right",
+    },
+  ];
+
   return (
     <Box>
       <SkipSelectionButton
@@ -258,6 +304,69 @@ const SelectionPage = ({
           />
         </Grid>
       </div>
+      {remaining > 0 && (
+        <Box
+          sx={{
+            position: "fixed",
+            bottom: "max(4vh, 1.5rem)",
+            left: 0,
+            width: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 4,
+            zIndex: 10,
+            // Let drags pass through the bar itself; only the buttons catch
+            // the pointer.
+            pointerEvents: "none",
+          }}
+        >
+          {actions.map(({ label, Icon, color, direction }, i) => (
+            <React.Fragment key={direction}>
+              {i === 1 && (
+                <Typography
+                  variant="caption"
+                  sx={{ color: "text.secondary", minWidth: "3rem" }}
+                  align="center"
+                >
+                  {remaining} left
+                </Typography>
+              )}
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  gap: 0.5,
+                }}
+              >
+                <IconButton
+                  onClick={() => onSwipe && onSwipe(direction)}
+                  aria-label={label}
+                  sx={{
+                    pointerEvents: "auto",
+                    width: 60,
+                    height: 60,
+                    bgcolor: color,
+                    color: inkFor[color] || "text.primary",
+                    boxShadow:
+                      "0 1px 2px rgba(0,0,0,0.05), 0 6px 16px rgba(0,0,0,0.1)",
+                    "&:hover": { bgcolor: color },
+                  }}
+                >
+                  <Icon fontSize="medium" />
+                </IconButton>
+                <Typography
+                  variant="caption"
+                  sx={{ color: "text.secondary", lineHeight: 1 }}
+                >
+                  {label}
+                </Typography>
+              </Box>
+            </React.Fragment>
+          ))}
+        </Box>
+      )}
     </Box>
   );
 };

@@ -44,14 +44,19 @@ const FadeTextSeries = ({ stringArray = [] }) => {
       onEntered={handleEntered}
     >
       <Typography
+        // Mirrors the guidance line on the ranking page so coaching text has
+        // one consistent home across the app.
         sx={{
           minHeight: "1.9rem",
-          marginTop: "10vh",
           position: "absolute",
+          top: "calc(64px + 1.5rem)",
+          left: 0,
           width: "100%",
+          color: "text.secondary",
+          fontWeight: 500,
         }}
         align="center"
-        variant={isDesktop ? "h3" : "h5"}
+        variant={isDesktop ? "h5" : "subtitle1"}
       >
         {currentText}
       </Typography>

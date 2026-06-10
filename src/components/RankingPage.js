@@ -7,7 +7,7 @@ import React, {
   useCallback,
 } from "react";
 import RankingTrait from "./TraitCards/RankingTrait";
-import { Grid } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 import { ProgressContext } from "./App";
 import useMergeSort from "../utils/useMergeSort";
 import useBreakpoint from "../utils/useBreakpoint";
@@ -25,9 +25,6 @@ const RankingPage = ({
 }) => {
   // Memoize topTraits to prevent unnecessary re-initialization
   const memoizedTopTraits = useMemo(() => topTraits.slice(), [topTraits]);
-  useEffect(() => {
-    console.log("Memoized topTraits:", memoizedTopTraits);
-  }, [memoizedTopTraits]);
 
   // Initialize traits from stored progress
   useEffect(() => {
@@ -127,7 +124,6 @@ const RankingPage = ({
   }, [handleRevertMatch, undoFunction]);
 
   useEffect(() => {
-    console.log("isComplete:", isComplete);
     if (isComplete) {
       setTopTraits(currentStanding);
       setActiveStepState(3);
@@ -139,21 +135,38 @@ const RankingPage = ({
   // Ensure topTraits is populated before rendering. The redirect-to-/Selection
   // effect above handles the deep-link case; this is just a one-frame loader.
   if (!topTraits || topTraits.length === 0) {
-    return <div>Loading traits...</div>;
+    return (
+      <Typography align="center" sx={{ color: "text.secondary" }}>
+        One moment…
+      </Typography>
+    );
   }
 
-  // The original code mistakenly named the desktop media query `isMobile` and
-  // the layout was flipped on every screen. Apparent intent: bigger spacing on
-  // desktop (60), tighter on mobile (3); row layout on desktop, stacked on
-  // mobile.
+  const hasMatch = currentMatch && currentMatch.left && currentMatch.right;
+
   return (
     <div>
+      <Typography
+        variant={isDesktop ? "h5" : "subtitle1"}
+        align="center"
+        sx={{
+          position: "absolute",
+          top: "calc(64px + 1.5rem)",
+          left: 0,
+          width: "100%",
+          color: "text.secondary",
+          fontWeight: 500,
+        }}
+      >
+        Which matters more to you?
+      </Typography>
       <Grid
         container
-        spacing={isDesktop ? 60 : 3}
+        spacing={isDesktop ? 6 : 2}
         alignItems="center"
         justifyContent="center"
         direction={isDesktop ? "row" : "column"}
+        wrap="nowrap"
       >
         {currentMatch && currentMatch.left && (
           <Grid item>
@@ -163,6 +176,30 @@ const RankingPage = ({
               onClick={() => handleRoundWin(currentMatch.left)}
               key={currentMatch.left}
             />
+          </Grid>
+        )}
+        {hasMatch && (
+          <Grid item>
+            <Box
+              aria-hidden
+              sx={{
+                width: { xs: 36, md: 48 },
+                height: { xs: 36, md: 48 },
+                borderRadius: "50%",
+                bgcolor: "background.paper",
+                boxShadow:
+                  "0 1px 2px rgba(0,0,0,0.05), 0 4px 12px rgba(0,0,0,0.08)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "text.secondary",
+                fontWeight: 700,
+                fontSize: { xs: "0.75rem", md: "0.9rem" },
+                textTransform: "uppercase",
+              }}
+            >
+              vs
+            </Box>
           </Grid>
         )}
         {currentMatch && currentMatch.right && (
