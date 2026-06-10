@@ -52,21 +52,24 @@ const SelectionPage = ({
   const [selectionHistory, setSelectionHistory] = useState([]);
 
   const theme = useTheme();
-  // Pull droppable hover colors from theme. Default phase: rose (reject) on
-  // the left, mint (accept) on the right. Restart phase shifts the bar:
-  // mint moves left ("liked"), cream moves right ("loved").
-  const [leftDroppableColor, setLeftDroppableColor] = useState(
-    progressData?.data?.selection?.leftDroppableColor ||
-      theme.palette.custom.dropReject
-  );
-  const [rightDroppableColor, setRightDroppableColor] = useState(
-    progressData?.data?.selection?.rightDroppableColor ||
-      theme.palette.custom.dropAccept
-  );
 
-  const [hasRestarted, setHasRestarted] = useState(
-    !!progressData?.data?.selection?.hasRestarted
-  );
+  // The restart flag lives in the progress blob — its single source of
+  // truth — rather than being mirrored into local state. Mirroring broke
+  // resume: state seeded at mount never saw the stored blob swapped in
+  // when the user chose "Resume".
+  const hasRestarted = !!progressData?.data?.selection?.hasRestarted;
+
+  // Drop-zone colors derive from the phase + theme rather than being stored:
+  // default phase is rose (reject) left, soft teal (accept) right; the
+  // restart phase raises the bar — teal moves left ("liked"), cream takes the
+  // right ("loved"). Deriving (instead of persisting hex values) means a
+  // future palette change applies to saved sessions automatically.
+  const leftDroppableColor = hasRestarted
+    ? theme.palette.custom.dropAccept
+    : theme.palette.custom.dropReject;
+  const rightDroppableColor = hasRestarted
+    ? theme.palette.custom.dropLove
+    : theme.palette.custom.dropAccept;
 
   // First-visit guidance: one plain sentence that names the gesture for this
   // device, then fades away. Skipped if another message is already queued
@@ -137,27 +140,21 @@ const SelectionPage = ({
     }
   }, [columnData]);
 
-  // Persist progress whenever column data, selected traits, or the restart
-  // context (color/flag) change.
+  // Persist progress whenever column data or selected traits change. Uses
+  // the functional form (and leaves hasRestarted alone — the merge keeps
+  // it) so a same-commit update from getLessTraits can't be overwritten by
+  // this effect's stale closure.
   useEffect(() => {
-    const updated = updateSelectionProgress(progressData, {
-      column1: columnData.columns.column1.traitIds,
-      column2: columnData.columns.column2.traitIds,
-      column3: columnData.columns.column3.traitIds,
-      selectedTraits: topTraits,
-      hasRestarted,
-      leftDroppableColor,
-      rightDroppableColor,
-    });
-    setProgressData(updated);
+    setProgressData((prev) =>
+      updateSelectionProgress(prev, {
+        column1: columnData.columns.column1.traitIds,
+        column2: columnData.columns.column2.traitIds,
+        column3: columnData.columns.column3.traitIds,
+        selectedTraits: topTraits,
+      })
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    columnData,
-    topTraits,
-    hasRestarted,
-    leftDroppableColor,
-    rightDroppableColor,
-  ]);
+  }, [columnData, topTraits]);
 
   const undoLastSelection = useCallback(() => {
     setShouldSlideUp(true);
@@ -246,33 +243,54 @@ const SelectionPage = ({
       "You kept quite a few!",
       "Which do you like — and which do you love?",
     ]);
-    // Restart phase: the bar got higher. Liked moves to mint (was the accept
-    // tier), loved is the new top tier (cream).
-    setLeftDroppableColor(theme.palette.custom.dropAccept);
-    setRightDroppableColor(theme.palette.custom.dropLove);
-    setHasRestarted(true);
+    // Restart phase: the bar got higher. Setting the flag in the progress
+    // blob drives the colors and labels — liked moves to soft teal (was the
+    // accept tier), loved is the new top tier.
+    setProgressData((prev) =>
+      updateSelectionProgress(prev, { hasRestarted: true })
+    );
   }
-  // Tap targets that mirror the swipe gesture — same semantics, same colors
-  // as the drop zones, so clicking and dragging always agree.
+  // Tap targets that mirror the swipe gesture — same semantics and hue
+  // families as the drop zones, so clicking and dragging always agree. In
+  // the first pass "Keep" is the primary action and carries the solid brand
+  // color; in the restart pass Like/Love are peers, so both stay soft.
   const remaining = columnData.columns.column2.traitIds.length;
-  const inkFor = {
-    [theme.palette.custom.dropReject]: theme.palette.custom.inkReject,
-    [theme.palette.custom.dropAccept]: theme.palette.custom.inkAccept,
-    [theme.palette.custom.dropLove]: theme.palette.custom.inkLove,
-  };
+  const { custom, primary } = theme.palette;
   const actions = [
-    {
-      label: hasRestarted ? "Like" : "Pass",
-      Icon: hasRestarted ? ThumbUpAltRounded : CloseRounded,
-      color: leftDroppableColor,
-      direction: "left",
-    },
-    {
-      label: hasRestarted ? "Love" : "Keep",
-      Icon: hasRestarted ? FavoriteRounded : CheckRounded,
-      color: rightDroppableColor,
-      direction: "right",
-    },
+    hasRestarted
+      ? {
+          label: "Like",
+          Icon: ThumbUpAltRounded,
+          bg: custom.dropAccept,
+          ink: custom.inkAccept,
+          hoverBg: custom.dropAccept,
+          direction: "left",
+        }
+      : {
+          label: "Pass",
+          Icon: CloseRounded,
+          bg: custom.dropReject,
+          ink: custom.inkReject,
+          hoverBg: custom.dropReject,
+          direction: "left",
+        },
+    hasRestarted
+      ? {
+          label: "Love",
+          Icon: FavoriteRounded,
+          bg: custom.dropLove,
+          ink: custom.inkLove,
+          hoverBg: custom.dropLove,
+          direction: "right",
+        }
+      : {
+          label: "Keep",
+          Icon: CheckRounded,
+          bg: primary.main,
+          ink: primary.contrastText,
+          hoverBg: primary.dark,
+          direction: "right",
+        },
   ];
 
   return (
@@ -308,7 +326,7 @@ const SelectionPage = ({
         <Box
           sx={{
             position: "fixed",
-            bottom: "max(4vh, 1.5rem)",
+            bottom: "max(2.5vh, 1rem)",
             left: 0,
             width: "100%",
             display: "flex",
@@ -321,7 +339,7 @@ const SelectionPage = ({
             pointerEvents: "none",
           }}
         >
-          {actions.map(({ label, Icon, color, direction }, i) => (
+          {actions.map(({ label, Icon, bg, ink, hoverBg, direction }, i) => (
             <React.Fragment key={direction}>
               {i === 1 && (
                 <Typography
@@ -347,11 +365,11 @@ const SelectionPage = ({
                     pointerEvents: "auto",
                     width: 60,
                     height: 60,
-                    bgcolor: color,
-                    color: inkFor[color] || "text.primary",
+                    bgcolor: bg,
+                    color: ink,
                     boxShadow:
                       "0 1px 2px rgba(0,0,0,0.05), 0 6px 16px rgba(0,0,0,0.1)",
-                    "&:hover": { bgcolor: color },
+                    "&:hover": { bgcolor: hoverBg },
                   }}
                 >
                   <Icon fontSize="medium" />

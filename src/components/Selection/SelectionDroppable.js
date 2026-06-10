@@ -16,6 +16,12 @@ const TraitList = styled.div`
   align-items: center;
   min-width: ${(props) => (props.isStarter ? "1px" : "49.9vw")};
   min-height: 100vh;
+  /* Center the card between the app bar (top) and the Pass/Keep action bar
+     (bottom) rather than in the raw viewport, so neither can overlap the
+     card — including on phones where browser chrome shrinks the visible
+     area below 100vh. */
+  padding: 80px 0 170px;
+  box-sizing: border-box;
   max-width: ${(props) => props.isStarter && "1px"};
   ${(props) =>
     props.showHoverColor &&
