@@ -161,24 +161,41 @@ p {
   }
 }
 
+/* "This card swipes" hint: lean left then right with a slight tilt, like a
+   card being nudged off a deck. Tilt sells the physicality better than a
+   straight shake. */
 @keyframes wiggle {
   0%,
   100% {
-    transform: translateX(0);
+    transform: translateX(0) rotate(0deg);
   }
   25% {
-    transform: translateX(-10px);
+    transform: translateX(-9px) rotate(-1.5deg);
   }
   50% {
-    transform: translateX(10px);
+    transform: translateX(9px) rotate(1.5deg);
   }
   75% {
-    transform: translateX(-10px);
+    transform: translateX(-9px) rotate(-1.5deg);
   }
 }
 
 .wiggle-animation {
-  animation: wiggle 1s ease-in-out infinite;
+  animation: wiggle 1.1s ease-in-out infinite;
+}
+
+/* Stacked-deck cue: two card edges peeking out under the top card, telling
+   the user at a glance that more traits wait behind this one. Drawn with
+   box-shadow so it needs no extra DOM; suppressed while dragging so the deck
+   visually stays behind as the top card is pulled away. */
+.deck .card.selection {
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.05),
+    0 8px 24px rgba(0, 0, 0, 0.06),
+    0 7px 0 -3px #ffffff,
+    0 8px 3px -3px rgba(0, 0, 0, 0.08),
+    0 14px 0 -6px #ffffff,
+    0 15px 3px -6px rgba(0, 0, 0, 0.06);
 }
 
 .card.flipped {
