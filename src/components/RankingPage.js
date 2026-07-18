@@ -162,37 +162,58 @@ const RankingPage = ({
   }
 
   return (
-    <Grid
-      container
-      spacing={isDesktop ? 6 : 2}
-      alignItems="center"
-      justifyContent="center"
-      direction={isDesktop ? "row" : "column"}
-      wrap="nowrap"
-    >
-      {currentMatch && currentMatch.left && (
-        <Grid item sx={{ display: "flex" }}>
-          <RankingTrait
-            className={leftCardClass}
-            trait={currentMatch.left}
-            onClick={() => handleRoundWin(currentMatch.left)}
-            onAnimationEnd={handleCardAnimationEnd}
-            key={currentMatch.left}
-          />
-        </Grid>
-      )}
-      {currentMatch && currentMatch.right && (
-        <Grid item sx={{ display: "flex" }}>
-          <RankingTrait
-            className={rightCardClass}
-            trait={currentMatch.right}
-            onClick={() => handleRoundWin(currentMatch.right)}
-            onAnimationEnd={handleCardAnimationEnd}
-            key={currentMatch.right}
-          />
-        </Grid>
-      )}
-    </Grid>
+    <>
+      {/* Persistent prompt, in the same "home" (position + style) as the
+          Selection coaching line so guidance reads consistently across the
+          app. z-index keeps it above the cards (.card is z-index:1). */}
+      <Typography
+        variant={isDesktop ? "h5" : "subtitle1"}
+        align="center"
+        sx={{
+          minHeight: "1.9rem",
+          position: "absolute",
+          top: "calc(64px + 1.5rem)",
+          left: 0,
+          width: "100%",
+          zIndex: 3,
+          color: "text.secondary",
+          fontWeight: 500,
+        }}
+      >
+        Which matters more to you?
+      </Typography>
+      <Grid
+        container
+        spacing={isDesktop ? 6 : 2}
+        alignItems="center"
+        justifyContent="center"
+        direction={isDesktop ? "row" : "column"}
+        wrap="nowrap"
+      >
+        {currentMatch && currentMatch.left && (
+          <Grid item sx={{ display: "flex" }}>
+            <RankingTrait
+              className={leftCardClass}
+              trait={currentMatch.left}
+              onClick={() => handleRoundWin(currentMatch.left)}
+              onAnimationEnd={handleCardAnimationEnd}
+              key={currentMatch.left}
+            />
+          </Grid>
+        )}
+        {currentMatch && currentMatch.right && (
+          <Grid item sx={{ display: "flex" }}>
+            <RankingTrait
+              className={rightCardClass}
+              trait={currentMatch.right}
+              onClick={() => handleRoundWin(currentMatch.right)}
+              onAnimationEnd={handleCardAnimationEnd}
+              key={currentMatch.right}
+            />
+          </Grid>
+        )}
+      </Grid>
+    </>
   );
 };
 
