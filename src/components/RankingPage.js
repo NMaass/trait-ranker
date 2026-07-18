@@ -14,6 +14,11 @@ import useBreakpoint from "../utils/useBreakpoint";
 import { UndoContext } from "./App";
 import "../style/CardStyle.scss";
 import { updateRankingProgress } from "../utils/progressManagement";
+import { coachingTextSx } from "../style/coachingText";
+
+// The slide/fade animations run 600ms; the fallback waits comfortably longer
+// so it only fires when a real `animationend` was missed, never mid-animation.
+const ANIM_FALLBACK_MS = 950;
 
 const RankingPage = ({
   topTraits,
@@ -58,6 +63,14 @@ const RankingPage = ({
   // back in at the end of the slide, and shift cards mid-slide-in.
   const animPhaseRef = useRef("idle");
   const pendingWinnerRef = useRef(null);
+  // Safety net for the state machine above. animationend is the primary,
+  // precise driver, but if it's ever missed — a tab hidden mid-animation
+  // suspends animations, an interrupted animation may never emit the event —
+  // the machine would deadlock and ranking would freeze with no recovery.
+  // This timer force-advances after the animation *should* be done and is
+  // cleared the instant animationend fires, so it only runs when the event was
+  // actually lost — never cutting a real animation short.
+  const fallbackRef = useRef(null);
 
   // If a user lands on /Rank with no traits (deep link, post-clear), bounce
   // back to /Selection rather than showing an indefinite loading state.
@@ -81,6 +94,38 @@ const RankingPage = ({
     setProgressData((prev) => updateRankingProgress(prev, rankingState));
   }, [rankingState, setProgressData]);
 
+  const clearFallback = useCallback(() => {
+    if (fallbackRef.current) {
+      clearTimeout(fallbackRef.current);
+      fallbackRef.current = null;
+    }
+  }, []);
+
+  // out -> idle: slide-in finished; clear the transient classes so the cards
+  // sit at rest (and the flip transition re-arms). Phase-guarded and idempotent
+  // so animationend and the fallback timer can't double-run it.
+  const finishSlideIn = useCallback(() => {
+    if (animPhaseRef.current !== "in") return;
+    clearFallback();
+    animPhaseRef.current = "idle";
+    setLeftCardClass("");
+    setRightCardClass("");
+  }, [clearFallback]);
+
+  // out -> in: the winning card has slid away; apply the merge result and slide
+  // the next match in. The fade-out end is intentionally not what gates this —
+  // only the slide does, so the losing card always gets its full fade.
+  const finishSlideOut = useCallback(() => {
+    if (animPhaseRef.current !== "out") return;
+    clearFallback();
+    animPhaseRef.current = "in";
+    matchWin(pendingWinnerRef.current);
+    pendingWinnerRef.current = null;
+    setLeftCardClass("slide-in");
+    setRightCardClass("slide-in");
+    fallbackRef.current = setTimeout(finishSlideIn, ANIM_FALLBACK_MS);
+  }, [matchWin, clearFallback, finishSlideIn]);
+
   const handleRoundWin = useCallback(
     (trait) => {
       // Drop rapid-fire clicks while a slide animation is in flight; otherwise
@@ -97,37 +142,20 @@ const RankingPage = ({
         setLeftCardClass("fade-out");
         setRightCardClass("slide-out");
       }
+      clearFallback();
+      fallbackRef.current = setTimeout(finishSlideOut, ANIM_FALLBACK_MS);
     },
-    [currentMatch]
+    [currentMatch, clearFallback, finishSlideOut]
   );
 
-  // Pivot the state machine off the real animation lifecycle. The fade-out
-  // end is ignored on purpose — only the slide gates the merge update, so the
-  // losing card always gets its full fade before anything unmounts.
   const handleCardAnimationEnd = useCallback(
     (event) => {
-      if (
-        event.animationName === "slide-out" &&
-        animPhaseRef.current === "out"
-      ) {
-        animPhaseRef.current = "in";
-        matchWin(pendingWinnerRef.current);
-        pendingWinnerRef.current = null;
-        setLeftCardClass("slide-in");
-        setRightCardClass("slide-in");
-      } else if (
-        event.animationName === "slide-in" &&
-        animPhaseRef.current === "in"
-      ) {
-        // slide-in has no fill (it ends exactly at the natural position), so
-        // clearing the class after completion causes no visual change — it
-        // just re-arms the animation and the flip transition for next round.
-        animPhaseRef.current = "idle";
-        setLeftCardClass("");
-        setRightCardClass("");
-      }
+      // finish* are phase-guarded no-ops for the wrong phase, so stray events
+      // (like the loser's fade-out) are safely ignored.
+      if (event.animationName === "slide-out") finishSlideOut();
+      else if (event.animationName === "slide-in") finishSlideIn();
     },
-    [matchWin]
+    [finishSlideOut, finishSlideIn]
   );
 
   const handleRevertMatch = useCallback(() => {
@@ -136,19 +164,27 @@ const RankingPage = ({
     revertMatch();
     setLeftCardClass("slide-in");
     setRightCardClass("slide-in");
-  }, [revertMatch]);
+    clearFallback();
+    fallbackRef.current = setTimeout(finishSlideIn, ANIM_FALLBACK_MS);
+  }, [revertMatch, clearFallback, finishSlideIn]);
 
   useEffect(() => {
     undoFunction.current = handleRevertMatch;
   }, [handleRevertMatch, undoFunction]);
 
+  // Never leave a timer running past unmount.
+  useEffect(() => clearFallback, [clearFallback]);
+
   useEffect(() => {
     if (isComplete) {
       setTopTraits(currentStanding);
       setActiveStepState(3);
-      setProgressData(updateRankingProgress(progressData, rankingState));
+      // Functional updater so this can't clobber a concurrent progress write
+      // with a stale `progressData` base (the persist effect above also writes).
+      setProgressData((prev) => updateRankingProgress(prev, rankingState));
       history.push("/Results");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isComplete]);
 
   // Ensure topTraits is populated before rendering. The redirect-to-/Selection
@@ -163,22 +199,12 @@ const RankingPage = ({
 
   return (
     <>
-      {/* Persistent prompt, in the same "home" (position + style) as the
-          Selection coaching line so guidance reads consistently across the
-          app. z-index keeps it above the cards (.card is z-index:1). */}
+      {/* Persistent prompt, sharing the Selection coaching line's style so
+          guidance reads consistently across the app. */}
       <Typography
         variant={isDesktop ? "h5" : "subtitle1"}
         align="center"
-        sx={{
-          minHeight: "1.9rem",
-          position: "absolute",
-          top: "calc(64px + 1.5rem)",
-          left: 0,
-          width: "100%",
-          zIndex: 3,
-          color: "text.secondary",
-          fontWeight: 500,
-        }}
+        sx={coachingTextSx}
       >
         Which matters more to you?
       </Typography>

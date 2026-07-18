@@ -15,8 +15,6 @@ const skipSelection = (
   setTopTraits(selectedTraits);
   setActiveStepState(1);
 
-  console.log("Skipping to ranking with traits:", selectedTraits);
-
   // Navigate to the Rank page
   history.push("/Rank");
 };

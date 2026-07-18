@@ -7,16 +7,24 @@ const FreeDragTrait = ({ trait, index, color, isDraggable }) => {
   const [currentColor, setCurrentColor] = useState("");
   const firstUpdate = useRef(true);
   useEffect(() => {
-    if (firstUpdate.current == true) {
+    if (firstUpdate.current === true) {
       firstUpdate.current = false;
       return;
     }
-    setTimeout(() => {
-      setIsBouncing(true);
-      setTimeout(() => setCurrentColor(color), 250); //timeout set to half bounce time to time color change to apex
-    }, 500 * index); //timeout set to total bounce time to have items bounce one at a time
     setIsBouncing(false);
-  }, [color]);
+    // Stagger each card's bounce; change color at the bounce apex. Both timers
+    // are cleared on unmount/re-run so they can't fire setState on an unmounted
+    // card (React "update on unmounted component" warning + wasted work).
+    let colorTimer;
+    const bounceTimer = setTimeout(() => {
+      setIsBouncing(true);
+      colorTimer = setTimeout(() => setCurrentColor(color), 250);
+    }, 500 * index);
+    return () => {
+      clearTimeout(bounceTimer);
+      clearTimeout(colorTimer);
+    };
+  }, [color, index]);
 
   return (
     <Draggable draggableId={trait} index={index} isDragDisabled={!isDraggable}>

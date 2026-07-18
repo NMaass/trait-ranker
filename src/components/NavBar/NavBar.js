@@ -37,7 +37,11 @@ const NavBar = ({ history }) => {
 
                 <Grid item>
                   <IconButton
-                    onClick={undoFunction.current}
+                    // Call through the ref at click time. Binding
+                    // `undoFunction.current` directly captured whatever the ref
+                    // held at NavBar's render — usually stale or null, since the
+                    // active page assigns the real handler in a later effect.
+                    onClick={() => undoFunction.current?.()}
                     aria-label="Undo last action"
                     color="inherit"
                   >

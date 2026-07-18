@@ -12,7 +12,6 @@ import FadeTextSeries from "../../utils/FadeTextSeries";
 const GuessPage = ({ traits, columnData, setColumnData, history }) => {
   let traitsLeft = useRef(shuffle(traits.slice(0, 7)));
   let wrongTraits = useRef([]);
-  let traitPool = initialTraits.columns.column2.traitIds; //already randomized on each load
   let finalList = useRef([]);
   const [colors, setColors] = useState([]);
   const [isDraggable, setIsDraggable] = useState(true);
@@ -24,15 +23,19 @@ const GuessPage = ({ traits, columnData, setColumnData, history }) => {
   const [showLockIn, setShowLockIn] = useState(true);
 
   useEffect(() => {
-    while (wrongTraits.current.length < 7) {
-      //get eligible red herrings
-      if (!traitsLeft.current.includes(traitPool[0])) {
-        wrongTraits.current.push(traitPool[0]);
+    // Build 7 "red herring" wrong traits from the shared pool. Copy first:
+    // the old code aliased initialTraits.columns.column2.traitIds and spliced
+    // it in place, permanently truncating the real Selection deck (a shared
+    // module singleton) for the rest of the session once Guess ran.
+    const pool = [...initialTraits.columns.column2.traitIds];
+    for (let i = 0; i < pool.length && wrongTraits.current.length < 7; i++) {
+      if (!traitsLeft.current.includes(pool[i])) {
+        wrongTraits.current.push(pool[i]);
       }
-      traitPool = traitPool.splice(1, traitPool.length);
     }
     loadNextTraits();
-  }, [traitPool]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handlePick = (pick) => {
     finalList.current.push(pick);
@@ -59,25 +62,18 @@ const GuessPage = ({ traits, columnData, setColumnData, history }) => {
     setCurrentTraits(
       shuffle([traitsLeft.current.pop(), wrongTraits.current.pop()])
     );
-    console.log("TraitsLeft: ", traitsLeft.current);
-    console.log("WrongTaits: ", wrongTraits.current);
-    console.log(finalList.current);
   };
   const onDone = () => {
-    console.log("done!");
     let guessColors = [];
     const correctTraits = traits.slice(0, 7);
     const guess = columnData.columns.guessing.traitIds;
     for (let i = 0; i < correctTraits.length; i++) {
       if (correctTraits[i] === guess[i]) {
         guessColors.push("green");
-        console.log("correct", correctTraits[i], guess[i]);
       } else if (correctTraits.includes(guess[i])) {
         guessColors.push("gold");
-        console.log("in there", correctTraits[i], guess[i]);
       } else {
         guessColors.push("LightGray");
-        console.log("incorrect", correctTraits[i], guess[i]);
       }
     }
     setColors(guessColors);

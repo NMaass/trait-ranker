@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Fade, Typography } from "@mui/material";
 import useBreakpoint from "./useBreakpoint";
+import { coachingTextSx } from "../style/coachingText";
 
 const FadeTextSeries = ({ stringArray = [] }) => {
   const [currentText, setCurrentText] = useState("");
@@ -44,21 +45,8 @@ const FadeTextSeries = ({ stringArray = [] }) => {
       onEntered={handleEntered}
     >
       <Typography
-        // Mirrors the guidance line on the ranking page so coaching text has
-        // one consistent home across the app.
-        sx={{
-          minHeight: "1.9rem",
-          position: "absolute",
-          top: "calc(64px + 1.5rem)",
-          left: 0,
-          width: "100%",
-          // Keep the coaching line above the cards (.card is z-index:1) so it
-          // is never painted behind a card if their bands meet (e.g. landscape
-          // or a dynamic-viewport transition on mobile).
-          zIndex: 3,
-          color: "text.secondary",
-          fontWeight: 500,
-        }}
+        // Shared style with the Ranking prompt (see style/coachingText).
+        sx={coachingTextSx}
         align="center"
         variant={isDesktop ? "h5" : "subtitle1"}
       >
