@@ -25,7 +25,7 @@ const SelectionTrait = ({ trait, firstCard, provided }) => {
         <div className="card-front">
           <CardHelp
             toggleFlipped={toggleFlipped}
-            flipped={flipped}
+            icon="help"
             firstCard={firstCard}
           />
           <Grid
@@ -56,7 +56,7 @@ const SelectionTrait = ({ trait, firstCard, provided }) => {
         </div>
         {/* Back Side */}
         <div className="card-back">
-          <CardHelp toggleFlipped={toggleFlipped} flipped={flipped} />
+          <CardHelp toggleFlipped={toggleFlipped} icon="flip" />
           <Grid
             container
             alignItems="center"

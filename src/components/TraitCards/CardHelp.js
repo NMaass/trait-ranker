@@ -4,14 +4,19 @@ import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import FlipIcon from "@mui/icons-material/Flip";
 import "../../style/CardStyle.scss";
 
-const CardHelp = ({ toggleFlipped, flipped, firstCard }) => {
+// Each card face gets its own fixed icon: the front always shows the help
+// "?", the back always shows the flip-back arrow. (It used to swap with the
+// shared `flipped` state, so pressing it visibly changed the icon on the
+// face you were looking at mid-flip.)
+const CardHelp = ({ toggleFlipped, firstCard, icon = "help" }) => {
   return (
     <IconButton
       onClick={toggleFlipped}
       style={{ position: "absolute", top: -5, right: -5 }}
       className={firstCard ? "icon-grow" : ""}
+      aria-label={icon === "flip" ? "Flip card back" : "Show definition"}
     >
-      {flipped ? (
+      {icon === "flip" ? (
         <FlipIcon fontSize="large" />
       ) : (
         <HelpOutlineIcon fontSize="large" />

@@ -7,7 +7,7 @@ import React, {
   useCallback,
 } from "react";
 import RankingTrait from "./TraitCards/RankingTrait";
-import { Box, Grid, Typography } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import { ProgressContext } from "./App";
 import useMergeSort from "../utils/useMergeSort";
 import useBreakpoint from "../utils/useBreakpoint";
@@ -51,7 +51,13 @@ const RankingPage = ({
   const [leftCardClass, setLeftCardClass] = useState("");
   const [rightCardClass, setRightCardClass] = useState("");
   const { undoFunction } = useContext(UndoContext);
-  const isAnimatingRef = useRef(false);
+  // Animation state machine: "idle" | "out" | "in". Transitions are driven by
+  // animationend events (see handleCardAnimationEnd), NOT parallel timeouts —
+  // a setTimeout can fire before the animation's final frame paints (common
+  // under load on phones), which used to cut the fade-out short, pop cards
+  // back in at the end of the slide, and shift cards mid-slide-in.
+  const animPhaseRef = useRef("idle");
+  const pendingWinnerRef = useRef(null);
 
   // If a user lands on /Rank with no traits (deep link, post-clear), bounce
   // back to /Selection rather than showing an indefinite loading state.
@@ -62,23 +68,26 @@ const RankingPage = ({
   }, [topTraits, history]);
 
   useEffect(() => {
-    if (progressPercent) {
+    // `!= null` (not truthiness) so 0% is applied too — otherwise the bar
+    // kept showing a previous run's 100% until the first pick of a new run.
+    if (progressPercent != null) {
       setProgressState(progressPercent);
     }
   }, [progressPercent, setProgressState]);
 
-  // Persist ranking progress
+  // Persist ranking progress. rankingState is memoized inside useMergeSort,
+  // so this only fires when the sort actually advances (not every render).
   useEffect(() => {
-    const updated = updateRankingProgress(progressData, rankingState);
-    setProgressData(updated);
-  }, [rankingState]);
+    setProgressData((prev) => updateRankingProgress(prev, rankingState));
+  }, [rankingState, setProgressData]);
 
   const handleRoundWin = useCallback(
     (trait) => {
       // Drop rapid-fire clicks while a slide animation is in flight; otherwise
       // a second click reads the stale `currentMatch` and corrupts the merge.
-      if (isAnimatingRef.current) return;
-      isAnimatingRef.current = true;
+      if (animPhaseRef.current !== "idle") return;
+      animPhaseRef.current = "out";
+      pendingWinnerRef.current = trait;
 
       // Trigger slide-out animation
       if (trait === currentMatch.left) {
@@ -88,35 +97,45 @@ const RankingPage = ({
         setLeftCardClass("fade-out");
         setRightCardClass("slide-out");
       }
+    },
+    [currentMatch]
+  );
 
-      // Set timeout to update the match and reset animations after slide-out is complete
-      setTimeout(() => {
-        matchWin(trait);
+  // Pivot the state machine off the real animation lifecycle. The fade-out
+  // end is ignored on purpose — only the slide gates the merge update, so the
+  // losing card always gets its full fade before anything unmounts.
+  const handleCardAnimationEnd = useCallback(
+    (event) => {
+      if (
+        event.animationName === "slide-out" &&
+        animPhaseRef.current === "out"
+      ) {
+        animPhaseRef.current = "in";
+        matchWin(pendingWinnerRef.current);
+        pendingWinnerRef.current = null;
         setLeftCardClass("slide-in");
         setRightCardClass("slide-in");
-
-        // Set another timeout to reset the classes after the slide-in animation
-        setTimeout(() => {
-          setLeftCardClass("");
-          setRightCardClass("");
-          isAnimatingRef.current = false;
-        }, 600);
-      }, 600); // Timeout matches the slide-out animation duration
+      } else if (
+        event.animationName === "slide-in" &&
+        animPhaseRef.current === "in"
+      ) {
+        // slide-in has no fill (it ends exactly at the natural position), so
+        // clearing the class after completion causes no visual change — it
+        // just re-arms the animation and the flip transition for next round.
+        animPhaseRef.current = "idle";
+        setLeftCardClass("");
+        setRightCardClass("");
+      }
     },
-    [currentMatch, matchWin]
+    [matchWin]
   );
 
   const handleRevertMatch = useCallback(() => {
-    if (isAnimatingRef.current) return;
-    isAnimatingRef.current = true;
+    if (animPhaseRef.current !== "idle") return;
+    animPhaseRef.current = "in";
     revertMatch();
     setLeftCardClass("slide-in");
     setRightCardClass("slide-in");
-    setTimeout(() => {
-      setLeftCardClass("");
-      setRightCardClass("");
-      isAnimatingRef.current = false;
-    }, 600);
   }, [revertMatch]);
 
   useEffect(() => {
@@ -142,78 +161,38 @@ const RankingPage = ({
     );
   }
 
-  const hasMatch = currentMatch && currentMatch.left && currentMatch.right;
-
   return (
-    <div>
-      <Typography
-        variant={isDesktop ? "h5" : "subtitle1"}
-        align="center"
-        sx={{
-          position: "absolute",
-          top: "calc(64px + 1.5rem)",
-          left: 0,
-          width: "100%",
-          color: "text.secondary",
-          fontWeight: 500,
-        }}
-      >
-        Which matters more to you?
-      </Typography>
-      <Grid
-        container
-        spacing={isDesktop ? 6 : 2}
-        alignItems="center"
-        justifyContent="center"
-        direction={isDesktop ? "row" : "column"}
-        wrap="nowrap"
-      >
-        {currentMatch && currentMatch.left && (
-          <Grid item>
-            <RankingTrait
-              className={leftCardClass}
-              trait={currentMatch.left}
-              onClick={() => handleRoundWin(currentMatch.left)}
-              key={currentMatch.left}
-            />
-          </Grid>
-        )}
-        {hasMatch && (
-          <Grid item>
-            <Box
-              aria-hidden
-              sx={{
-                width: { xs: 36, md: 48 },
-                height: { xs: 36, md: 48 },
-                borderRadius: "50%",
-                bgcolor: "background.paper",
-                boxShadow:
-                  "0 1px 2px rgba(0,0,0,0.05), 0 4px 12px rgba(0,0,0,0.08)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                color: "text.secondary",
-                fontWeight: 700,
-                fontSize: { xs: "0.75rem", md: "0.9rem" },
-                textTransform: "uppercase",
-              }}
-            >
-              vs
-            </Box>
-          </Grid>
-        )}
-        {currentMatch && currentMatch.right && (
-          <Grid item>
-            <RankingTrait
-              className={rightCardClass}
-              trait={currentMatch.right}
-              onClick={() => handleRoundWin(currentMatch.right)}
-              key={currentMatch.right}
-            />
-          </Grid>
-        )}
-      </Grid>
-    </div>
+    <Grid
+      container
+      spacing={isDesktop ? 6 : 2}
+      alignItems="center"
+      justifyContent="center"
+      direction={isDesktop ? "row" : "column"}
+      wrap="nowrap"
+    >
+      {currentMatch && currentMatch.left && (
+        <Grid item sx={{ display: "flex" }}>
+          <RankingTrait
+            className={leftCardClass}
+            trait={currentMatch.left}
+            onClick={() => handleRoundWin(currentMatch.left)}
+            onAnimationEnd={handleCardAnimationEnd}
+            key={currentMatch.left}
+          />
+        </Grid>
+      )}
+      {currentMatch && currentMatch.right && (
+        <Grid item sx={{ display: "flex" }}>
+          <RankingTrait
+            className={rightCardClass}
+            trait={currentMatch.right}
+            onClick={() => handleRoundWin(currentMatch.right)}
+            onAnimationEnd={handleCardAnimationEnd}
+            key={currentMatch.right}
+          />
+        </Grid>
+      )}
+    </Grid>
   );
 };
 

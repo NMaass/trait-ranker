@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 
 function useMergeSort(initialTraits, initialState) {
   // Constants
@@ -212,9 +212,11 @@ function useMergeSort(initialTraits, initialState) {
     const newComparisonStack = [...currentComparisonStack];
     newComparisonStack[newComparisonStack.length - 1] = newCurrentMerge;
 
-    let newMergeStack = mergeStack.map((level) =>
-      level.map((sublist) => [...sublist])
-    );
+    // Shallow copy only. Sublists are never mutated in place anywhere in the
+    // merge (every update builds a new array), so history snapshots can safely
+    // share structure with the live state. The old deep copy made every single
+    // comparison cost O(n) allocations — on phones that churn was visible.
+    let newMergeStack = [...mergeStack];
 
     const newComparisonsMade = comparisonsMade + 1;
     const progressPercent = Math.min(
@@ -306,6 +308,13 @@ function useMergeSort(initialTraits, initialState) {
   const { currentMatch, currentStanding, isComplete, progressPercent } =
     currentState || {};
 
+  // Memoized: `{ ...currentState }` inline here produced a brand-new object on
+  // every render, and RankingPage's persist effect (keyed on rankingState)
+  // fired every render → setProgressData → re-render → new rankingState → …
+  // an infinite render loop that pinned the main thread (and could kill the
+  // tab on phones). Only change identity when the sort state actually changes.
+  const rankingState = useMemo(() => ({ ...currentState }), [currentState]);
+
   return {
     progressPercent,
     currentStanding,
@@ -313,7 +322,7 @@ function useMergeSort(initialTraits, initialState) {
     matchWin,
     revertMatch,
     isComplete,
-    rankingState: { ...currentState },
+    rankingState,
     comparisonsMade: currentState?.comparisonsMade,
   };
 }

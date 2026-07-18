@@ -326,7 +326,9 @@ const SelectionPage = ({
         <Box
           sx={{
             position: "fixed",
-            bottom: "max(2.5vh, 1rem)",
+            // Clear the home indicator on notched phones; falls back to a
+            // comfortable margin where there is no safe-area inset.
+            bottom: "calc(env(safe-area-inset-bottom, 0px) + max(2.5vh, 1rem))",
             left: 0,
             width: "100%",
             display: "flex",

@@ -16,6 +16,9 @@ body {
   font-family: "Lato", Helvetica, Arial, sans-serif;
   background-color: var(--bg-page);
   height: 100vh;
+  /* dvh tracks the *visible* area as mobile browser chrome shows/hides, so
+     centered content stays between the app bar and the action bar. */
+  height: 100dvh;
   display: grid;
   place-items: center;
   overflow: hidden;
@@ -67,13 +70,19 @@ body {
 @media (max-width: 1024px) {
   html {
     /* Fill most of the width on portrait phones; the vh term keeps the same
-       3:4 ratio from overflowing in landscape. */
-    --card-w: min(86vw, 42vh);
+       3:4 ratio from overflowing in landscape. The dvh term shrinks the card
+       on short screens so it can never reach the instruction text above or
+       the Pass/Keep action bar below (~290px of reserved vertical chrome). */
+    --card-w: min(86vw, 42vh, calc((100vh - 290px) * 0.75));
+    --card-w: min(86vw, 42vh, calc((100dvh - 290px) * 0.75));
   }
   .rankCard {
     /* Two ranking cards stack vertically on small screens, so each one goes
-       landscape to fit both above the fold. */
-    width: min(86vw, 56vh);
+       landscape to fit both above the fold. The dvh cap shrinks both cards
+       on short screens so the pair (plus their gap) always fits below the
+       app bar without overlapping anything. */
+    width: min(86vw, 56vh, calc((100vh - 96px) * 0.8));
+    width: min(86vw, 56vh, calc((100dvh - 96px) * 0.8));
     aspect-ratio: 16 / 10;
     transition: transform 0.6s ease-in-out;
   }
@@ -238,15 +247,17 @@ p {
   animation-delay: 2s; /* Delay the start by 1 second */
 }
 
+/* No static `transform` on the slide classes — the keyframes already cover
+   the full range, and a static transform fought the card's flip transition
+   (and the next animation in the sequence) every time classes swapped. */
 .slide-out {
-  transform: translateX(-100vw);
   animation: slide-out 0.6s ease-in-out forwards;
 }
 
-/* Slide In from the Right */
+/* Slide In from the Right. No fill: the animation ends exactly at the
+   element's natural position, so nothing needs clearing to avoid a snap. */
 .slide-in {
-  transform: translateX(100vw);
-  animation: slide-in 0.6s ease-in-out forwards;
+  animation: slide-in 0.6s ease-in-out;
 }
 
 .slide-up {

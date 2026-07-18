@@ -71,10 +71,6 @@ function CustomStepper(props) {
 
   const { steps, current, progress } = props;
 
-  function StepContent({ done, index }) {
-    return done ? "✓" : index + 1;
-  }
-
   const ProgressBar = ({ current, step, progress }) => {
     let value = 0;
     if (current + 1 === step) {
@@ -91,7 +87,12 @@ function CustomStepper(props) {
           "&.MuiLinearProgress-root": {
             flex: "1 1 auto",
             position: "absolute",
-            top: 12,
+            // Vertically center the 4px bar on the step circle (30px circle →
+            // center 15px → top 13px; the small-screen circle is 24px → 10px).
+            top: 13,
+            "@media (max-width: 374.98px)": {
+              top: 10,
+            },
             left: "calc(-50% + 20px)",
             right: "calc(50% + 20px)",
             // Track derives from secondary at low alpha so the unfilled
@@ -107,13 +108,16 @@ function CustomStepper(props) {
   };
 
   function getStepIcon(currentStep) {
+    // "small" (20px) keeps the glyph centered inside the 30px circle — and
+    // inside the 24px circle on narrow phones, where the default 24px icon
+    // touched the edges and read as misaligned.
     switch (currentStep) {
       case 0:
-        return <CompareArrowsOutlinedIcon />;
+        return <CompareArrowsOutlinedIcon fontSize="small" />;
       case 1:
-        return <SortOutlinedIcon />;
+        return <SortOutlinedIcon fontSize="small" />;
       case 2:
-        return <WorkspacePremiumOutlinedIcon />;
+        return <WorkspacePremiumOutlinedIcon fontSize="small" />;
       default:
         return null;
     }

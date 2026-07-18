@@ -52,6 +52,10 @@ const FadeTextSeries = ({ stringArray = [] }) => {
           top: "calc(64px + 1.5rem)",
           left: 0,
           width: "100%",
+          // Keep the coaching line above the cards (.card is z-index:1) so it
+          // is never painted behind a card if their bands meet (e.g. landscape
+          // or a dynamic-viewport transition on mobile).
+          zIndex: 3,
           color: "text.secondary",
           fontWeight: 500,
         }}

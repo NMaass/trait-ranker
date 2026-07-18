@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "../../style/CardStyle.scss";
 import { traitIcons, traitDefinitions } from "../../utils/listOfAllTraits";
 import { IconContext } from "react-icons";
@@ -7,7 +7,7 @@ import TouchRipple from "@mui/material/ButtonBase/TouchRipple";
 import CardHelp from "./CardHelp";
 import useBreakpoint from "../../utils/useBreakpoint";
 
-const RankingTrait = ({ trait, onClick, className }) => {
+const RankingTrait = ({ trait, onClick, onAnimationEnd, className }) => {
   const { isMobile } = useBreakpoint();
   const [flipped, setFlipped] = useState(false);
 
@@ -28,13 +28,14 @@ const RankingTrait = ({ trait, onClick, className }) => {
     <div
       className={`card rankCard ${flipped ? "flipped" : ""} ${className || ""}`}
       onClick={onClick}
+      onAnimationEnd={onAnimationEnd}
       onMouseDown={onRippleStart}
       onMouseUp={onRippleStop}
     >
       <div className="card-inner">
         {/* Front Side */}
         <div className="card-front">
-          <CardHelp toggleFlipped={toggleFlipped} flipped={flipped} />
+          <CardHelp toggleFlipped={toggleFlipped} icon="help" />
           <Grid
             container
             alignItems="center"
@@ -65,9 +66,9 @@ const RankingTrait = ({ trait, onClick, className }) => {
             </Grid>
           </Grid>
         </div>
-        {/* Back Side */}
+        {/* Back Side — definition only; the trait name stays on the front. */}
         <div className="card-back">
-          <CardHelp toggleFlipped={toggleFlipped} flipped={flipped} />
+          <CardHelp toggleFlipped={toggleFlipped} icon="flip" />
           <Grid
             container
             alignItems="center"
@@ -75,9 +76,6 @@ const RankingTrait = ({ trait, onClick, className }) => {
             direction="column"
             sx={{ height: "100%" }}
           >
-            <Grid item>
-              <h1>{trait}</h1>
-            </Grid>
             <Grid item>
               <Typography variant="h6">{traitDefinitions[trait]}</Typography>
             </Grid>
