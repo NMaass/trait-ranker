@@ -61,7 +61,8 @@ const HelpDialogBox = () => {
       title: "Selection",
       description: `Trait Ranker helps you discover and prioritize your most important personality traits. ${verb} right to mark a trait as valuable or left to skip it. Press the help button anytime for guidance.`,
       media: desktopDrag,
-      mediaAlt: "Animated example of dragging a trait card right or left.",
+      mediaAlt:
+        "Animated example of swiping a trait card right to keep it or left to pass.",
     },
     Rank: {
       title: "Ranking",
