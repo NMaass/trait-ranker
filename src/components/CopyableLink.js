@@ -37,35 +37,54 @@ const CopyableLink = ({ text }) => {
       flashTooltip("Copy the link below.");
     }
   };
-  const onTipClose = () => {
-    setShowTooltip(false);
-  };
+
   return (
     <Grid
       container
       direction="column"
       alignItems="center"
       justifyContent="center"
-      spacing={2}
+      wrap="nowrap"
+      sx={{ width: "100%", gap: 1 }}
     >
       <Grid item>
         <Tooltip
           title={tooltipMsg}
           open={showTooltip}
           leaveDelay={1500}
-          onClose={onTipClose}
+          onClose={() => setShowTooltip(false)}
         >
           <Button variant="contained" onClick={onCopy}>
             Share
           </Button>
         </Tooltip>
       </Grid>
-      {showLink && (
-        <Grid item>
-          <InputLabel>{text}</InputLabel>
-        </Grid>
-      )}
+      <Grid
+        item
+        sx={{
+          minHeight: "2.5rem",
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <InputLabel
+          sx={{
+            visibility: showLink ? "visible" : "hidden",
+            maxWidth: "100%",
+            px: 1,
+            textAlign: "center",
+            whiteSpace: "normal",
+            overflowWrap: "anywhere",
+            fontSize: { xs: "0.75rem", sm: "0.875rem" },
+          }}
+        >
+          {text}
+        </InputLabel>
+      </Grid>
     </Grid>
   );
 };
+
 export default CopyableLink;
