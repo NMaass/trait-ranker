@@ -7,9 +7,19 @@ import FlipCard from "./FlipCard";
 const SmallTraitList = ({ traits }) => {
   const shown = traits.slice(0, 7);
   return (
-    <Grid container direction="column" alignItems="center">
+    <Grid
+      container
+      direction="column"
+      alignItems="center"
+      wrap="nowrap"
+      sx={{ width: "100%", gap: { xs: 0.5, sm: 0.75 } }}
+    >
       {shown.map((trait, index) => (
-        <Grid item key={trait}>
+        <Grid
+          item
+          key={trait}
+          sx={{ width: "100%", display: "flex", justifyContent: "center" }}
+        >
           <FlipCard
             trait={trait}
             rank={index + 1}
@@ -20,4 +30,5 @@ const SmallTraitList = ({ traits }) => {
     </Grid>
   );
 };
+
 export default SmallTraitList;
