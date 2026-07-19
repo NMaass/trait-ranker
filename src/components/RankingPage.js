@@ -18,6 +18,9 @@ import { updateRankingProgress } from "../utils/progressManagement";
 // The slide/fade animations run 600ms; the fallback waits comfortably longer
 // so it only fires when a real `animationend` was missed, never mid-animation.
 const ANIM_FALLBACK_MS = 950;
+// requestAnimationFrame can be suspended in a background tab. This fallback
+// advances the short reset phase without waiting for the tab to become visible.
+const RESET_FALLBACK_MS = 100;
 
 const RankingPage = ({
   topTraits,
@@ -25,7 +28,6 @@ const RankingPage = ({
   history,
   initalProgress,
   setProgressData,
-  progressData,
 }) => {
   // Memoize topTraits to prevent unnecessary re-initialization
   const memoizedTopTraits = useMemo(() => topTraits.slice(), [topTraits]);
@@ -50,8 +52,8 @@ const RankingPage = ({
   const { isDesktop } = useBreakpoint();
 
   const { progress, activeStep } = useContext(ProgressContext);
-  const [progressState, setProgressState] = progress;
-  const [activeStepState, setActiveStepState] = activeStep;
+  const [, setProgressState] = progress;
+  const [, setActiveStepState] = activeStep;
   const [leftCardClass, setLeftCardClass] = useState("");
   const [rightCardClass, setRightCardClass] = useState("");
   const { undoFunction } = useContext(UndoContext);
@@ -109,6 +111,16 @@ const RankingPage = ({
     setRightCardClass("");
   }, [clearFallback]);
 
+  const startSlideIn = useCallback(() => {
+    if (animPhaseRef.current !== "reset") return;
+    clearResetFrame();
+    clearFallback();
+    animPhaseRef.current = "in";
+    setLeftCardClass("slide-in");
+    setRightCardClass("slide-in");
+    fallbackRef.current = setTimeout(finishSlideIn, ANIM_FALLBACK_MS);
+  }, [clearResetFrame, clearFallback, finishSlideIn]);
+
   // out -> reset -> in: first clear both outgoing classes and commit the next
   // pair. Add slide-in on the following frame, after the browser has painted
   // the reset state. This is the important separation that prevents a losing
@@ -125,15 +137,9 @@ const RankingPage = ({
     setRightCardClass("");
     matchWin(winner);
 
-    resetFrameRef.current = requestAnimationFrame(() => {
-      resetFrameRef.current = null;
-      if (animPhaseRef.current !== "reset") return;
-      animPhaseRef.current = "in";
-      setLeftCardClass("slide-in");
-      setRightCardClass("slide-in");
-      fallbackRef.current = setTimeout(finishSlideIn, ANIM_FALLBACK_MS);
-    });
-  }, [matchWin, clearFallback, clearResetFrame, finishSlideIn]);
+    resetFrameRef.current = requestAnimationFrame(startSlideIn);
+    fallbackRef.current = setTimeout(startSlideIn, RESET_FALLBACK_MS);
+  }, [matchWin, clearFallback, clearResetFrame, startSlideIn]);
 
   const handleRoundWin = useCallback(
     (trait) => {
