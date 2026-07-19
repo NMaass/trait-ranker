@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "../../style/CardStyle.scss";
 import { traitIcons, traitDefinitions } from "../../utils/listOfAllTraits";
 import { IconContext } from "react-icons";
@@ -7,33 +7,61 @@ import TouchRipple from "@mui/material/ButtonBase/TouchRipple";
 import CardHelp from "./CardHelp";
 import useBreakpoint from "../../utils/useBreakpoint";
 
-const RankingTrait = ({ trait, onClick, onAnimationEnd, className }) => {
+const RankingTrait = ({
+  trait,
+  onClick,
+  onAnimationEnd,
+  className,
+  disabled = false,
+}) => {
   const { isMobile } = useBreakpoint();
   const [flipped, setFlipped] = useState(false);
+  const rippleRef = useRef(null);
 
-  const rippleRef = React.useRef(null);
-  const onRippleStart = (e) => {
-    rippleRef.current.start(e);
+  // Keep the card DOM node stable between comparisons, but always show a new
+  // trait from its front face. This avoids remounting the interactive control
+  // (and losing keyboard focus) just to replace its content.
+  useEffect(() => {
+    setFlipped(false);
+  }, [trait]);
+
+  const onRippleStart = (event) => {
+    if (!disabled) rippleRef.current?.start(event);
   };
-  const onRippleStop = (e) => {
-    rippleRef.current.stop(e);
+  const onRippleStop = (event) => {
+    rippleRef.current?.stop(event);
   };
 
-  const toggleFlipped = (e) => {
-    setFlipped(!flipped);
-    e.stopPropagation(); // Prevent the onClick from triggering
+  const toggleFlipped = (event) => {
+    setFlipped((current) => !current);
+    event.stopPropagation();
+  };
+
+  const activate = () => {
+    if (!disabled) onClick();
+  };
+
+  const handleKeyDown = (event) => {
+    if (disabled || (event.key !== "Enter" && event.key !== " ")) return;
+    event.preventDefault();
+    activate();
   };
 
   return (
     <div
       className={`card rankCard ${flipped ? "flipped" : ""} ${className || ""}`}
-      onClick={onClick}
+      role="button"
+      tabIndex={disabled ? -1 : 0}
+      aria-disabled={disabled}
+      aria-label={`Choose ${trait}`}
+      onClick={activate}
+      onKeyDown={handleKeyDown}
       onAnimationEnd={onAnimationEnd}
       onMouseDown={onRippleStart}
       onMouseUp={onRippleStop}
+      onMouseLeave={onRippleStop}
     >
       <div className="card-inner">
-        {/* Front Side */}
         <div className="card-front">
           <CardHelp toggleFlipped={toggleFlipped} icon="help" />
           <Grid
@@ -48,8 +76,6 @@ const RankingTrait = ({ trait, onClick, onAnimationEnd, className }) => {
             </Grid>
             <Grid item>
               <IconContext.Provider
-                // Mobile ranking cards are landscape, so size against the
-                // shorter edge; desktop cards scale with --card-w.
                 value={{
                   style: {
                     width: isMobile
@@ -66,7 +92,6 @@ const RankingTrait = ({ trait, onClick, onAnimationEnd, className }) => {
             </Grid>
           </Grid>
         </div>
-        {/* Back Side — definition only; the trait name stays on the front. */}
         <div className="card-back">
           <CardHelp toggleFlipped={toggleFlipped} icon="flip" />
           <Grid
