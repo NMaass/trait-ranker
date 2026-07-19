@@ -10,21 +10,41 @@ const FlipCard = ({ trait, rank, delay = 0 }) => {
   const [flip, setFlip] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
+    setValue("");
+    setFlip(false);
+    let valueTimer;
+    const flipTimer = setTimeout(() => {
       setFlip(true);
-      setTimeout(() => setValue(trait), 500);
+      valueTimer = setTimeout(() => setValue(trait), 500);
     }, delay);
-    return () => clearTimeout(timer);
-    // Reveal runs once; trait/delay are fixed for the life of the card.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+
+    return () => {
+      clearTimeout(flipTimer);
+      clearTimeout(valueTimer);
+    };
+  }, [trait, delay]);
 
   return (
-    <Card className={`wideCard ${flip ? "flip" : ""}`}>
-      <CardContent sx={{ height: "100%", py: 0, "&:last-child": { pb: 0 } }}>
+    <Card
+      className={flip ? "flip" : ""}
+      sx={{
+        width: "min(100%, 480px)",
+        height: { xs: "clamp(44px, 7dvh, 58px)", sm: "clamp(56px, 8vh, 72px)" },
+        flexShrink: 0,
+      }}
+    >
+      <CardContent
+        sx={{
+          height: "100%",
+          boxSizing: "border-box",
+          px: { xs: 1, sm: 2 },
+          py: 0,
+          "&:last-child": { pb: 0 },
+        }}
+      >
         <Grid
           container
-          spacing={2}
+          spacing={1}
           alignItems="center"
           wrap="nowrap"
           sx={{ height: "100%" }}
@@ -32,29 +52,36 @@ const FlipCard = ({ trait, rank, delay = 0 }) => {
           <Grid item>
             <Typography
               sx={{
-                width: "1.75rem",
+                width: { xs: "1.35rem", sm: "1.75rem" },
+                fontSize: { xs: "0.9rem", sm: "1rem" },
                 fontWeight: 700,
                 color: "text.secondary",
+                fontVariantNumeric: "tabular-nums",
               }}
               align="center"
             >
               {rank}
             </Typography>
           </Grid>
-          <Grid item sx={{ display: "flex" }}>
+          <Grid item sx={{ display: "flex", flexShrink: 0 }}>
             <IconContext.Provider
               value={{
                 style: {
-                  width: "clamp(28px, 4vh, 40px)",
-                  height: "clamp(28px, 4vh, 40px)",
+                  width: "clamp(24px, 4dvh, 36px)",
+                  height: "clamp(24px, 4dvh, 36px)",
                 },
               }}
             >
               {traitIcons[value]}
             </IconContext.Provider>
           </Grid>
-          <Grid item>
-            <Typography variant="h6" component="span">
+          <Grid item sx={{ minWidth: 0, flex: 1 }}>
+            <Typography
+              component="span"
+              title={value}
+              noWrap
+              sx={{ fontSize: { xs: "0.95rem", sm: "1.25rem" } }}
+            >
               {value}
             </Typography>
           </Grid>

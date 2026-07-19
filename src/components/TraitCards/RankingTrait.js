@@ -50,6 +50,10 @@ const RankingTrait = ({
   return (
     <div
       className={`card rankCard ${flipped ? "flipped" : ""} ${className || ""}`}
+      // `fade-out` owns opacity while it runs. Every other state explicitly
+      // restores opacity so the animation's `forwards` fill cannot leak into
+      // the next trait rendered in this persistent card node.
+      style={{ opacity: className === "fade-out" ? undefined : 1 }}
       role="button"
       tabIndex={disabled ? -1 : 0}
       aria-disabled={disabled}
