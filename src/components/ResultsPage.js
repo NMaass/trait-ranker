@@ -39,6 +39,9 @@ const ResultsPage = ({ topTraits, userID, progressData, setProgressData }) => {
   return (
     <Box
       component="main"
+      // App's legacy touchmove lock is needed by Selection's drag surface. Stop
+      // the event here so this page keeps native momentum scrolling on phones.
+      onTouchMove={(event) => event.stopPropagation()}
       sx={{
         position: "fixed",
         inset: 0,
