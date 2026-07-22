@@ -78,11 +78,11 @@ body {
   }
   .rankCard {
     /* Two ranking cards stack vertically on small screens, so each one goes
-       landscape to fit both above the fold. The dvh cap shrinks both cards
-       on short screens so the pair (plus their gap) always fits below the
-       app bar without overlapping anything. */
-    width: min(86vw, 56vh, calc((100vh - 96px) * 0.8));
-    width: min(86vw, 56vh, calc((100dvh - 96px) * 0.8));
+       landscape to fit both above the fold. The dvh cap reserves the real
+       vertical chrome — 64px app bar + 84px bottom undo bar + 16px gap —
+       so the stacked pair always fits between them, even on short phones. */
+    width: min(86vw, 56vh, calc((100vh - 164px) * 0.8));
+    width: min(86vw, 56vh, calc((100dvh - 164px) * 0.8));
     aspect-ratio: 16 / 10;
     transition: transform 0.6s ease-in-out;
   }

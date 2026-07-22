@@ -17,6 +17,7 @@ import { ProgressContext } from "../App";
 import { TutorialContext } from "../App";
 import { SkipSelectionButton } from "../../utils/devTools";
 import { UndoContext } from "../App";
+import UndoButton from "../UndoButton";
 import FadeTextSeries from "../../utils/FadeTextSeries";
 import { updateSelectionProgress } from "../../utils/progressManagement";
 const SelectionPage = ({
@@ -183,6 +184,9 @@ const SelectionPage = ({
     undoFunction.current = undoLastSelection;
   }, [undoLastSelection, undoFunction]);
 
+  // Don't leave a stale handler behind for other pages to call after unmount.
+  useEffect(() => () => { undoFunction.current = null; }, [undoFunction]);
+
   function handleClearStack() {
     // column3 ("Valued") is the LIKED pile; column1 ("Not Valued") is disliked.
     // Thresholds gate based on how many traits the user *kept*, and we hand
@@ -344,13 +348,23 @@ const SelectionPage = ({
           {actions.map(({ label, Icon, bg, ink, hoverBg, direction }, i) => (
             <React.Fragment key={direction}>
               {i === 1 && (
-                <Typography
-                  variant="caption"
-                  sx={{ color: "text.secondary", minWidth: "3rem" }}
-                  align="center"
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    gap: 0.5,
+                  }}
                 >
-                  {remaining} left
-                </Typography>
+                  <UndoButton />
+                  <Typography
+                    variant="caption"
+                    sx={{ color: "text.secondary", lineHeight: 1 }}
+                    align="center"
+                  >
+                    {remaining} left
+                  </Typography>
+                </Box>
               )}
               <Box
                 sx={{

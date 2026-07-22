@@ -1,18 +1,15 @@
 import React, { useContext } from "react";
-import { AppBar, Box, Toolbar, IconButton, Grid } from "@mui/material";
-import { FaUndo } from "react-icons/fa";
+import { AppBar, Box, Toolbar, Grid } from "@mui/material";
 
 import HelpDialogBox from "./HelpDialogBox";
 import HomeButton from "./HomeButton";
 import CustomStepper from "./CustomStepper";
 import { ProgressContext } from "../App";
-import { UndoContext } from "../App";
 const steps = ["Select", "Rank", "Results"];
 const NavBar = ({ history }) => {
   const { progress, activeStep } = useContext(ProgressContext);
   const [progressState, setProgressState] = progress;
   const [activeStepState, setActiveStepState] = activeStep;
-  const { undoFunction } = useContext(UndoContext);
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -33,20 +30,6 @@ const NavBar = ({ history }) => {
               <Grid container justifyContent="flex-end" alignItems="center">
                 <Grid item>
                   <HelpDialogBox />
-                </Grid>
-
-                <Grid item>
-                  <IconButton
-                    // Call through the ref at click time. Binding
-                    // `undoFunction.current` directly captured whatever the ref
-                    // held at NavBar's render — usually stale or null, since the
-                    // active page assigns the real handler in a later effect.
-                    onClick={() => undoFunction.current?.()}
-                    aria-label="Undo last action"
-                    color="inherit"
-                  >
-                    <FaUndo />
-                  </IconButton>
                 </Grid>
               </Grid>
             </Grid>

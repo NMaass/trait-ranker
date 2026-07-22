@@ -33,9 +33,10 @@ const SelectionTrait = ({ trait, firstCard, provided }) => {
             alignItems="center"
             justifyContent="center"
             direction="column"
+            wrap="nowrap"
             sx={{ height: "100%" }}
           >
-            <Grid item>
+            <Grid item sx={{ minHeight: 0 }}>
               <h1>{trait}</h1>
             </Grid>
             <Grid item>
@@ -62,13 +63,16 @@ const SelectionTrait = ({ trait, firstCard, provided }) => {
             alignItems="center"
             justifyContent="center"
             direction="column"
+            wrap="nowrap"
             sx={{ height: "100%" }}
           >
-            <Grid item>
+            <Grid item sx={{ minHeight: 0 }}>
               <h1>{trait}</h1>
             </Grid>
-            <Grid item>
-              <Typography variant="h5">{traitDefinitions[trait]}</Typography>
+            <Grid item sx={{ minHeight: 0 }}>
+              <Typography variant="h5" align="center">
+                {traitDefinitions[trait]}
+              </Typography>
             </Grid>
           </Grid>
         </div>

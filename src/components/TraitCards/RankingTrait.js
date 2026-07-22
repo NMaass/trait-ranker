@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import "../../style/CardStyle.scss";
 import { traitIcons, traitDefinitions } from "../../utils/listOfAllTraits";
 import { IconContext } from "react-icons";
@@ -18,13 +18,8 @@ const RankingTrait = ({
   const [flipped, setFlipped] = useState(false);
   const rippleRef = useRef(null);
 
-  // Keep the card DOM node stable between comparisons, but always show a new
-  // trait from its front face. This avoids remounting the interactive control
-  // (and losing keyboard focus) just to replace its content.
-  useEffect(() => {
-    setFlipped(false);
-  }, [trait]);
-
+  // Remounted each comparison round (see the `key` in RankingPage), so the
+  // card always starts on its front face — no need to flip it back in place.
   const onRippleStart = (event) => {
     if (!disabled) rippleRef.current?.start(event);
   };
@@ -50,10 +45,6 @@ const RankingTrait = ({
   return (
     <div
       className={`card rankCard ${flipped ? "flipped" : ""} ${className || ""}`}
-      // `fade-out` owns opacity while it runs. Every other state explicitly
-      // restores opacity so the animation's `forwards` fill cannot leak into
-      // the next trait rendered in this persistent card node.
-      style={{ opacity: className === "fade-out" ? undefined : 1 }}
       role="button"
       tabIndex={disabled ? -1 : 0}
       aria-disabled={disabled}
@@ -73,20 +64,36 @@ const RankingTrait = ({
             alignItems="center"
             justifyContent="center"
             direction="column"
+            // Mobile ranking cards are short landscape slabs; the default
+            // wrap let a tall name+icon spill into a second "column", which
+            // shoved the icon to the card's right edge. Never wrap.
+            wrap="nowrap"
             sx={{ height: "100%" }}
           >
-            <Grid item>
-              <h1>{trait}</h1>
+            <Grid item sx={{ minHeight: 0 }}>
+              <Typography
+                component="h1"
+                align="center"
+                sx={{
+                  fontWeight: 600,
+                  lineHeight: 1.2,
+                  // Scale with the card so long trait names stay inside.
+                  fontSize: isMobile ? "clamp(1.1rem, 6vw, 1.6rem)" : "2rem",
+                  m: 0,
+                }}
+              >
+                {trait}
+              </Typography>
             </Grid>
-            <Grid item>
+            <Grid item sx={{ minHeight: 0, display: "flex" }}>
               <IconContext.Provider
                 value={{
                   style: {
                     width: isMobile
-                      ? "min(20vw, 13vh)"
+                      ? "min(16vw, 11vh)"
                       : "calc(var(--card-w) * 0.34)",
                     height: isMobile
-                      ? "min(20vw, 13vh)"
+                      ? "min(16vw, 11vh)"
                       : "calc(var(--card-w) * 0.34)",
                   },
                 }}
@@ -103,10 +110,17 @@ const RankingTrait = ({
             alignItems="center"
             justifyContent="center"
             direction="column"
+            wrap="nowrap"
             sx={{ height: "100%" }}
           >
-            <Grid item>
-              <Typography variant="h6">{traitDefinitions[trait]}</Typography>
+            <Grid item sx={{ minHeight: 0 }}>
+              <Typography
+                variant={isMobile ? "body2" : "h6"}
+                align="center"
+                sx={{ px: 1 }}
+              >
+                {traitDefinitions[trait]}
+              </Typography>
             </Grid>
           </Grid>
         </div>

@@ -10,6 +10,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import { useLocation } from "react-router-dom";
 import desktopDrag from "../../Assets/DesktopDrag.gif";
+import rankingDrag from "../../Assets/Ranking.gif";
 import useBreakpoint from "../../utils/useBreakpoint";
 
 const Transition = forwardRef(function Transition(props, ref) {
@@ -68,7 +69,9 @@ const HelpDialogBox = () => {
       title: "Ranking",
       description:
         "You'll see two traits at a time — tap the one that matters more to you. Repeat until your favorites bubble to the top. Use the undo button if you change your mind.",
-      media: null,
+      media: rankingDrag,
+      mediaAlt:
+        "Animated example of two ranking cards where tapping one slides it off and slides the next pair in.",
     },
     Results: {
       title: "Your Top Traits",

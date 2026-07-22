@@ -48,6 +48,14 @@
       "react-app/jest"
     ]
   },
+  "jest": {
+    "transformIgnorePatterns": [
+      "node_modules/(?!(@mui|@babel/runtime)/)"
+    ],
+    "moduleNameMapper": {
+      "^react-icons(/.*)?$": "<rootDir>/src/tests/__mocks__/react-icons.js"
+    }
+  },
   "browserslist": {
     "production": [
       ">0.2%",
