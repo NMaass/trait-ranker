@@ -13,14 +13,12 @@
     "@testing-library/dom": "^8.9.1",
     "@testing-library/react": "^12.1.5",
     "@testing-library/user-event": "^12.1.10",
-    "firebase": "^9.8.1",
+    "firebase": "^12.5.0",
     "flow-bin": "^0.182.0",
-    "gh-pages": "^4.0.0",
+    "gh-pages": "^6.3.0",
     "logrocket": "^3.0.1",
     "mixpanel-browser": "^2.45.0",
     "sass": "^1.69.5",
-    "patch-package": "^6.4.7",
-    "postinstall-postinstall": "^2.1.0",
     "prettier": "^2.7.1",
     "react": "^17.0.2",
     "react-beautiful-dnd": "^13.1.0",
@@ -28,7 +26,6 @@
     "react-ga": "^3.3.0",
     "react-icons": "^4.3.1",
     "react-router-dom": "^5.3.0",
-    "react-scripts": "4.0.3",
     "react-swipeable": "^7.0.0",
     "styled-components": "^5.3.1",
     "tween-functions": "^1.2.0",
@@ -36,24 +33,26 @@
   },
   "scripts": {
     "deploy": "gh-pages -d build",
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
+    "start": "vite --host 127.0.0.1",
+    "build": "vite build",
+    "test": "jest",
     "flow": "flow"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
   },
   "jest": {
     "transformIgnorePatterns": [
       "node_modules/(?!(@mui|@babel/runtime)/)"
     ],
     "moduleNameMapper": {
-      "^react-icons(/.*)?$": "<rootDir>/src/tests/__mocks__/react-icons.js"
+      "^react-icons(/.*)?$": "<rootDir>/src/tests/__mocks__/react-icons.js",
+      "\\.(css|scss|sass)$": "<rootDir>/src/tests/__mocks__/style.js",
+      "\\.(gif|png|jpg|svg|ico)$": "<rootDir>/src/tests/__mocks__/file.js"
+    },
+    "testEnvironment": "jsdom",
+    "setupFilesAfterEnv": [
+      "<rootDir>/src/setupTests.js"
+    ],
+    "transform": {
+      "^.+\\.[jt]sx?$": "babel-jest"
     }
   },
   "browserslist": {
@@ -70,11 +69,23 @@
   },
   "devDependencies": {
     "@babel/cli": "^7.17.10",
-    "@babel/core": "^7.18.0",
-    "@babel/preset-flow": "^7.17.12",
+    "@babel/core": "^7.29.1",
+    "@babel/preset-flow": "^7.27.1",
     "@mui/core": "^5.0.0-alpha.51",
     "@testing-library/jest-dom": "^6.6.1",
     "@testing-library/react-hooks": "^8.0.1",
-    "react-beautiful-dnd-test-utils": "^3.2.1"
+    "react-beautiful-dnd-test-utils": "^3.2.1",
+    "vite": "^8.3.5",
+    "@babel/preset-env": "^7.29.0",
+    "@babel/preset-react": "^7.28.5",
+    "jest": "^30.2.0",
+    "jest-environment-jsdom": "^30.2.0",
+    "babel-jest": "^30.2.0"
+  },
+  "overrides": {
+    "@grpc/grpc-js": "^1.13.6"
+  },
+  "patchedDependencies": {
+    "deepmerge@4.3.1": "patches/deepmerge@4.3.1.patch"
   }
 }
